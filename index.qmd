@@ -20,3 +20,11 @@ For each patient $i$, $X_i \coloneqq (e_i, t_i, f_i)$, where:
 
 At this stage, the pathways only contain consultations and pharmaceuticals events. We plan to add way more types of event, including deaths, hospitalizations, medical procedures etc.
 
+## Transformer-based models
+
+### Architecture
+
+- An embedding matrix of size $\mathbb{R}^{\lvert \mathcal{V} \rvert, d_{embed}}$ projects each token of the sequence to an embedding vector. Adapting from the classical Transformer, we use $t_i$ to have a _time-aware_ positional encoding using a sinusoidal encoding. At the beginning of the sequence, we add a symbolic [START] token, composed of the summed embeddings of age and gender.
+
+- These embeddings are then passed to **causal** self-attention layers, so that the Transformer-based model outputs *causally contextualized embeddings* for each token so that: $$ GPT_{\theta}(X_i) \in \mathbb{R}^{cs, d_{embed}}$$ where $\theta$ parametrizes the neural network. 
+
