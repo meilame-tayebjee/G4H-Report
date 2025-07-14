@@ -4,6 +4,7 @@ authors:
   - name: Meilame Tayebjee
     roles: writing
     corresponding: true
+number-sections: true
 bibliography: references.bib
 ---
 
