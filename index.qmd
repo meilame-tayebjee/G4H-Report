@@ -7,5 +7,16 @@ authors:
 bibliography: references.bib
 ---
 
-## Section
-This is a simple placeholder for the manuscript's main document [@knuth84].
+# Medical pathway embeddings
+
+## Data 
+
+We consider a dataset $(X_i)_{i = 1..n}$ of _medical pathways_.
+For each patient $i$, $X_i \coloneqq (e_i, t_i, f_i)$, where:
+
+- $e_i \in \mathbb{R}^{cs}$ denotes the vector of _tokenized events_. It is a tensor^[Actually, we consider several tensors (and several vocabulary sizes) - one for each _type_ of tokens, but we do not get into the details here.] which size is common for all patients^[Shorter sequences are _padded_, longer are cropped.] (an hyperparameter called the context size, $cs$), that contains integers between $0$ and the vocabulary size $\lvert \mathcal{V} \rvert$.
+- $t_i \in \mathbb{R}^{cs}$ is the temporal vector, containing the dates^[To describe a date, we actually use the number of days since 01/01/2016, the start of the available dataset] for each event in $e_i$. For now we only consider consultation and medication type of events.
+- $f_i \in \mathbb{R}^{2}$ corresponds to the patient general features, for now age and gender.
+
+At this stage, the pathways only contain consultations and pharmaceuticals events. We plan to add way more types of event, including deaths, hospitalizations, medical procedures etc.
+
