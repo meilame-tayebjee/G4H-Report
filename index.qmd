@@ -72,9 +72,9 @@ Up to a given time $t$, we have:
 
 ## Estimating the CATE
 
-We want to estimate the *Conditional AVergae Treatment Effect
+We want to estimate the *Conditional Average Treatment Effect* (CATE):
 
+$$ \tau(x, w) \coloneqq \mathbb{E}[Y_t \mid X_{<t} = x, W_t = w] $$
 
-Benchmarking
-Passing of time token
+So as to do that, we want to train a *S-learner*:
 
