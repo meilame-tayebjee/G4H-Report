@@ -9,10 +9,13 @@ format:
   html:
     comments:
       hypothesis: true
-  pdf: default
+  pdf:
+    documentclass: article
+    header-includes:
+        - \usepackage{mathtools}
+
 
 execute:
   freeze: true
-
 
 
