@@ -29,3 +29,52 @@ At this stage, the pathways only contain consultations and pharmaceuticals event
 
 - These embeddings are then passed to **causal** self-attention layers, so that the Transformer-based model outputs *causally contextualized embeddings* for each token so that: $$ GPT_{\theta}(X_i) \in \mathbb{R}^{cs, d_{embed}}$$ where $\theta$ parametrizes the neural network. 
 
+### Pre-training strategy
+
+At a given position in the pathway, we consider the pre-training task of predicting, for each token, if it will appear within the next $t$ days. We consider, simulatenously, several $t \in \mathcal{T}$, $\mathcal{T}$ being the sorted set of *short term horizons*, typically 14, 30, 60, 90, 180 days.
+
+Let, for this task:
+
+- $g_{\phi} \colon \mathbb{R}^{cs, d_{embed}} \to [0, 1]^{cs, \lvert \mathcal{V} \rvert, \lvert \mathcal{T} \rvert }$ the neural prediction head for this task (parametrized by $\phi$), on top of the Transformer layers
+- for a patient $i$, $Y_{i, \cdot, \cdot, \cdot} \in \{ 0, 1 \}^{cs, \lvert \mathcal{V} \rvert, \lvert \mathcal{T} \rvert}$ the ground truth^[For each short term horizon $t$, we crop the pathways $t$ before the end date of our dataset so that we can always compute a ground truth]
+
+The pre-training solves:
+
+```{=latex}
+\begin{align*}
+\theta, \phi \in \arg\!\min \; & \sum_{i=1}^{n} \sum_{\text{pos}=1}^{cs} \sum_{w \in \mathcal{V}} \sum_{t \in \mathcal{T}} 
+\text{BCE}\left( 
+    g_{\phi} \circ GPT_{\theta}(X_i)_{\text{pos}, w, t}, 
+    Y_{i, \text{pos}, w, t} 
+\right) \\
+& + \lambda \, \text{Mon}\left( g_{\phi} \circ GPT_{\theta}(X_i) \right)
+\end{align*}
+```
+
+where:
+
+- $\text{BCE}(x,y) = y \log(x) + (1-y) \log(1-x)$
+- for all $i$, $\text{Mon}\left( g_{\phi} \circ GPT_{\theta}(X_i) \right) \coloneqq$
+
+# Causal inference
+
+We are interested in the impact of losing one's *Médecin Traitant* (Primary Care Provider, PCP) on different health outcomes, and ultimately how this impact is varying across several groups (for instance between regions with dense medical services and medical deserts). Such a shock - due to death or retirement of the doctor - affects approximately 1M patients in France every year (1,000 GPs are leaving each year, each one them being the PCP of 1,000 patients on average).
+
+## Framework
+
+Up to a given time $t$, we have:
+
+- The covariate $X_{<t} \coloneqq (e_{<t}, t_{<t}, f_{<t})$, the medical history of the patient
+- $W_t$ is the treatment at time t and can either be:
+    1. the proportion of days the patient has spent without a PCP during the period $[t- \delta_{PCP}, t]$, $\delta_{PCP}$ being a hyperparameter controlling the length of the window
+    2. the maximum number of consecutive days without having a PCP, anytime in the past
+- $Y_t$, the binary outcome, indicating whether death has occured within a given time window $[t, t+ \delta_d]$(which length $\delta_d$ is again chosen)
+
+## Estimating the CATE
+
+We want to estimate the *Conditional AVergae Treatment Effect
+
+
+Benchmarking
+Passing of time token
+
