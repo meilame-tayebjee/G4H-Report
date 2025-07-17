@@ -8,11 +8,16 @@ manuscript:
 format:
   html:
     comments:
-      hypothesis: true
+      hypothesis: false
+    toc: true
+    toc-depth: 5
+    html-math-method: katex
   pdf:
     documentclass: article
     header-includes:
         - \usepackage{mathtools}
+        - \newcommand{\GPTpath}{GPT^{\text{path}}}
+        - \newcommand{\R}{\mathbb{R}}
 
 
 execute:

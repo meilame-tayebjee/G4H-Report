@@ -27,9 +27,10 @@ At this stage, the pathways only contain consultations and pharmaceuticals event
 
 - An embedding matrix of size $\mathbb{R}^{\lvert \mathcal{V} \rvert, d_{embed}}$ projects each token of the sequence to an embedding vector. Adapting from the classical Transformer, we use $t_i$ to have a _time-aware_ positional encoding using a sinusoidal encoding. At the beginning of the sequence, we add a symbolic [START] token, composed of the summed embeddings of age and gender.
 
-- These embeddings are then passed to **causal** self-attention layers, so that the Transformer-based model outputs *causally contextualized embeddings* for each token so that: $$ GPT_{\theta}(X_i) \in \mathbb{R}^{cs, d_{embed}}$$ where $\theta$ parametrizes the neural network. 
+- These embeddings are then passed to **causal**^[The rationale for having a causal mask is that we want to be able to exploit any embedding at any time (with only one inference pass through the model) without them having "seen" the future. Typically, the pre-training task (see @sec-pre-training) is such a task. However, we still plan to train a BERT - pre-training task is still in discussion (see @sec-benchmarks).] self-attention layers, so that the Transformer-based model outputs *causally contextualized embeddings* for each token so that: 
+$$ GPT_{\theta}(X_i) \in \mathbb{R}^{cs, d_{embed}}$$ where $\theta$ parametrizes the neural network. 
 
-### Pre-training strategy
+### Pre-training strategy {#sec-pre-training}
 
 At a given position in the pathway, we consider the pre-training task of predicting, for each token, if it will appear within the next $t$ days. We consider, simulatenously, several $t \in \mathcal{T}$, $\mathcal{T}$ being the sorted set of *short term horizons*, typically 14, 30, 60, 90, 180 days.
 
@@ -42,7 +43,7 @@ The pre-training solves:
 
 ```{=latex}
 \begin{align*}
-\theta, \phi \in \arg\!\min \; & \sum_{i=1}^{n} \sum_{\text{pos}=1}^{cs} \sum_{w \in \mathcal{V}} \sum_{t \in \mathcal{T}} 
+\theta^{*}, \phi^{*} \in \arg\!\min \; & \sum_{i=1}^{n} \sum_{\text{pos}=1}^{cs} \sum_{w \in \mathcal{V}} \sum_{t \in \mathcal{T}} 
 \text{BCE}\left( 
     g_{\phi} \circ GPT_{\theta}(X_i)_{\text{pos}, w, t}, 
     Y_{i, \text{pos}, w, t} 
@@ -56,6 +57,15 @@ where:
 - $\text{BCE}(x,y) = y \log(x) + (1-y) \log(1-x)$
 - for all $i$, $\text{Mon}\left( g_{\phi} \circ GPT_{\theta}(X_i) \right) \coloneqq$
 
+
+### Results
+
+We trained a "large" model (40M parameters) and a "small" one (5M parameters). It seems that the big model improves the result, leading us to think there is a signal to capture and that the task is "learnable". 
+
+![ROC curve of the pre-training task for a given specialty on a test set of 10,000 patients.](images/GPT_results/roc_spe_3.png)
+
+Still, the models converge quickly, and even small models achieve good convergence. This raises the (open) question of complexifying the task at some point.
+
 # Causal inference
 
 We are interested in the impact of losing one's *Médecin Traitant* (Primary Care Provider, PCP) on different health outcomes, and ultimately how this impact is varying across several groups (for instance between regions with dense medical services and medical deserts). Such a shock - due to death or retirement of the doctor - affects approximately 1M patients in France every year (1,000 GPs are leaving each year, each one them being the PCP of 1,000 patients on average).
@@ -68,7 +78,7 @@ Up to a given time $t$, we have:
 - $W_t$ is the treatment at time t and can either be:
     1. the proportion of days the patient has spent without a PCP during the period $[t- \delta_{PCP}, t]$, $\delta_{PCP}$ being a hyperparameter controlling the length of the window
     2. the maximum number of consecutive days without having a PCP, anytime in the past
-- $Y_t$, the binary outcome, indicating whether death has occured within a given time window $[t, t+ \delta_d]$(which length $\delta_d$ is again chosen)
+- $Y_t (W_t)$, the binary outcome, indicating whether death has occured within a given time window $[t, t+ \delta_d]$(which length $\delta_d$ is again chosen)
 
 ## Estimating the CATE
 
@@ -76,5 +86,66 @@ We want to estimate the *Conditional Average Treatment Effect* (CATE):
 
 $$ \tau(x, w) \coloneqq \mathbb{E}[Y_t \mid X_{<t} = x, W_t = w] $$
 
-So as to do that, we want to train a *S-learner*:
+### Assumptions
 
+- **SUTVA** : $$Y_t(w) = Y_t \quad \textit{ if } W_t = w$$
+
+    - The others not having a PCP for a given amount of time does not influence my probability to die 
+    - Only one version of treatment ?
+
+- **Conditional ignorability**
+
+$$ \forall w \in \mathbb{R}_{+}, Y_t(w) \perp W_t \mid X_{<t}$$
+
+- **Overlap**
+
+$$ 0 < \mathbb{P}(W_t = w | X_{<t} = x) < 1, \forall (w,x) \in (\mathbb{R}_{+}, \mathbb{R}^{d_{embed}})$$
+
+
+### Estimators
+
+For a given time t, we define ${pos}_t$ as being the last position in the patient's pathway before $t$, and we define the embedding of the pathway:
+
+$$ GPT^{\text{path}}(X_{<t}) \coloneqq GPT_{\theta^{*}}(X_{<t})_{{pos}_t} \in \mathbb{R}^{d_{embed}} $$
+
+
+#### S-learner & T-learner {.unnumbered}
+
+The S-learner is based on "outcome models" that ry to capture the link between the outcome and the features (@abecassis:hal-04774700).
+
+
+More precisely, we train on the validation set a head $g_{\phi}: \mathbb{R}^{d_{embed}} \times \mathbb{R}_{+}  \to [0,1]$ minimizing the binary cross-entropy loss on death prediction - to obtain $\phi^{*}$^[In this formulation, we assume that the embeddigns are *frozen* (we only train $\phi$ at $\theta^{*}$ constant). Another alternative is to *fine-tune* the Transformer model, training both $\phi$ and $\theta$ here, with the same task, same loss, same dataset. This is true for all the remaining of this document.]. At the end of the day:
+
+$$ \hat{\tau}_{\text{SLearner}}(x, w) \coloneqq g_{\phi^{*}} (GPT^{\text{path}}(x), w) - g_{\phi^{*}} (GPT^{\text{path}}(x), 0)$$
+
+where the baseline is "not having lost your PCP / having a PCP during all the period".
+
+🔴 T-learner for continuous treatment ?
+
+#### R-learner {.unnumbered}
+
+Another approach consists in trying to model the *propensity score*, the probability of being treated given $X$.
+
+A first head $g_{\phi_{m}}: \mathbb{R}^{d_{embed}} \to [0,1]$ is trained on the death prediction task, so that for a given pathway $x$, $g_{\phi_{m}^{*}}(GPT^{\text{path}}(x))$ is *close* to the conditional mean outcome $m(x) = \mathbb{E}[Y_t | x]$.
+
+Another head $g_{\phi_{e}}: \mathbb{R}^{d_{embed}} \to \mathbb{R}_+$ is trained to predict the treatment $W_t$ of a given individual (minimzing a Mean Squared Error).
+
+Finally, we train the CATE estimator training a head $g_{\phi_{\tau}}: \mathbb{R}^{d_{embed}} \to [0,1]$ by minimizing the *R-loss*: 
+
+\begin{align*}
+\phi_{\tau}^{*} \in \arg\!\min_{\phi_{\tau}} \; & 
+Y_t - g_{\phi_{m}^{*}}\left( GPT^{\text{path}}(X_{<t}) \right) \\
+& - \left( W_t - g_{\phi_{e}^{*}}\left( GPT^{\text{path}}(X_{<t}) \right) \right)
+\cdot g_{\phi_{\tau}}\left( GPT^{\text{path}}(X_{<t}) \right)
+\end{align*}
+
+
+
+🔴 DR-learner for continuous treatment ?
+
+## Benchmarks {#sec-benchmarks}
+
+### References {.unnumbered}
+
+::: {#refs}
+:::
