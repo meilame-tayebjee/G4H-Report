@@ -6,7 +6,14 @@ project:
 
 website:
   title: "G4H - From embeddings to causal inference"
+  site-url: https://meilame-tayebjee.github.io/G4H-Report/
   repo-url: https://github.com/meilame-tayebjee/G4H-Report
+  repo-actions: [
+    "source",
+    "issue",
+    "edit",
+  ]
+  repo-branch: main
 
 format:
   html:
