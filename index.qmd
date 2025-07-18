@@ -111,16 +111,17 @@ $$ GPT^{\text{path}}(X_{<t}) \coloneqq GPT_{\theta^{*}}(X_{<t})_{{pos}_t} \in \m
 
 #### S-learner & T-learner {.unnumbered}
 
-The S-learner is based on "outcome models" that ry to capture the link between the outcome and the features (@abecassis:hal-04774700).
+The S-learner is based on "outcome models" that try to capture the link between the outcome and the features (@abecassis:hal-04774700).
 
 
-More precisely, we train on the validation set a head $g_{\phi}: \mathbb{R}^{d_{embed}} \times \mathbb{R}_{+}  \to [0,1]$ minimizing the binary cross-entropy loss on death prediction - to obtain $\phi^{*}$^[In this formulation, we assume that the embeddigns are *frozen* (we only train $\phi$ at $\theta^{*}$ constant). Another alternative is to *fine-tune* the Transformer model, training both $\phi$ and $\theta$ here, with the same task, same loss, same dataset. This is true for all the remaining of this document.]. At the end of the day:
+More precisely, we train on the **validation set** a head $g_{\phi}: \mathbb{R}^{d_{embed}} \times \mathbb{R}_{+}  \to [0,1]$ minimizing the binary cross-entropy loss on death prediction - to obtain $\phi^{*}$^[In this formulation, we assume that the embeddings are *frozen* (we only train $\phi$ at $\theta^{*}$ constant). Another alternative is to *fine-tune* the Transformer model, training both $\phi$ and $\theta$ here, with the same task, same loss, same dataset. This is true for all the remaining of this document.]. At the end of the day:
 
 $$ \hat{\tau}_{\text{SLearner}}(x, w) \coloneqq g_{\phi^{*}} (GPT^{\text{path}}(x), w) - g_{\phi^{*}} (GPT^{\text{path}}(x), 0)$$
 
 where the baseline is "not having lost your PCP / having a PCP during all the period".
 
-🔴 T-learner for continuous treatment ?
+
+🔴 There is no T-learner for continuous treatment, *a priori*
 
 #### R-learner {.unnumbered}
 
@@ -140,8 +141,7 @@ Y_t - g_{\phi_{m}^{*}}\left( GPT^{\text{path}}(X_{<t}) \right) \\
 \end{align*}
 
 
-
-🔴 DR-learner for continuous treatment ?
+🔴 There is no DR-learner for continuous treatment, *a priori*
 
 ## Benchmarks {#sec-benchmarks}
 
