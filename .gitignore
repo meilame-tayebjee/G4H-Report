@@ -1,4 +1,4 @@
 /.quarto/
 _manuscript/
 .DS_Store
-public/
+/_site/
