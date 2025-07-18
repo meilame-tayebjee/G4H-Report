@@ -302,11 +302,11 @@ window.Quarto = {
 <p><span class="math display"> GPT^{\text{path}}(X_{&lt;t}) \coloneqq GPT_{\theta^{*}}(X_{&lt;t})_{{pos}_t} \in \mathbb{R}^{d_{embed}} </span></p>
 <section id="s-learner-t-learner" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="s-learner-t-learner">S-learner &amp; T-learner</h4>
-<p>The S-learner is based on “outcome models” that ry to capture the link between the outcome and the features (<span class="citation" data-cites="abecassis:hal-04774700">Abécassis et al. (<a href="#ref-abecassis:hal-04774700" role="doc-biblioref">2025</a>)</span>).</p>
-<p>More precisely, we train on the validation set a head <span class="math inline">g_{\phi}: \mathbb{R}^{d_{embed}} \times \mathbb{R}_{+}  \to [0,1]</span> minimizing the binary cross-entropy loss on death prediction - to obtain <span class="math inline">\phi^{*}</span><a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>. At the end of the day:</p>
+<p>The S-learner is based on “outcome models” that try to capture the link between the outcome and the features (<span class="citation" data-cites="abecassis:hal-04774700">Abécassis et al. (<a href="#ref-abecassis:hal-04774700" role="doc-biblioref">2025</a>)</span>).</p>
+<p>More precisely, we train on the <strong>validation set</strong> a head <span class="math inline">g_{\phi}: \mathbb{R}^{d_{embed}} \times \mathbb{R}_{+}  \to [0,1]</span> minimizing the binary cross-entropy loss on death prediction - to obtain <span class="math inline">\phi^{*}</span><a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>. At the end of the day:</p>
 <p><span class="math display"> \hat{\tau}_{\text{SLearner}}(x, w) \coloneqq g_{\phi^{*}} (GPT^{\text{path}}(x), w) - g_{\phi^{*}} (GPT^{\text{path}}(x), 0)</span></p>
 <p>where the baseline is “not having lost your PCP / having a PCP during all the period”.</p>
-<p>🔴 T-learner for continuous treatment ?</p>
+<p>🔴 There is no T-learner for continuous treatment, <em>a priori</em></p>
 </section>
 <section id="r-learner" class="level4 unnumbered">
 <h4 class="unnumbered anchored" data-anchor-id="r-learner">R-learner</h4>
@@ -320,7 +320,7 @@ Y_t - g_{\phi_{m}^{*}}\left( GPT^{\text{path}}(X_{&lt;t}) \right) \\
 &amp; - \left( W_t - g_{\phi_{e}^{*}}\left( GPT^{\text{path}}(X_{&lt;t}) \right) \right)
 \cdot g_{\phi_{\tau}}\left( GPT^{\text{path}}(X_{&lt;t}) \right)
 \end{align*}</span></p>
-<p>🔴 DR-learner for continuous treatment ?</p>
+<p>🔴 There is no DR-learner for continuous treatment, <em>a priori</em></p>
 </section>
 </section>
 </section>
@@ -349,7 +349,7 @@ Abécassis, Judith, Élise Dumas, Julie Alberge, and Gaël Varoquaux. 2025. <spa
 <li id="fn3"><p>To describe a date, we actually use the number of days since 01/01/2016, the start of the available dataset<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>The rationale for having a causal mask is that we want to be able to exploit any embedding at any time (with only one inference pass through the model) without them having “seen” the future. Typically, the pre-training task (see <a href="#sec-pre-training" class="quarto-xref">Section&nbsp;1.2.2</a>) is such a task. However, we still plan to train a BERT - pre-training task is still in discussion (see <a href="#sec-benchmarks" class="quarto-xref">Section&nbsp;2.3</a>).<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn5"><p>For each short term horizon <span class="math inline">t</span>, we crop the pathways <span class="math inline">t</span> before the end date of our dataset so that we can always compute a ground truth<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>In this formulation, we assume that the embeddigns are <em>frozen</em> (we only train <span class="math inline">\phi</span> at <span class="math inline">\theta^{*}</span> constant). Another alternative is to <em>fine-tune</em> the Transformer model, training both <span class="math inline">\phi</span> and <span class="math inline">\theta</span> here, with the same task, same loss, same dataset. This is true for all the remaining of this document.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>In this formulation, we assume that the embeddings are <em>frozen</em> (we only train <span class="math inline">\phi</span> at <span class="math inline">\theta^{*}</span> constant). Another alternative is to <em>fine-tune</em> the Transformer model, training both <span class="math inline">\phi</span> and <span class="math inline">\theta</span> here, with the same task, same loss, same dataset. This is true for all the remaining of this document.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
