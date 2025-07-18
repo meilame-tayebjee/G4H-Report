@@ -128,7 +128,7 @@ Another approach consists in trying to model the *propensity score*, the probabi
 
 A first head $g_{\phi_{m}}: \mathbb{R}^{d_{embed}} \to [0,1]$ is trained on the death prediction task, so that for a given pathway $x$, $g_{\phi_{m}^{*}}(GPT^{\text{path}}(x))$ is *close* to the conditional mean outcome $m(x) = \mathbb{E}[Y_t | x]$.
 
-Another head $g_{\phi_{e}}: \mathbb{R}^{d_{embed}} \to \mathbb{R}_+$ is trained to predict the treatment $W_t$ of a given individual (minimzing a Mean Squared Error).
+Another head $g_{\phi_{e}}: \mathbb{R}^{d_{embed}} \to \mathbb{R}_+$ is trained to predict the treatment $W_t$ of a given individual (minimizing a Mean Squared Error).
 
 Finally, we train the CATE estimator training a head $g_{\phi_{\tau}}: \mathbb{R}^{d_{embed}} \to [0,1]$ by minimizing the *R-loss*: 
 
@@ -144,6 +144,8 @@ Y_t - g_{\phi_{m}^{*}}\left( GPT^{\text{path}}(X_{<t}) \right) \\
 🔴 DR-learner for continuous treatment ?
 
 ## Benchmarks {#sec-benchmarks}
+
+WIP
 
 ### References {.unnumbered}
 
