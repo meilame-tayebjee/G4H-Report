@@ -1,24 +1,28 @@
 project:
-  type: manuscript
+  type: website
+  output-dir: public
+  render:
+    - index.qmd
 
-manuscript:
-  article: index.qmd
-  code-links: repo
+website:
+  title: "G4H - From embeddings to causal inference"
+  repo-url: https://github.com/meilame-tayebjee/G4H-Report
 
 format:
   html:
+    theme: litera
     comments:
       hypothesis: false
     toc: true
     toc-depth: 5
     html-math-method: katex
   pdf:
-    documentclass: article
+    documentclass: scrartcl
     header-includes:
         - \usepackage{mathtools}
         - \newcommand{\GPTpath}{GPT^{\text{path}}}
         - \newcommand{\R}{\mathbb{R}}
-
+    output-file: G4H-report.pdf
 
 execute:
   freeze: true
