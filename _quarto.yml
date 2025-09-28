@@ -1,9 +1,12 @@
 project:
   type: website
   render:
+    - mydocs/*/*.qmd
     - index.qmd
+    - cards/*.qmd
 
 website:
+  page-navigation: true
   title: "G4H - From embeddings to causal inference"
   site-url: https://meilame-tayebjee.github.io/G4H-Report/
   repo-url: https://github.com/meilame-tayebjee/G4H-Report
@@ -13,6 +16,11 @@ website:
     "edit",
   ]
   repo-branch: main
+  navbar:
+    right:
+      - icon: github
+        href: "https://github.com/meilame-tayebjee/G4H-Report"
+        aria-label: GitHub
 
 format:
   html:
@@ -32,5 +40,3 @@ format:
 
 execute:
   freeze: true
-
-

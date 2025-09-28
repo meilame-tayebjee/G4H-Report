@@ -1,0 +1,10 @@
+---
+title: Technical report
+date: "2025-07-31"
+description: |
+  From embeddings to causal inference
+slides:
+  text: Website
+  url: /mydocs/technical_report/technical_report.html
+order: 1
+---
