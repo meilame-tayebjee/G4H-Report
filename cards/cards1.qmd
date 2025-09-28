@@ -4,7 +4,7 @@ date: "2025-07-31"
 description: |
   From embeddings to causal inference
 slides:
-  text: Website
+  text: Doc
   url: /mydocs/technical_report/index.html
 order: 1
 ---
