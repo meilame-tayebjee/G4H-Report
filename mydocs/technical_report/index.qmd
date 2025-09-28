@@ -6,12 +6,14 @@ authors:
     corresponding: true
 number-sections: true
 bibliography: references.bib
+
 format:
   html:
     theme: litera
     toc: true
     toc-depth: 5
     html-math-method: katex
+    output-file: index.html
   pdf:
     documentclass: scrartcl
     output-file: G4H-report.pdf

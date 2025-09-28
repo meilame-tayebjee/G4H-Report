@@ -22,21 +22,5 @@ website:
         href: "https://github.com/meilame-tayebjee/G4H-Report"
         aria-label: GitHub
 
-format:
-  html:
-    theme: litera
-    comments:
-      hypothesis: false
-    toc: true
-    toc-depth: 5
-    html-math-method: katex
-  pdf:
-    documentclass: scrartcl
-    header-includes:
-        - \usepackage{mathtools}
-        - \newcommand{\GPTpath}{GPT^{\text{path}}}
-        - \newcommand{\R}{\mathbb{R}}
-    output-file: G4H-report.pdf
-
 execute:
   freeze: true

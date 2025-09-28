@@ -5,6 +5,6 @@ description: |
   From embeddings to causal inference
 slides:
   text: Website
-  url: /mydocs/technical_report/technical_report.html
+  url: /mydocs/technical_report/index.html
 order: 1
 ---
