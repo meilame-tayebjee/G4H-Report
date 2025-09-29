@@ -1,0 +1,26 @@
+##  About me {.unnumbered}
+
+- Graduated from HEC (19-24), X (X20), ENSAE and MVA (administrateur de l'Insee, 2024)
+- **Research internships**:
+  - 2023 (3A X): MIT (Operations Research Center), _Microtransit system design and optimization_
+  - 2024 (ENSAE-MVA): Inria HeKA, _Generative models for longitudinal images_
+- Currently, **first position in the Corps** since sept. 2024:
+  - Data Scientist at SSP Lab (MLOps, model trustworthiness, NLP (text classification, RAG), satellite imagery...)
+  - **PhD in CS Candidate** (part-time, _journées recherche_)
+
+##  Broader view of the Graph4Health ANR {.unnumbered}
+
+::: {.incremental}
+- The general objective is to 
+  - infer the causal impact of the **healthcare supply** (and its geographic distribution) on **health outcomes**
+    - using classic econometric tools
+    - **using deep learning methods for causal inference**
+  - study policies that contribute to the efficiency of the French healthcare system
+
+- **10 years of exhaustive SNDS**
+  - 70M patients
+  - consultations, procedures, hospitalizations, medications, deaths etc.
+:::
+
+## My project: embedding patient pathways for causal inference {.unnumbered}
+

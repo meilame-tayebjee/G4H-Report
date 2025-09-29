@@ -5,7 +5,6 @@ authors:
   - name: Meilame Tayebjee
     roles: writing
     corresponding: true
-number-sections: false # already handled in custom.css
 date: "2025-10-08"
 date-format: "D MMMM YYYY"
 lang: en-GB
@@ -20,18 +19,64 @@ format:
 css: custom.css
 ---
 
-## About me 
 
-- Graduated from HEC (19-24), X (X20), ENSAE and MVA (administrateur de l'Insee, 2024)
-- **Research internships**:
-  - 2023 (3A X): MIT (Operations Research Center), _Microtransit system design and optimization_
-  - 2024 (ENSAE-MVA): Inria HeKA, _Generative models for longitudinal images_
-- Currently, **first position in the Corps**:
-  - Data Scientist at SSP Lab (MLOps, model trustworthiness, NLP (text classification, RAG), satellite imagery...)
-  - **PhD in CS Candidate** (part-time, _journées recherche_)
+# Introduction
 
-## Broader view of the Graph4Health project 
+{{< include sections/intro.qmd >}}
 
 
+# Literature review
+
+## Transformer-based models for medical pathway embedding {.unnumbered}
 
 
+::: {#tbl-medpathway style="font-size: 0.5em;"}
+
+| Model name | Model archi. | Pre-train. Task(s) | Fine-tun. task(s) | # Params | Training data size | Vocab size (type) |
+|---|---|---|---|---|---|
+| Delphi (@Shmatko2025) | NanoGPT | Next disease event + Time to event | None | 2M | 400k patients | 1,258 (ICD-10)  |
+<!-- | BEHRT | BERT-style Transformer (EHR tokens + age/segment/position embeddings) | Multi-task disease onset prediction (301 cond.) | not reported (~6L, 12H, h=288) | ~1.6M pts |
+| Med-BERT | BERT for structured diagnosis codes | Disease prediction (HF, pancreatic cancer) | ~17M | 28.5M pts |
+| ClinicalBERT | BERT-base on clinical notes (MIMIC-III) | 30-day readmission + NLP tasks | ~110M (BERT-base) | 34,560 pts (downstream) |
+| life2vec | BERT-like encoder (Performer hybrid) | Mortality + personality prediction | not reported | ~2.28M people |
+| Hi-BEHRT | Hierarchical Transformer (local + global) | Risk prediction (HF, diabetes, CKD, stroke) | not reported | ~2.84M pts |
+| CEHR-BERT | BERT w/ temporal & visit tokens | Hosp., death, HF diagnosis, readmission | not reported | ~2.4M pts |
+| HEART | Relation-aware Transformer | 5 clinical tasks (2 datasets) | not reported | sizes vary |
+| Transformer patient embedding (NPJ Dig Med 2025) | Transformer (codes→embedding) | Stratification, disease prediction | not reported | 1.05M pts (eMERGE) | -->
+
+:::
+
+## ML/DL for causal inference  {.unnumbered}
+
+Several methodological papers:
+
+- @abecassis:hal-04774700
+- @
+
+
+## Causal impact of PCP loss on health outcomes  {.unnumbered}
+
+# Work done so far
+
+## Data management
+
+## Pre-training task
+
+## First trained model
+
+# Avenues of work
+
+## Causal inference
+
+## Benchmarking
+
+## Improvement of the pre-training task
+
+## Scaling
+
+# References {.unnumbered}
+
+## {.unnumbered}
+
+::: {#refs}
+:::
