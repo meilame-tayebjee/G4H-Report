@@ -4,9 +4,14 @@
   /* line-height: 1.15;  optional: tighten lines */
 }
 
+.reveal .toc ul {
+  list-style: none;
+  padding-left: 1.2em; /* keep indent for numbers */
+}
+
 /* make headings smaller too */
 .reveal h1 { font-size: 2.0em; }
-.reveal h2 { font-size: 1.6em; }
+.reveal h2 { font-size: 1.4em; }
 .reveal h3 { font-size: 1.0em; }
 
 /* Reset section counter at the start */
@@ -14,14 +19,14 @@
   counter-reset: section 0;  /* ensures first section is 1 */
 }
 
-/* Top-level headings (## in QMD) */
+/* Top-level headings (## in QMD)
 .reveal h2::before {
   counter-increment: section;
   content: counter(section) ". ";
 }
 
-/* Optional: also number h3, h4 if you want nested levels */
+/* Optional: also number h3, h4 if you want nested levels
 .reveal h3::before {
   counter-increment: subsection;
   content: counter(section) "." counter(subsection) ". ";
-}
+} */
