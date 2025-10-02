@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.24">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -57,7 +57,7 @@ div.csl-indent {
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../site_libs/bootstrap/bootstrap-fa6ebe1abc24c69c1ddb9a141d0fa116.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -251,7 +251,7 @@ window.Quarto = {
 <h3 data-number="1.2.1" class="anchored" data-anchor-id="architecture"><span class="header-section-number">1.2.1</span> Architecture</h3>
 <ul>
 <li><p>An embedding matrix of size <span class="math inline">\mathbb{R}^{\lvert \mathcal{V} \rvert, d_{embed}}</span> projects each token of the sequence to an embedding vector. Adapting from the classical Transformer, we use <span class="math inline">t_i</span> to have a <em>time-aware</em> positional encoding using a sinusoidal encoding. At the beginning of the sequence, we add a symbolic [START] token, composed of the summed embeddings of age and gender.</p></li>
-<li><p>These embeddings are then passed to <strong>causal</strong><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> self-attention layers, so that the Transformer-based model outputs <em>causally contextualized embeddings</em> for each token so that: <span class="math display"> GPT_{\theta}(X_i) \in \mathbb{R}^{cs, d_{embed}}</span> where <span class="math inline">\theta</span> parametrizes the neural network.</p></li>
+<li><p>These embeddings are then passed to <strong>causal</strong><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> self-attention layers, so that the Transformer-based model outputs <em>causally contextualized embeddings</em> for each token: <span class="math display"> GPT_{\theta}(X_i) \in \mathbb{R}^{cs, d_{embed}}</span> where <span class="math inline">\theta</span> parametrizes the neural network.</p></li>
 </ul>
 </section>
 <section id="sec-pre-training" class="level3" data-number="1.2.2">
@@ -274,7 +274,7 @@ window.Quarto = {
 <p>where:</p>
 <ul>
 <li><span class="math inline">\text{BCE}(x,y) = y \log(x) + (1-y) \log(1-x)</span></li>
-<li>for all <span class="math inline">i</span>, <span class="math inline">\text{Mon}\left( g_{\phi} \circ GPT_{\theta}(X_i) \right) \coloneqq</span></li>
+<li>for all <span class="math inline">i</span>, <span class="math inline">\text{Mon}\left( g_{\phi} \circ GPT_{\theta}(X_i) \right) \coloneqq \sum_{t, t' | t' &gt; t} \max \left(0, g_{\phi} \circ GPT_{\theta}(X_i)_{\cdot, \cdot, t} - GPT_{\theta}(X_i)_{\cdot, \cdot, t'} \right)</span></li>
 </ul>
 </section>
 <section id="results" class="level3" data-number="1.2.3">
