@@ -42,7 +42,7 @@ At this stage, the pathways only contain consultations and pharmaceuticals event
 
 - An embedding matrix of size $\mathbb{R}^{\lvert \mathcal{V} \rvert, d_{embed}}$ projects each token of the sequence to an embedding vector. Adapting from the classical Transformer, we use $t_i$ to have a _time-aware_ positional encoding using a sinusoidal encoding. At the beginning of the sequence, we add a symbolic [START] token, composed of the summed embeddings of age and gender.
 
-- These embeddings are then passed to **causal**^[The rationale for having a causal mask is that we want to be able to exploit any embedding at any time (with only one inference pass through the model) without them having "seen" the future. Typically, the pre-training task (see @sec-pre-training) is such a task. However, we still plan to train a BERT - pre-training task is still in discussion (see @sec-benchmarks).] self-attention layers, so that the Transformer-based model outputs *causally contextualized embeddings* for each token so that: 
+- These embeddings are then passed to **causal**^[The rationale for having a causal mask is that we want to be able to exploit any embedding at any time (with only one inference pass through the model) without them having "seen" the future. Typically, the pre-training task (see @sec-pre-training) is such a task. However, we still plan to train a BERT - pre-training task is still in discussion (see @sec-benchmarks).] self-attention layers, so that the Transformer-based model outputs *causally contextualized embeddings* for each token: 
 $$ GPT_{\theta}(X_i) \in \mathbb{R}^{cs, d_{embed}}$$ where $\theta$ parametrizes the neural network. 
 
 ### Pre-training strategy {#sec-pre-training}
@@ -70,7 +70,7 @@ The pre-training solves:
 where:
 
 - $\text{BCE}(x,y) = y \log(x) + (1-y) \log(1-x)$
-- for all $i$, $\text{Mon}\left( g_{\phi} \circ GPT_{\theta}(X_i) \right) \coloneqq$
+- for all $i$, $\text{Mon}\left( g_{\phi} \circ GPT_{\theta}(X_i) \right) \coloneqq \sum_{t, t' | t' > t} \max \left(0, g_{\phi} \circ GPT_{\theta}(X_i)_{\cdot, \cdot, t} - GPT_{\theta}(X_i)_{\cdot, \cdot, t'} \right)$
 
 
 ### Results
@@ -154,6 +154,7 @@ Y_t - g_{\phi_{m}^{*}}\left( GPT^{\text{path}}(X_{<t}) \right) \\
 & - \left( W_t - g_{\phi_{e}^{*}}\left( GPT^{\text{path}}(X_{<t}) \right) \right)
 \cdot g_{\phi_{\tau}}\left( GPT^{\text{path}}(X_{<t}) \right)
 \end{align*}
+
 
 
 🔴 There is no DR-learner for continuous treatment, *a priori*
