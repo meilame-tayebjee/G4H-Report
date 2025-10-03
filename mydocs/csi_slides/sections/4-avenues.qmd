@@ -1,0 +1,82 @@
+## Causal inference {.unnumbered}
+
+- **Goal**: Estimate the impact of losing one's *Médecin Traitant* (Primary Care Provider, PCP), and looping back with Titouan's work
+
+::: {.incremental}
+- Up to a given time $t$, we have:
+
+  - The covariate $X_{<t} \coloneqq (e_{<t}, t_{<t}, f_{<t})$, the medical history of the patient
+  - $W_t$ is the treatment at time t, say: **the proportion of days the patient has spent without a PCP during the period $[t- \delta_{PCP}, t]$, $\delta_{PCP}$** being a hyperparameter controlling the length of the window
+  - $Y_t (W_t)$, the binary outcome, indicating **whether death has occured within a given time window** $[t, t+ \delta_d]$(which length $\delta_d$ is again chosen)
+:::
+
+---
+
+### Assumptions {.unnumbered .scrollable}
+
+::: {.incremental}
+- **SUTVA** : $$Y_t(w) = Y_t \quad \textit{ if } W_t = w$$
+
+    - The others not having a PCP for a given amount of time does not influence my probability to die 
+    - Only one version of treatment ?
+
+- **Conditional ignorability** $$ \forall w \in \mathbb{R}_{+}, Y_t(w) \perp W_t \mid X_{<t}$$
+
+- **Overlap** $$ 0 < \mathbb{P}(W_t = w | X_{<t} = x) < 1, \forall (w,x) \in (\mathbb{R}_{+}, \mathbb{R}^{d_{embed}})$$
+:::
+
+---
+
+### Estimators of the CATE: S-learner{.unnumbered}
+
+For a given time t, we define ${pos}_t$ as being the last position in the patient's pathway before $t$, and we define the embedding of the pathway:
+
+$$ GPT^{\text{path}}(X_{<t}) \coloneqq GPT_{\theta^{*}}(X_{<t})_{{pos}_t} \in \mathbb{R}^{d_{embed}} $$
+
+$$ \hat{\tau}_{\text{SLearner}}(x, w) \coloneqq g_{\phi^{*}} (GPT^{\text{path}}(x), w) - g_{\phi^{*}} (GPT^{\text{path}}(x), 0)$$
+
+where the baseline is "not having lost your PCP / having a PCP during all the period".
+
+---
+
+### Estimators of the CATE: R-learner{.unnumbered .scrollable}
+
+
+::: {.incremental}
+- Another approach consists in trying to model the *propensity score*, the probability of being treated given $X$.
+
+
+- A first head $g_{\phi_{m}}: \mathbb{R}^{d_{embed}} \to [0,1]$ is trained on the death prediction task, so that for a given pathway $x$, $g_{\phi_{m}^{*}}(GPT^{\text{path}}(x))$ is *close* to the conditional mean outcome $m(x) = \mathbb{E}[Y_t | x]$.
+
+- Another head $g_{\phi_{e}}: \mathbb{R}^{d_{embed}} \to \mathbb{R}_+$ is trained to predict the treatment $W_t$ of a given individual (minimizing a Mean Squared Error).
+
+- Finally, we train the CATE estimator training a head $g_{\phi_{\tau}}: \mathbb{R}^{d_{embed}} \to [0,1]$ by minimizing the *R-loss*: \begin{align*}
+\phi_{\tau}^{*} \in \arg\!\min_{\phi_{\tau}} \; & 
+Y_t - g_{\phi_{m}^{*}}\left( GPT^{\text{path}}(X_{<t}) \right) \\
+& - \left( W_t - g_{\phi_{e}^{*}}\left( GPT^{\text{path}}(X_{<t}) \right) \right)
+\cdot g_{\phi_{\tau}}\left( GPT^{\text{path}}(X_{<t}) \right)
+\end{align*}
+:::
+
+
+## Benchmarking {.unnumbered}
+
+::: {.incremental}
+- **How to compare embedding models ? What is a good embedding ?**
+  1. Death prediction
+  2. R-loss in a causal inference context (@doutreligneHowSelectPredictive2025)
+
+- **Competitors:**
+  - SVD-PPMI (static embeddings)
+  - BERT (pure embeddings, no trajectories)
+    - MLM pre-training task (@life2vec)
+    - **Temporal window masking task**
+  - GPT with next-token + time-to-event task (@Shmatko2025)
+:::
+
+## Improvement of the pre-training task - WIP {.unnumbered}
+- Going generative
+
+## Scaling - WIP {.unnumbered}
+
+- Chinchilla paper: scaling law

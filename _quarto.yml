@@ -7,7 +7,7 @@ project:
 
 website:
   page-navigation: true
-  title: "G4H - From embeddings to causal inference"
+  title: "Graph4Health - Medical pathway embeddings and causal inference on health outcomes"
   site-url: https://meilame-tayebjee.github.io/G4H-Report/
   repo-url: https://github.com/meilame-tayebjee/G4H-Report
   repo-actions: [
