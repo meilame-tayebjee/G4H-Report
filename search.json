@@ -1,5 +1,117 @@
 [
   {
+    "objectID": "mydocs/csi_slides/index.html#about-me",
+    "href": "mydocs/csi_slides/index.html#about-me",
+    "title": "PhD Committee",
+    "section": "About me",
+    "text": "About me\n\nGraduated from HEC (19-24), X (X20), ENSAE and MVA (administrateur de l’Insee, 2024)\nResearch internships:\n\n2023 (3A X): MIT (Operations Research Center), Microtransit system design and optimization\n2024 (ENSAE-MVA): Inria HeKA, Generative models for longitudinal images\n\nCurrently, first position in the Corps since sept. 2024:\n\nData Scientist at SSP Lab (MLOps, model trustworthiness, NLP (text classification, RAG), satellite imagery…)\nPhD in CS Candidate (part-time, journées recherche)"
+  },
+  {
+    "objectID": "mydocs/csi_slides/index.html#broader-view-of-the-graph4health-anr",
+    "href": "mydocs/csi_slides/index.html#broader-view-of-the-graph4health-anr",
+    "title": "PhD Committee",
+    "section": "Broader view of the Graph4Health ANR",
+    "text": "Broader view of the Graph4Health ANR\n\nThe general objective is to\n\ninfer the causal impact of the healthcare supply (and its geographic distribution) on health outcomes\n\nusing classic econometric tools\nusing deep learning methods for causal inference\n\nstudy policies that contribute to the efficiency of the French healthcare system\n\n10 years of exhaustive SNDS\n\n70M patients\nconsultations, procedures, hospitalizations, medications, deaths etc."
+  },
+  {
+    "objectID": "mydocs/csi_slides/index.html#my-project-embedding-patient-pathways-for-causal-inference",
+    "href": "mydocs/csi_slides/index.html#my-project-embedding-patient-pathways-for-causal-inference",
+    "title": "PhD Committee",
+    "section": "My project: embedding patient pathways for causal inference",
+    "text": "My project: embedding patient pathways for causal inference"
+  },
+  {
+    "objectID": "mydocs/csi_slides/index.html#transformer-based-models-for-medical-pathway-embedding",
+    "href": "mydocs/csi_slides/index.html#transformer-based-models-for-medical-pathway-embedding",
+    "title": "PhD Committee",
+    "section": "Transformer-based models for medical pathway embedding",
+    "text": "Transformer-based models for medical pathway embedding\n\n\n\nTable 1\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nModel name\nModel archi.\nPre-train. Task(s)\nFine-tun. task(s)\n# Params\nTraining data size\nVocab size (type)\nGenerative\nTrajectory1\n\n\n\n\nDelphi (Shmatko et al. (2025))\nNanoGPT\nNext disease event + Time to event\nNone\n2M\n400k patients\n1,258 (ICD10)\n✅\n✅\n\n\nMOTOR (Many Outcome Time Oriented Representation) (Steinberg et al. (2024))\nTransformer (causal masking and local attention)\nTime to event (TTE)\nTTE for part. disease\n143M\n55M patients, 9B events\n8,192 (ICD10 and other specific codes)\n≅\n≅\n\n\nLife2Vec (Savcisens et al. (2023))\nBERT\nMLM + SOP\nMortality Prediction\n8M\n3M patients\n~700(labour + ICD10)\n❌\n❌\n\n\nTransformEHR (Yang et al. (2023))\nEncoder-Decoder\nVisit masking: Given visits 1-3, predict all codes in visit 4\nDisease (pancreatic cancer) / Outcome (self harm) pred.\n?\n255M visits from 7M patients\nICD10\n✅\n❌\n\n\nBEHRT (Li et al. (2020))\nBERT\nMLM\nDisease prediction\nnot reported (~6L, 12H, h=288)\n1.6M patients\n301 disease codes\n❌\n❌\n\n\n\n\n\n\n\nEfficient (i.e. in one forward pass) computation of embeddings at any time"
+  },
+  {
+    "objectID": "mydocs/csi_slides/index.html#mldl-for-causal-inference",
+    "href": "mydocs/csi_slides/index.html#mldl-for-causal-inference",
+    "title": "PhD Committee",
+    "section": "ML/DL for causal inference",
+    "text": "ML/DL for causal inference\nSeveral methodological papers:\n\nAbécassis et al. (2025), Doutreligne and Varoquaux (2025)\n\nThe best predictive model is not the best suited for causal inference\nModel selection using risk scores\nDesigning a causal inference framework (DAG, PICOT)\n\nWager (2024): reading group"
+  },
+  {
+    "objectID": "mydocs/csi_slides/index.html#causal-impact-of-pcp-loss-on-health-outcomes---wip",
+    "href": "mydocs/csi_slides/index.html#causal-impact-of-pcp-loss-on-health-outcomes---wip",
+    "title": "PhD Committee",
+    "section": "Causal impact of PCP loss on health outcomes - WIP",
+    "text": "Causal impact of PCP loss on health outcomes - WIP"
+  },
+  {
+    "objectID": "mydocs/csi_slides/index.html#data-management",
+    "href": "mydocs/csi_slides/index.html#data-management",
+    "title": "PhD Committee",
+    "section": "Data management",
+    "text": "Data management\n\nValidation and EDA of the first delivered simplified tables: prestations and medications\nJointure, cleaning and subsampling\n\nSo that any subsample can fit in vRAM\n\nTokenization\n\nIMAGE of data"
+  },
+  {
+    "objectID": "mydocs/csi_slides/index.html#notations",
+    "href": "mydocs/csi_slides/index.html#notations",
+    "title": "PhD Committee",
+    "section": "Notations",
+    "text": "Notations\nNotations: dataset\nDataset of medical pathways:  For i = 1, \\dots, n, X_i \\coloneqq (e_i, t_i, f_i), where:\n\ne_i \\in \\mathbb{R}^{cs} are the tokenized events, containing integers between 0 and the vocabulary size \\lvert \\mathcal{V} \\rvert\nt_i \\in \\mathbb{R}^{cs} is the temporal vector, containing the dates\nf_i \\in \\mathbb{R}^{2} corresponds to the patient general features, for now age and gender"
+  },
+  {
+    "objectID": "mydocs/csi_slides/index.html#pre-training-task",
+    "href": "mydocs/csi_slides/index.html#pre-training-task",
+    "title": "PhD Committee",
+    "section": "Pre-training task",
+    "text": "Pre-training task\nObjectives\n\nHaving a time-aware Transformers (\\neq NLP)\nKeeping in mind causal inference\n\nWe want to be able to efficiently compute the embedding of the pathway at any time (the trajectory of the patient)\nIdeally we want to have a generative model - to generate counterfactuals"
+  },
+  {
+    "objectID": "mydocs/csi_slides/index.html#first-trained-models",
+    "href": "mydocs/csi_slides/index.html#first-trained-models",
+    "title": "PhD Committee",
+    "section": "First trained models",
+    "text": "First trained models\nWe trained a “large” model (40M params) and a “small” one (5M).\n\nROC curve of the pre-training task for a given specialty on a test set of 10,000 patients.Still, the models converge quickly, and even small models achieve good convergence. This raises the (open) question of complexifying the task at some point."
+  },
+  {
+    "objectID": "mydocs/csi_slides/index.html#plot-of-the-embedding-space---wip",
+    "href": "mydocs/csi_slides/index.html#plot-of-the-embedding-space---wip",
+    "title": "PhD Committee",
+    "section": "Plot of the embedding space - WIP",
+    "text": "Plot of the embedding space - WIP"
+  },
+  {
+    "objectID": "mydocs/csi_slides/index.html#causal-inference",
+    "href": "mydocs/csi_slides/index.html#causal-inference",
+    "title": "PhD Committee",
+    "section": "Causal inference",
+    "text": "Causal inference\n\nGoal: Estimate the impact of losing one’s Médecin Traitant (Primary Care Provider, PCP), and looping back with Titouan’s work\n\n\nUp to a given time t, we have:\n\nThe covariate X_{&lt;t} \\coloneqq (e_{&lt;t}, t_{&lt;t}, f_{&lt;t}), the medical history of the patient\nW_t is the treatment at time t, say: the proportion of days the patient has spent without a PCP during the period [t- \\delta_{PCP}, t], \\delta_{PCP} being a hyperparameter controlling the length of the window\nY_t (W_t), the binary outcome, indicating whether death has occured within a given time window [t, t+ \\delta_d](which length \\delta_d is again chosen)"
+  },
+  {
+    "objectID": "mydocs/csi_slides/index.html#benchmarking",
+    "href": "mydocs/csi_slides/index.html#benchmarking",
+    "title": "PhD Committee",
+    "section": "Benchmarking",
+    "text": "Benchmarking\n\nHow to compare embedding models ? What is a good embedding ?\n\nDeath prediction\nR-loss in a causal inference context (Doutreligne and Varoquaux (2025))\n\nCompetitors:\n\nSVD-PPMI (static embeddings)\nBERT (pure embeddings, no trajectories)\n\nMLM pre-training task (Savcisens et al. (2023))\nTemporal window masking task\n\nGPT with next-token + time-to-event task (Shmatko et al. (2025))"
+  },
+  {
+    "objectID": "mydocs/csi_slides/index.html#improvement-of-the-pre-training-task---wip",
+    "href": "mydocs/csi_slides/index.html#improvement-of-the-pre-training-task---wip",
+    "title": "PhD Committee",
+    "section": "Improvement of the pre-training task - WIP",
+    "text": "Improvement of the pre-training task - WIP\n\nGoing generative"
+  },
+  {
+    "objectID": "mydocs/csi_slides/index.html#scaling---wip",
+    "href": "mydocs/csi_slides/index.html#scaling---wip",
+    "title": "PhD Committee",
+    "section": "Scaling - WIP",
+    "text": "Scaling - WIP\n\nChinchilla paper: scaling law"
+  },
+  {
+    "objectID": "mydocs/csi_slides/index.html#section",
+    "href": "mydocs/csi_slides/index.html#section",
+    "title": "PhD Committee",
+    "section": "",
+    "text": "Abécassis, Judith, Élise Dumas, Julie Alberge, and Gaël Varoquaux. 2025. ‘From prediction to prescription: Machine learning and Causal Inference’. Annual Review of Biomedical Data Science, April. https://doi.org/10.1146/annurev-biodatasci-103123-095750.\n\n\nDoutreligne, Matthieu, and Gaël Varoquaux. 2025. ‘How to Select Predictive Models for Decision-Making or Causal Inference’. GigaScience 14 (January): giaf016. https://doi.org/10.1093/gigascience/giaf016.\n\n\nLi, Yikuan, Shishir Rao, José Roberto Ayala Solares, Abdelaali Hassaine, Rema Ramakrishnan, Dexter Canoy, Yajie Zhu, Kazem Rahimi, and Gholamreza Salimi-Khorshidi. 2020. ‘BEHRT: Transformer for Electronic Health Records’. Scientific Reports 10 (1): 7155. https://doi.org/10.1038/s41598-020-62922-y.\n\n\nSavcisens, Germans, Tina Eliassi-Rad, Lars Kai Hansen, Laust Hvas Mortensen, Lau Lilleholt, Anna Rogers, Ingo Zettler, and Sune Lehmann. 2023. ‘Using Sequences of Life-Events to Predict Human Lives’. Nature Computational Science 4 (1): 43–56. https://doi.org/10.1038/s43588-023-00573-5.\n\n\nShmatko, Artem, Alexander Wolfgang Jung, Kumar Gaurav, Søren Brunak, Laust Hvas Mortensen, Ewan Birney, Tom Fitzgerald, and Moritz Gerstung. 2025. ‘Learning the Natural History of Human Disease with Generative Transformers’. Nature, September. https://doi.org/10.1038/s41586-025-09529-3.\n\n\nSteinberg, Ethan, Jason Alan Fries, Yizhe Xu, and Nigam Shah. 2024. ‘MOTOR: A Time-to-Event Foundation Model for Structured Medical Records’. In The Twelfth International Conference on Learning Representations. https://openreview.net/forum?id=NialiwI2V6.\n\n\nWager, Stefan. 2024. Causal Inference: A Statistical Learning Approach.\n\n\nYang, Zhichao, Avijit Mitra, Weisong Liu, Dan Berlowitz, and Hong Yu. 2023. ‘TransformEHR: Transformer-Based Encoder-Decoder Generative Model to Enhance Prediction of Disease Outcomes Using Electronic Health Records’. Nature Communications 14 (1): 7857. https://doi.org/10.1038/s41467-023-43715-z."
+  },
+  {
     "objectID": "mydocs/technical_report/index.html",
     "href": "mydocs/technical_report/index.html",
     "title": "G4H - From embeddings to causal inference",

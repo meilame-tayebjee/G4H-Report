@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://meilame-tayebjee.github.io/G4H-Report/cards/cards1.html</loc>
-    <lastmod>2025-10-02T15:43:23.000Z</lastmod>
-  </url>
-  <url>
-    <loc>https://meilame-tayebjee.github.io/G4H-Report/mydocs/technical_report/index.html</loc>
-    <lastmod>2025-10-02T15:43:23.090Z</lastmod>
+    <loc>https://meilame-tayebjee.github.io/G4H-Report/cards/cards2.html</loc>
+    <lastmod>2025-10-03T16:09:02.159Z</lastmod>
   </url>
   <url>
     <loc>https://meilame-tayebjee.github.io/G4H-Report/index.html</loc>
-    <lastmod>2025-10-02T15:43:23.000Z</lastmod>
+    <lastmod>2025-10-03T16:09:02.159Z</lastmod>
+  </url>
+  <url>
+    <loc>https://meilame-tayebjee.github.io/G4H-Report/mydocs/csi_slides/index.html</loc>
+    <lastmod>2025-10-03T16:09:02.160Z</lastmod>
+  </url>
+  <url>
+    <loc>https://meilame-tayebjee.github.io/G4H-Report/mydocs/technical_report/index.html</loc>
+    <lastmod>2025-10-03T16:09:02.254Z</lastmod>
+  </url>
+  <url>
+    <loc>https://meilame-tayebjee.github.io/G4H-Report/cards/cards1.html</loc>
+    <lastmod>2025-10-03T16:09:02.159Z</lastmod>
   </url>
 </urlset>
