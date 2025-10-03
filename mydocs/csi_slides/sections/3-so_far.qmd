@@ -1,0 +1,67 @@
+## Data management {.unnumbered}
+
+- Validation and EDA of the first delivered simplified tables: prestations and medications
+- Jointure, cleaning and subsampling
+  - So that any subsample can fit in vRAM
+- Tokenization
+
+IMAGE of data
+
+## Notations {.unnumbered}
+### Notations: dataset {.unnumbered}
+
+**Dataset of medical pathways: ** For $i = 1, \dots, n$, $X_i \coloneqq (e_i, t_i, f_i)$, where:
+
+::: {.incremental}
+-  $e_i \in \mathbb{R}^{cs}$ are the tokenized events,  containing integers between $0$ and the vocabulary size $\lvert \mathcal{V} \rvert$
+- $t_i \in \mathbb{R}^{cs}$ is the temporal vector, containing the dates
+- $f_i \in \mathbb{R}^{2}$ corresponds to the patient general features, for now age and gender
+:::
+
+---
+
+### Notations: model {.unnumbered}
+
+
+- Embedding matrices of size $\mathbb{R}^{\lvert \mathcal{V} \rvert, d_{embed}}$ (vocab),  $\mathbb{R}^{2, d_{embed}}$ (gender) and $\mathbb{R}^{8, d_{embed}}$ (age class)
+  - We use $t_i$ to have a _time-aware_ positional encoding using a sinusoidal encoding
+  - A symbolic [START] token, composed of the summed embeddings of age and gender.
+
+- **Causal** self-attention layers so that the Transformer-based model outputs ***causally contextualized embeddings***:
+$$ GPT_{\theta}(X_i) \in \mathbb{R}^{cs, d_{embed}}$$
+
+where $\theta$ parametrizes the neural network.
+
+## Pre-training task {.unnumbered}
+
+### Objectives {.unnumbered}
+
+:::{.incremental}
+- Having a **time-aware** Transformers ($\neq$ NLP)
+- Keeping in mind causal inference
+  - We want to be able to efficiently compute the embedding of the pathway **at any time** (the *trajectory* of the patient)
+  - Ideally we want to have a generative model - to generate counterfactuals
+:::
+
+
+---
+
+### Description {.unnumbered}
+
+We predict for each token, if it will appear within the next $t$ days.
+
+ We consider, simulatenously, several $t \in \mathcal{T}$, $\mathcal{T}$ being the sorted set of ***short term horizons***, typically 14, 30, 90, 180 days.
+
+
+![](images/GPT-pretraining.png)
+
+## First trained models {.unnumbered}
+
+
+We trained a "large" model (40M params) and a "small" one (5M).
+
+![ROC curve of the pre-training task for a given specialty on a test set of 10,000 patients.](../technical_report/images/GPT_results/roc_spe_3.png)
+
+Still, the models converge quickly, and even small models achieve good convergence. This raises the (open) question of complexifying the task at some point.
+
+## Plot of the embedding space - WIP {.unnumbered}
