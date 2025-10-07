@@ -200,7 +200,7 @@ Meilame Tayebjee
 <li><a href="#/pre-training-task" id="/toc-pre-training-task">Pre-training task</a></li>
 
 <li><a href="#/first-trained-models" id="/toc-first-trained-models">First trained models</a></li>
-<li><a href="#/plot-of-the-embedding-space---wip" id="/toc-plot-of-the-embedding-space---wip">Plot of the embedding space - WIP</a></li>
+<li><a href="#/plot-of-the-embedding-space" id="/toc-plot-of-the-embedding-space">Plot of the embedding space</a></li>
 </ul></li>
 <li><a href="#/avenues-of-work" id="/toc-avenues-of-work"><span class="header-section-number">4</span> Avenues of work</a>
 <ul>
@@ -208,7 +208,9 @@ Meilame Tayebjee
 
 
 
+
 <li><a href="#/benchmarking" id="/toc-benchmarking">Benchmarking</a></li>
+<li><a href="#/improving-pre-training-task" id="/toc-improving-pre-training-task">Improving pre-training task</a></li>
 <li><a href="#/scaling" id="/toc-scaling">Scaling</a></li>
 </ul></li>
 <li><a href="#/references" id="/toc-references">References</a>
@@ -251,7 +253,7 @@ Meilame Tayebjee
 </ul></li>
 <li class="fragment">study policies that contribute to the efficiency of the French healthcare system</li>
 </ul></li>
-<li class="fragment"><strong>10 years of exhaustive SNDS</strong>
+<li class="fragment"><strong>11 years of exhaustive SNDS</strong>
 <ul>
 <li class="fragment">70M patients</li>
 <li class="fragment">consultations, procedures, hospitalizations, medications, deaths etc.</li>
@@ -277,12 +279,7 @@ Meilame Tayebjee
 </section>
 <section id="transformer-based-models-for-medical-pathway-embedding" class="slide level2 unnumbered">
 <h2>Transformer-based models for medical pathway embedding</h2>
-<div id="tbl-medpathway" class="quarto-float quarto-figure quarto-figure-center" style="font-size: 0.45em;">
-<figure class="quarto-float quarto-float-tbl">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl quarto-uncaptioned" id="tbl-medpathway-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1
-</figcaption>
-<div aria-describedby="tbl-medpathway-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div style="font-size: 0.5em;">
 <table class="caption-top" style="width:100%;">
 <colgroup>
 <col style="width: 2%">
@@ -358,7 +355,7 @@ Table&nbsp;1
 <td>BERT</td>
 <td>MLM</td>
 <td>Disease prediction</td>
-<td>not reported (~6L, 12H, h=288)</td>
+<td>n.r. (~6L, 12H, h=288)</td>
 <td>1.6M patients</td>
 <td>301 disease codes</td>
 <td>❌</td>
@@ -374,8 +371,6 @@ Table&nbsp;1
 | HEART | Relation-aware Transformer | 5 clinical tasks (2 datasets) | not reported | sizes vary |
 | Transformer patient embedding (NPJ Dig Med 2025) | Transformer (codes→embedding) | Stratification, disease prediction | not reported | 1.05M pts (eMERGE) | -->
 </div>
-</figure>
-</div>
 <aside><ol class="aside-footnotes"><li id="fn1"><p>Efficient (i.e.&nbsp;in one forward pass) computation of embeddings at any time</p></li></ol></aside></section>
 <section id="mldl-for-causal-inference" class="slide level2 unnumbered">
 <h2>ML/DL for causal inference</h2>
@@ -385,12 +380,16 @@ Table&nbsp;1
 <ul>
 <li>The best predictive model is not the best suited for causal inference</li>
 <li>Model selection using risk scores</li>
-<li>Designing a causal inference framework (DAG, PICOT)</li>
+<li>Designing a causal inference framework (Directed Acyclic Graphs (DAGs), Population-Intervention-Control-Outcome-Time (PICOT))</li>
 </ul></li>
 <li><span class="citation" data-cites="wagerCausalInferenceStatistical">Wager (<a href="#/section" role="doc-biblioref" onclick="">2024</a>)</span>:
 <ul>
 <li>Definitions and assumptions</li>
 <li>Meta-learners</li>
+</ul></li>
+<li><span class="citation" data-cites="meta-learners">Curth and Schaar (<a href="#/section" role="doc-biblioref" onclick="">2021</a>)</span>:
+<ul>
+<li>Comparison of different meta-learners in different settings</li>
 </ul></li>
 </ul>
 </section>
@@ -467,9 +466,10 @@ Table&nbsp;1
 
 <img data-src="../technical_report/images/GPT_results/roc_spe_3.png" class="r-stretch quarto-figure-center"><p class="caption">ROC curve of the pre-training task for a given specialty on a test set of 10,000 patients.</p><p>Still, the models converge quickly, and even small models achieve good convergence. This raises the (open) question of complexifying the task at some point.</p>
 </section>
-<section id="plot-of-the-embedding-space---wip" class="slide level2 unnumbered">
-<h2>Plot of the embedding space - WIP</h2>
-</section></section>
+<section id="plot-of-the-embedding-space" class="slide level2 unnumbered">
+<h2>Plot of the embedding space</h2>
+
+<img data-src="images/embedding_space.png" class="quarto-figure quarto-figure-center r-stretch"></section></section>
 <section>
 <section id="avenues-of-work" class="title-slide slide level1 center" data-number="4">
 <h1><span class="header-section-number">4</span> Avenues of work</h1>
@@ -484,10 +484,10 @@ Table&nbsp;1
 <li class="fragment"><p>Up to a given time <span class="math inline">t</span>, we have:</p>
 <ul>
 <li class="fragment">The covariate <span class="math inline">X_{&lt;t} \coloneqq (e_{&lt;t}, t_{&lt;t}, f_{&lt;t})</span>, the medical history of the patient</li>
-<li class="fragment"><span class="math inline">W_t</span> is the treatment at time t, say: <strong>the proportion of days the patient has spent without a PCP during the period <span class="math inline">[t- \delta_{PCP}, t]</span>, <span class="math inline">\delta_{PCP}</span></strong> being a hyperparameter controlling the length of the window</li>
+<li class="fragment"><span class="math inline">W_t</span> is the (binary) treatment at time t, say: the patient has lost its PCP (death or retirement) before <span class="math inline">t</span></li>
 <li class="fragment"><span class="math inline">Y_t (W_t)</span>, the binary outcome, indicating <strong>whether death has occured within a given time window</strong> <span class="math inline">[t, t+ \delta_d]</span></li>
 </ul></li>
-<li class="fragment"><p>We want to estimate the <strong>Conditional Average Treatment Effect</strong> (CATE): <span class="math display"> \tau(x, w, t) \coloneqq \mathbf{E}[Y_t | X_{&lt;t} = x, W_t = w]</span></p></li>
+<li class="fragment"><p>We want to estimate the <strong>Conditional Average Treatment Effect</strong> (CATE): <span class="math display"> \tau(x, t) \coloneqq \mathbf{E}[Y_t(1) - Y_t(0) | X_{&lt;t} = x]</span></p></li>
 </ul>
 </section>
 <section class="slide level2">
@@ -499,17 +499,15 @@ Table&nbsp;1
 <li class="fragment">The others not having a PCP for a given amount of time does not influence my probability to die</li>
 <li class="fragment">Only one version of treatment ?</li>
 </ul></li>
-<li class="fragment"><p><strong>Conditional ignorability</strong> <span class="math display"> \forall w \in \mathbb{R}_{+}, Y_t(w) \perp W_t \mid X_{&lt;t}</span></p></li>
-<li class="fragment"><p><strong>Overlap</strong> <span class="math display"> 0 &lt; \mathbb{P}(W_t = w | X_{&lt;t} = x) &lt; 1, \forall (w,x) \in (\mathbb{R}_{+}, \mathbb{R}^{d_{embed}})</span></p></li>
+<li class="fragment"><p><strong>Conditional ignorability - Unconfoundedness</strong> <span class="math display"> \forall w \in \{0,1\}, Y_t(w) \perp W_t \mid X_{&lt;t}</span></p></li>
+<li class="fragment"><p><strong>Overlap</strong> <span class="math display"> 0 &lt; \mathbb{P}(W_t = w | X_{&lt;t} = x) &lt; 1, \forall (w,x) \in ( \{0,1\}, \mathbb{R}^{d_{embed}})</span></p></li>
 </ul>
 </section>
 <section class="slide level2">
 
 <h3 class="unnumbered" id="estimators-of-the-cate-s-learner">Estimators of the CATE: S-learner</h3>
-<p>For a given time t, we define <span class="math inline">{pos}_t</span> as being the last position in the patient’s pathway before <span class="math inline">t</span>, and we define the embedding of the pathway:</p>
-<p><span class="math display"> GPT^{\text{path}}(X_{&lt;t}) \coloneqq GPT_{\theta^{*}}(X_{&lt;t})_{{pos}_t} \in \mathbb{R}^{d_{embed}} </span></p>
-<p><span class="math display"> \hat{\tau}_{\text{SLearner}}(x, w) \coloneqq g_{\phi^{*}} (GPT^{\text{path}}(x), w) - g_{\phi^{*}} (GPT^{\text{path}}(x), 0)</span></p>
-<p>where the baseline is “not having lost your PCP / having a PCP during all the period”.</p>
+<p>For a given time t, we define <span class="math inline">{pos}_t</span> as being the last position in the patient’s pathway before <span class="math inline">t</span>, and we define the embedding of the pathway: <span class="math display"> GPT^{\text{path}}(X_{&lt;t}) \coloneqq GPT_{\theta^{*}}(X_{&lt;t})_{{pos}_t} \in \mathbb{R}^{d_{embed}} </span></p>
+<p>We train on the <strong>calibration set</strong> a head <span class="math inline">g_{\phi}: \mathbb{R}^{d_{embed}} \times \mathbb{R}_{+}  \to [0,1]</span>, minimizing the BCE loss on death prediction - to obtain <span class="math inline">\phi^{*}</span>. <span class="math display"> \hat{\tau}_{\text{SLearner}}(x) \coloneqq g_{\phi^{*}} (GPT^{\text{path}}(x), 1) - g_{\phi^{*}} (GPT^{\text{path}}(x), 0)</span></p>
 </section>
 <section class="slide level2">
 
@@ -517,7 +515,7 @@ Table&nbsp;1
 <ul>
 <li class="fragment"><p>Another approach consists in trying to model the <em>propensity score</em>, the probability of being treated given <span class="math inline">X</span>.</p></li>
 <li class="fragment"><p><strong>A first head</strong> <span class="math inline">g_{\phi_{m}}: \mathbb{R}^{d_{embed}} \to [0,1]</span> is trained on the <strong>death prediction task</strong>, so that for a given pathway <span class="math inline">x</span>, <span class="math inline">g_{\phi_{m}^{*}}(GPT^{\text{path}}(x))</span> is <em>close</em> to the conditional mean outcome <span class="math inline">m(x) = \mathbb{E}[Y_t | x]</span>.</p></li>
-<li class="fragment"><p><strong>Another head</strong> <span class="math inline">g_{\phi_{e}}: \mathbb{R}^{d_{embed}} \to \mathbb{R}_+</span> is trained to <strong>predict the treatment</strong> <span class="math inline">W_t</span> of a given individual (minimizing a Mean Squared Error).</p></li>
+<li class="fragment"><p><strong>Another head</strong> <span class="math inline">g_{\phi_{e}}: \mathbb{R}^{d_{embed}} \to  [0,1]</span> is trained to <strong>predict the treatment</strong> <span class="math inline">W_t</span> of a given individual (minimizing a Mean Squared Error).</p></li>
 <li class="fragment"><p>Finally, we train the CATE estimator training a head <span class="math inline">g_{\phi_{\tau}}: \mathbb{R}^{d_{embed}} \to [0,1]</span> by minimizing the <em>R-loss</em>: <span class="math display">\begin{align*}
 \phi_{\tau}^{*} \in \arg\!\min_{\phi_{\tau}} \; &amp;
 Y_t - g_{\phi_{m}^{*}}\left( GPT^{\text{path}}(X_{&lt;t}) \right) \\
@@ -526,17 +524,30 @@ Y_t - g_{\phi_{m}^{*}}\left( GPT^{\text{path}}(X_{&lt;t}) \right) \\
 \end{align*}</span></p></li>
 </ul>
 </section>
+<section class="slide level2">
+
+<h3 class="unnumbered scrollable" id="estimators-of-the-cate-at-the-end-of-the-day">Estimators of the CATE: at the end of the day</h3>
+<p>We have a lot of other meta-learners:</p>
+<ul>
+<li>T-learner</li>
+<li>X-learner</li>
+<li>DR-learner</li>
+<li>…</li>
+</ul>
+
+<img data-src="images/ML-CI-pipe.png" width="1000" class="r-stretch quarto-figure-center"><p class="caption">Target pipeline - from <span class="citation" data-cites="abecassis:hal-04774700">Abécassis et al. (<a href="#/section" role="doc-biblioref" onclick="">2025</a>)</span></p></section>
 <section id="benchmarking" class="slide level2 unnumbered">
 <h2>Benchmarking</h2>
 <ul>
 <li class="fragment"><strong>How to compare embedding models ? What is a good embedding ?</strong>
 <ol type="1">
-<li class="fragment">Death prediction</li>
-<li class="fragment">R-loss in a causal inference context (<span class="citation" data-cites="doutreligneHowSelectPredictive2025">Doutreligne and Varoquaux (<a href="#/section" role="doc-biblioref" onclick="">2025</a>)</span>)</li>
+<li class="fragment">Death or other outcome prediction</li>
+<li class="fragment">R-loss (<span class="citation" data-cites="doutreligneHowSelectPredictive2025">Doutreligne and Varoquaux (<a href="#/section" role="doc-biblioref" onclick="">2025</a>)</span>)</li>
+<li class="fragment">Visualization of the embedding space and <em>semantic understanding</em> (metric t.b.d.)</li>
 </ol></li>
 <li class="fragment"><strong>Competitors:</strong>
 <ul>
-<li class="fragment">SVD-PPMI (static embeddings)</li>
+<li class="fragment">SVD-PPMI (static embeddings - SVD of a cooccurrence matrix with a given window size)</li>
 <li class="fragment">BERT (pure embeddings, no trajectories)
 <ul>
 <li class="fragment">MLM pre-training task (<span class="citation" data-cites="life2vec">Savcisens et al. (<a href="#/section" role="doc-biblioref" onclick="">2023</a>)</span>)</li>
@@ -546,10 +557,18 @@ Y_t - g_{\phi_{m}^{*}}\left( GPT^{\text{path}}(X_{&lt;t}) \right) \\
 </ul></li>
 </ul>
 </section>
+<section id="improving-pre-training-task" class="slide level2 unnumbered">
+<h2>Improving pre-training task</h2>
+<ul>
+<li>Exploring Posson loss - ground truth being <strong>number of events</strong> for each token, for ecah time window</li>
+<li>Exponential loss for time-to-event task (as in MOTOR (<span class="citation" data-cites="steinberg2024motor">Steinberg et al. (<a href="#/section" role="doc-biblioref" onclick="">2024</a>)</span>))</li>
+</ul>
+<p>We want ideally to have a generative model.</p>
+</section>
 <section id="scaling" class="slide level2 unnumbered scrollable">
 <h2>Scaling</h2>
 <ul>
-<li><span class="citation" data-cites="chinchilla">Hoffmann et al. (<a href="#/section" role="doc-biblioref" onclick="">2022</a>)</span> (Chinchilla paper) proposes a <strong>scaling law</strong> for LLMs
+<li><span class="citation" data-cites="chinchilla">Hoffmann et al. (<a href="#/section" role="doc-biblioref" onclick="">2022</a>)</span> proposes a <strong>scaling law</strong> for LLMs
 <ul>
 <li><p>Trade off between number of training tokens (train dataset size) and number of parameters in the model (model size)</p></li>
 <li><p>Estimated optimal ratio: <span class="math display">\frac{\text{\# training tokens}}{\text{\# parameters}} = 20</span></p>
@@ -585,6 +604,9 @@ Y_t - g_{\phi_{m}^{*}}\left( GPT^{\text{path}}(X_{&lt;t}) \right) \\
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-abecassis:hal-04774700" class="csl-entry" role="listitem">
 Abécassis, Judith, Élise Dumas, Julie Alberge, and Gaël Varoquaux. 2025. <span>‘<span class="nocase">From prediction to prescription: Machine learning and Causal Inference</span>’</span>. <em><span>Annual Review of Biomedical Data Science</span></em>, April. <a href="https://doi.org/10.1146/annurev-biodatasci-103123-095750">https://doi.org/10.1146/annurev-biodatasci-103123-095750</a>.
+</div>
+<div id="ref-meta-learners" class="csl-entry" role="listitem">
+Curth, Alicia, and Mihaela van der Schaar. 2021. <span>‘Nonparametric Estimation of Heterogeneous Treatment Effects: From Theory to Learning Algorithms’</span>. <a href="https://arxiv.org/abs/2101.10943">https://arxiv.org/abs/2101.10943</a>.
 </div>
 <div id="ref-doutreligneHowSelectPredictive2025" class="csl-entry" role="listitem">
 Doutreligne, Matthieu, and Gaël Varoquaux. 2025. <span>‘How to Select Predictive Models for Decision-Making or Causal Inference’</span>. <em>GigaScience</em> 14 (January): giaf016. <a href="https://doi.org/10.1093/gigascience/giaf016">https://doi.org/10.1093/gigascience/giaf016</a>.
