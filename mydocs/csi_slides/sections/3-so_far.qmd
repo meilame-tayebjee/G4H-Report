@@ -5,7 +5,7 @@
   - So that any subsample can fit in vRAM
 - Tokenization
 
-IMAGE of data
+![](images/tokenized_data.png){fig-align="center"}
 
 ## Notations {.unnumbered}
 ### Notations: dataset {.unnumbered}
