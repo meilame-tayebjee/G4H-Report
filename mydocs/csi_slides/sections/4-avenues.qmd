@@ -74,9 +74,24 @@ Y_t - g_{\phi_{m}^{*}}\left( GPT^{\text{path}}(X_{<t}) \right) \\
   - GPT with next-token + time-to-event task (@Shmatko2025)
 :::
 
-## Improvement of the pre-training task - WIP {.unnumbered}
+## Improvement of the pre-training task {.unnumbered}
 - Going generative
 
-## Scaling - WIP {.unnumbered}
+## Scaling {.unnumbered .scrollable}
 
-- Chinchilla paper: scaling law
+- @chinchilla (Chinchilla paper) proposes a **scaling law** for LLMs
+  - Trade off between number of training tokens (train dataset size) and number of parameters in the model (model size)
+  - Estimated optimal ratio: 
+  $$\frac{\text{\# training tokens}}{\text{\# parameters}} = 20$$
+
+    - is it the same for medical pathways ?
+
+::: {.columns}
+::: {.column width="50%"}
+![From @Shmatko2025](images/delphi-graph.png){width=100%}
+:::
+
+::: {.column width="50%"}
+![From @chinchilla](images/chinchilla.jpeg){width=100%}
+:::
+:::
