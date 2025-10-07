@@ -1,4 +1,4 @@
-## Causal inference {.unnumbered}
+## Causal inference {.unnumbered .scrollable}
 
 - **Goal**: Estimate the impact of losing one's *Médecin Traitant* (Primary Care Provider, PCP), and looping back with Titouan's work
 
@@ -7,7 +7,10 @@
 
   - The covariate $X_{<t} \coloneqq (e_{<t}, t_{<t}, f_{<t})$, the medical history of the patient
   - $W_t$ is the treatment at time t, say: **the proportion of days the patient has spent without a PCP during the period $[t- \delta_{PCP}, t]$, $\delta_{PCP}$** being a hyperparameter controlling the length of the window
-  - $Y_t (W_t)$, the binary outcome, indicating **whether death has occured within a given time window** $[t, t+ \delta_d]$(which length $\delta_d$ is again chosen)
+  - $Y_t (W_t)$, the binary outcome, indicating **whether death has occured within a given time window** $[t, t+ \delta_d]$
+
+- We want to estimate the **Conditional Average Treatment Effect** (CATE):
+$$ \tau(x, w, t) \coloneqq \mathbf{E}[Y_t | X_{<t} = x, W_t = w]$$
 :::
 
 ---
@@ -46,15 +49,15 @@ where the baseline is "not having lost your PCP / having a PCP during all the pe
 - Another approach consists in trying to model the *propensity score*, the probability of being treated given $X$.
 
 
-- A first head $g_{\phi_{m}}: \mathbb{R}^{d_{embed}} \to [0,1]$ is trained on the death prediction task, so that for a given pathway $x$, $g_{\phi_{m}^{*}}(GPT^{\text{path}}(x))$ is *close* to the conditional mean outcome $m(x) = \mathbb{E}[Y_t | x]$.
+- **A first head** $g_{\phi_{m}}: \mathbb{R}^{d_{embed}} \to [0,1]$ is trained on the **death prediction task**, so that for a given pathway $x$, $g_{\phi_{m}^{*}}(GPT^{\text{path}}(x))$ is *close* to the conditional mean outcome $m(x) = \mathbb{E}[Y_t | x]$.
 
-- Another head $g_{\phi_{e}}: \mathbb{R}^{d_{embed}} \to \mathbb{R}_+$ is trained to predict the treatment $W_t$ of a given individual (minimizing a Mean Squared Error).
+- **Another head** $g_{\phi_{e}}: \mathbb{R}^{d_{embed}} \to \mathbb{R}_+$ is trained to **predict the treatment** $W_t$ of a given individual (minimizing a Mean Squared Error).
 
 - Finally, we train the CATE estimator training a head $g_{\phi_{\tau}}: \mathbb{R}^{d_{embed}} \to [0,1]$ by minimizing the *R-loss*: \begin{align*}
 \phi_{\tau}^{*} \in \arg\!\min_{\phi_{\tau}} \; & 
 Y_t - g_{\phi_{m}^{*}}\left( GPT^{\text{path}}(X_{<t}) \right) \\
-& - \left( W_t - g_{\phi_{e}^{*}}\left( GPT^{\text{path}}(X_{<t}) \right) \right)
-\cdot g_{\phi_{\tau}}\left( GPT^{\text{path}}(X_{<t}) \right)
+& - \left( W_t - g_{\phi_{e}^{*}}\left( GPT^{\text{path}}(X_{<t}) \right) 
+\cdot g_{\phi_{\tau}}\left( GPT^{\text{path}}(X_{<t}) \right) \right)
 \end{align*}
 :::
 
@@ -74,9 +77,21 @@ Y_t - g_{\phi_{m}^{*}}\left( GPT^{\text{path}}(X_{<t}) \right) \\
   - GPT with next-token + time-to-event task (@Shmatko2025)
 :::
 
-## Improvement of the pre-training task - WIP {.unnumbered}
-- Going generative
+## Scaling {.unnumbered .scrollable}
 
-## Scaling - WIP {.unnumbered}
+- @chinchilla (Chinchilla paper) proposes a **scaling law** for LLMs
+  - Trade off between number of training tokens (train dataset size) and number of parameters in the model (model size)
+  - Estimated optimal ratio: 
+  $$\frac{\text{\# training tokens}}{\text{\# parameters}} = 20$$
 
-- Chinchilla paper: scaling law
+    - is it the same for medical pathways ?
+
+::: {.columns}
+::: {.column width="50%"}
+![From @Shmatko2025](images/delphi-graph.png){width=100%}
+:::
+
+::: {.column width="50%"}
+![From @chinchilla](images/chinchilla.jpeg){width=100%}
+:::
+:::

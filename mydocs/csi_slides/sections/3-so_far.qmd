@@ -5,7 +5,7 @@
   - So that any subsample can fit in vRAM
 - Tokenization
 
-IMAGE of data
+![](images/tokenized_data.png){fig-align="center"}
 
 ## Notations {.unnumbered}
 ### Notations: dataset {.unnumbered}
@@ -40,7 +40,10 @@ where $\theta$ parametrizes the neural network.
 - Having a **time-aware** Transformers ($\neq$ NLP)
 - Keeping in mind causal inference
   - We want to be able to efficiently compute the embedding of the pathway **at any time** (the *trajectory* of the patient)
-  - Ideally we want to have a generative model - to generate counterfactuals
+
+- **Problems with the next token task:**
+  - a lot of simultaneous events, especially for medications
+  - different types of events: does it make sense to have a competition among them ?
 :::
 
 

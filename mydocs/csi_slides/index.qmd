@@ -37,10 +37,10 @@ css: custom.css
 
 {{< include sections/4-avenues.qmd >}}
 
-
 # References {.unnumbered}
 
 ## {.unnumbered}
 
 ::: {#refs}
 :::
+

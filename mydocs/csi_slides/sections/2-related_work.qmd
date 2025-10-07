@@ -30,6 +30,11 @@ Several methodological papers:
   - The best predictive model is not the best suited for causal inference
   - Model selection using risk scores
   - Designing a causal inference framework (DAG, PICOT)
-- @wagerCausalInferenceStatistical: reading group
+- @wagerCausalInferenceStatistical:
+  - Definitions and assumptions
+  - Meta-learners
 
-## Causal impact of PCP loss on health outcomes - WIP  {.unnumbered}
+
+## Causal impact of PCP loss on health outcomes  {.unnumbered}
+
+![From T. Le Calvé, PhD Student, CREST](images/capture_titouan.png)
