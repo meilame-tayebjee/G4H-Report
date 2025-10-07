@@ -17,7 +17,7 @@
     - **using deep learning methods for causal inference**
   - study policies that contribute to the efficiency of the French healthcare system
 
-- **10 years of exhaustive SNDS**
+- **11 years of exhaustive SNDS**
   - 70M patients
   - consultations, procedures, hospitalizations, medications, deaths etc.
 :::

@@ -67,4 +67,6 @@ We trained a "large" model (40M params) and a "small" one (5M).
 
 Still, the models converge quickly, and even small models achieve good convergence. This raises the (open) question of complexifying the task at some point.
 
-## Plot of the embedding space - WIP {.unnumbered}
+## Plot of the embedding space {.unnumbered}
+
+![](images/embedding_space.png){fig-align="center"}
