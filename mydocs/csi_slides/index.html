@@ -190,7 +190,7 @@ Meilame Tayebjee
 <ul>
 <li><a href="#/transformer-based-models-for-medical-pathway-embedding" id="/toc-transformer-based-models-for-medical-pathway-embedding">Transformer-based models for medical pathway embedding</a></li>
 <li><a href="#/mldl-for-causal-inference" id="/toc-mldl-for-causal-inference">ML/DL for causal inference</a></li>
-<li><a href="#/causal-impact-of-pcp-loss-on-health-outcomes---wip" id="/toc-causal-impact-of-pcp-loss-on-health-outcomes---wip">Causal impact of PCP loss on health outcomes - WIP</a></li>
+<li><a href="#/causal-impact-of-pcp-loss-on-health-outcomes" id="/toc-causal-impact-of-pcp-loss-on-health-outcomes">Causal impact of PCP loss on health outcomes</a></li>
 </ul></li>
 <li><a href="#/work-done-so-far" id="/toc-work-done-so-far"><span class="header-section-number">3</span> Work done so far</a>
 <ul>
@@ -209,8 +209,7 @@ Meilame Tayebjee
 
 
 <li><a href="#/benchmarking" id="/toc-benchmarking">Benchmarking</a></li>
-<li><a href="#/improvement-of-the-pre-training-task---wip" id="/toc-improvement-of-the-pre-training-task---wip">Improvement of the pre-training task - WIP</a></li>
-<li><a href="#/scaling---wip" id="/toc-scaling---wip">Scaling - WIP</a></li>
+<li><a href="#/scaling" id="/toc-scaling">Scaling</a></li>
 </ul></li>
 <li><a href="#/references" id="/toc-references">References</a>
 <ul>
@@ -261,7 +260,16 @@ Meilame Tayebjee
 </section>
 <section id="my-project-embedding-patient-pathways-for-causal-inference" class="slide level2 unnumbered">
 <h2>My project: embedding patient pathways for causal inference</h2>
-</section></section>
+<ul>
+<li>Our data: patient (medical) pathways
+<ul>
+<li>unstructured (just as in NLP)</li>
+<li>temporally irregular (not like NLP!)</li>
+</ul></li>
+<li>To feed classical causal ML estimators, we need to represent those pathways as vectors (<em>embeddings</em>)</li>
+</ul>
+
+<img data-src="images/pathway_data.png" class="quarto-figure quarto-figure-center r-stretch"></section></section>
 <section>
 <section id="related-work" class="title-slide slide level1 center" data-number="2">
 <h1><span class="header-section-number">2</span> Related work</h1>
@@ -379,12 +387,17 @@ Table&nbsp;1
 <li>Model selection using risk scores</li>
 <li>Designing a causal inference framework (DAG, PICOT)</li>
 </ul></li>
-<li><span class="citation" data-cites="wagerCausalInferenceStatistical">Wager (<a href="#/section" role="doc-biblioref" onclick="">2024</a>)</span>: reading group</li>
+<li><span class="citation" data-cites="wagerCausalInferenceStatistical">Wager (<a href="#/section" role="doc-biblioref" onclick="">2024</a>)</span>:
+<ul>
+<li>Definitions and assumptions</li>
+<li>Meta-learners</li>
+</ul></li>
 </ul>
 </section>
-<section id="causal-impact-of-pcp-loss-on-health-outcomes---wip" class="slide level2 unnumbered">
-<h2>Causal impact of PCP loss on health outcomes - WIP</h2>
-</section></section>
+<section id="causal-impact-of-pcp-loss-on-health-outcomes" class="slide level2 unnumbered">
+<h2>Causal impact of PCP loss on health outcomes</h2>
+
+<img data-src="images/capture_titouan.png" class="r-stretch quarto-figure-center"><p class="caption">From T. Le Calvé, PhD Student, CREST</p></section></section>
 <section>
 <section id="work-done-so-far" class="title-slide slide level1 center" data-number="3">
 <h1><span class="header-section-number">3</span> Work done so far</h1>
@@ -400,8 +413,8 @@ Table&nbsp;1
 </ul></li>
 <li>Tokenization</li>
 </ul>
-<p>IMAGE of data</p>
-</section>
+
+<img data-src="images/tokenized_data.png" class="quarto-figure quarto-figure-center r-stretch"></section>
 <section id="notations" class="slide level2 unnumbered">
 <h2>Notations</h2>
 <h3 class="unnumbered" id="notations-dataset">Notations: dataset</h3>
@@ -433,7 +446,11 @@ Table&nbsp;1
 <li class="fragment">Keeping in mind causal inference
 <ul>
 <li class="fragment">We want to be able to efficiently compute the embedding of the pathway <strong>at any time</strong> (the <em>trajectory</em> of the patient)</li>
-<li class="fragment">Ideally we want to have a generative model - to generate counterfactuals</li>
+</ul></li>
+<li class="fragment"><strong>Problems with the next token task:</strong>
+<ul>
+<li class="fragment">a lot of simultaneous events, especially for medications</li>
+<li class="fragment">different types of events: does it make sense to have a competition among them ?</li>
 </ul></li>
 </ul>
 </section>
@@ -458,7 +475,7 @@ Table&nbsp;1
 <h1><span class="header-section-number">4</span> Avenues of work</h1>
 
 </section>
-<section id="causal-inference" class="slide level2 unnumbered">
+<section id="causal-inference" class="slide level2 unnumbered scrollable">
 <h2>Causal inference</h2>
 <ul>
 <li><strong>Goal</strong>: Estimate the impact of losing one’s <em>Médecin Traitant</em> (Primary Care Provider, PCP), and looping back with Titouan’s work</li>
@@ -468,8 +485,9 @@ Table&nbsp;1
 <ul>
 <li class="fragment">The covariate <span class="math inline">X_{&lt;t} \coloneqq (e_{&lt;t}, t_{&lt;t}, f_{&lt;t})</span>, the medical history of the patient</li>
 <li class="fragment"><span class="math inline">W_t</span> is the treatment at time t, say: <strong>the proportion of days the patient has spent without a PCP during the period <span class="math inline">[t- \delta_{PCP}, t]</span>, <span class="math inline">\delta_{PCP}</span></strong> being a hyperparameter controlling the length of the window</li>
-<li class="fragment"><span class="math inline">Y_t (W_t)</span>, the binary outcome, indicating <strong>whether death has occured within a given time window</strong> <span class="math inline">[t, t+ \delta_d]</span>(which length <span class="math inline">\delta_d</span> is again chosen)</li>
+<li class="fragment"><span class="math inline">Y_t (W_t)</span>, the binary outcome, indicating <strong>whether death has occured within a given time window</strong> <span class="math inline">[t, t+ \delta_d]</span></li>
 </ul></li>
+<li class="fragment"><p>We want to estimate the <strong>Conditional Average Treatment Effect</strong> (CATE): <span class="math display"> \tau(x, w, t) \coloneqq \mathbf{E}[Y_t | X_{&lt;t} = x, W_t = w]</span></p></li>
 </ul>
 </section>
 <section class="slide level2">
@@ -498,13 +516,13 @@ Table&nbsp;1
 <h3 class="unnumbered scrollable" id="estimators-of-the-cate-r-learner">Estimators of the CATE: R-learner</h3>
 <ul>
 <li class="fragment"><p>Another approach consists in trying to model the <em>propensity score</em>, the probability of being treated given <span class="math inline">X</span>.</p></li>
-<li class="fragment"><p>A first head <span class="math inline">g_{\phi_{m}}: \mathbb{R}^{d_{embed}} \to [0,1]</span> is trained on the death prediction task, so that for a given pathway <span class="math inline">x</span>, <span class="math inline">g_{\phi_{m}^{*}}(GPT^{\text{path}}(x))</span> is <em>close</em> to the conditional mean outcome <span class="math inline">m(x) = \mathbb{E}[Y_t | x]</span>.</p></li>
-<li class="fragment"><p>Another head <span class="math inline">g_{\phi_{e}}: \mathbb{R}^{d_{embed}} \to \mathbb{R}_+</span> is trained to predict the treatment <span class="math inline">W_t</span> of a given individual (minimizing a Mean Squared Error).</p></li>
+<li class="fragment"><p><strong>A first head</strong> <span class="math inline">g_{\phi_{m}}: \mathbb{R}^{d_{embed}} \to [0,1]</span> is trained on the <strong>death prediction task</strong>, so that for a given pathway <span class="math inline">x</span>, <span class="math inline">g_{\phi_{m}^{*}}(GPT^{\text{path}}(x))</span> is <em>close</em> to the conditional mean outcome <span class="math inline">m(x) = \mathbb{E}[Y_t | x]</span>.</p></li>
+<li class="fragment"><p><strong>Another head</strong> <span class="math inline">g_{\phi_{e}}: \mathbb{R}^{d_{embed}} \to \mathbb{R}_+</span> is trained to <strong>predict the treatment</strong> <span class="math inline">W_t</span> of a given individual (minimizing a Mean Squared Error).</p></li>
 <li class="fragment"><p>Finally, we train the CATE estimator training a head <span class="math inline">g_{\phi_{\tau}}: \mathbb{R}^{d_{embed}} \to [0,1]</span> by minimizing the <em>R-loss</em>: <span class="math display">\begin{align*}
 \phi_{\tau}^{*} \in \arg\!\min_{\phi_{\tau}} \; &amp;
 Y_t - g_{\phi_{m}^{*}}\left( GPT^{\text{path}}(X_{&lt;t}) \right) \\
-&amp; - \left( W_t - g_{\phi_{e}^{*}}\left( GPT^{\text{path}}(X_{&lt;t}) \right) \right)
-\cdot g_{\phi_{\tau}}\left( GPT^{\text{path}}(X_{&lt;t}) \right)
+&amp; - \left( W_t - g_{\phi_{e}^{*}}\left( GPT^{\text{path}}(X_{&lt;t}) \right)
+\cdot g_{\phi_{\tau}}\left( GPT^{\text{path}}(X_{&lt;t}) \right) \right)
 \end{align*}</span></p></li>
 </ul>
 </section>
@@ -528,17 +546,34 @@ Y_t - g_{\phi_{m}^{*}}\left( GPT^{\text{path}}(X_{&lt;t}) \right) \\
 </ul></li>
 </ul>
 </section>
-<section id="improvement-of-the-pre-training-task---wip" class="slide level2 unnumbered">
-<h2>Improvement of the pre-training task - WIP</h2>
+<section id="scaling" class="slide level2 unnumbered scrollable">
+<h2>Scaling</h2>
 <ul>
-<li>Going generative</li>
-</ul>
-</section>
-<section id="scaling---wip" class="slide level2 unnumbered">
-<h2>Scaling - WIP</h2>
+<li><span class="citation" data-cites="chinchilla">Hoffmann et al. (<a href="#/section" role="doc-biblioref" onclick="">2022</a>)</span> (Chinchilla paper) proposes a <strong>scaling law</strong> for LLMs
 <ul>
-<li>Chinchilla paper: scaling law</li>
+<li><p>Trade off between number of training tokens (train dataset size) and number of parameters in the model (model size)</p></li>
+<li><p>Estimated optimal ratio: <span class="math display">\frac{\text{\# training tokens}}{\text{\# parameters}} = 20</span></p>
+<ul>
+<li>is it the same for medical pathways ?</li>
+</ul></li>
+</ul></li>
 </ul>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/delphi-graph.png" style="width:100.0%"></p>
+<figcaption>From <span class="citation" data-cites="Shmatko2025">Shmatko et al. (<a href="#/section" role="doc-biblioref" onclick="">2025</a>)</span></figcaption>
+</figure>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/chinchilla.jpeg" style="width:100.0%"></p>
+<figcaption>From <span class="citation" data-cites="chinchilla">Hoffmann et al. (<a href="#/section" role="doc-biblioref" onclick="">2022</a>)</span></figcaption>
+</figure>
+</div>
+</div></div>
 </section></section>
 <section>
 <section id="references" class="title-slide slide level1 unnumbered center">
@@ -553,6 +588,9 @@ Abécassis, Judith, Élise Dumas, Julie Alberge, and Gaël Varoquaux. 2025. <spa
 </div>
 <div id="ref-doutreligneHowSelectPredictive2025" class="csl-entry" role="listitem">
 Doutreligne, Matthieu, and Gaël Varoquaux. 2025. <span>‘How to Select Predictive Models for Decision-Making or Causal Inference’</span>. <em>GigaScience</em> 14 (January): giaf016. <a href="https://doi.org/10.1093/gigascience/giaf016">https://doi.org/10.1093/gigascience/giaf016</a>.
+</div>
+<div id="ref-chinchilla" class="csl-entry" role="listitem">
+Hoffmann, Jordan, Sebastian Borgeaud, Arthur Mensch, Elena Buchatskaya, Trevor Cai, Eliza Rutherford, Diego de Las Casas, et al. 2022. <span>‘Training Compute-Optimal Large Language Models’</span>. <a href="https://arxiv.org/abs/2203.15556">https://arxiv.org/abs/2203.15556</a>.
 </div>
 <div id="ref-liBEHRTTransformerElectronic2020" class="csl-entry" role="listitem">
 Li, Yikuan, Shishir Rao, José Roberto Ayala Solares, Abdelaali Hassaine, Rema Ramakrishnan, Dexter Canoy, Yajie Zhu, Kazem Rahimi, and Gholamreza Salimi-Khorshidi. 2020. <span>‘<span>BEHRT</span>: <span>Transformer</span> for <span>Electronic Health Records</span>’</span>. <em>Scientific Reports</em> 10 (1): 7155. <a href="https://doi.org/10.1038/s41598-020-62922-y">https://doi.org/10.1038/s41598-020-62922-y</a>.
