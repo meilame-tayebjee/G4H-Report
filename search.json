@@ -102,7 +102,7 @@
     "href": "mydocs/csi_slides/index.html#scaling",
     "title": "PhD Committee",
     "section": "Scaling",
-    "text": "Scaling\n\nHoffmann et al. (2022) proposes a scaling law for LLMs\n\nTrade off between number of training tokens (train dataset size) and number of parameters in the model (model size)\nEstimated optimal ratio: \\frac{\\text{\\# training tokens}}{\\text{\\# parameters}} = 20\n\nis it the same for medical pathways ?\n\n\n\n\n\n\n\n\nFrom Shmatko et al. (2025)\n\n\n\n\n\n\nFrom Hoffmann et al. (2022)"
+    "text": "Scaling\n\nHoffmann et al. (2022) propose a scaling law for LLMs\n\nTrade off between number of training tokens (train dataset size) and number of parameters in the model (model size)\nEstimated optimal ratio: \\frac{\\text{\\# training tokens}}{\\text{\\# parameters}} = 20\n\nis it the same for medical pathways ?\n\n\n\n\n\n\n\n\nFrom Shmatko et al. (2025)\n\n\n\n\n\n\nFrom Hoffmann et al. (2022)"
   },
   {
     "objectID": "mydocs/csi_slides/index.html#section",
