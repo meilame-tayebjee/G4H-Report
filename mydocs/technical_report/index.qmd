@@ -151,8 +151,7 @@ Finally, we train the CATE estimator training a head $g_{\phi_{\tau}}: \mathbb{R
 \begin{align*}
 \phi_{\tau}^{*} \in \arg\!\min_{\phi_{\tau}} \; & 
 Y_t - g_{\phi_{m}^{*}}\left( GPT^{\text{path}}(X_{<t}) \right) \\
-& - \left( W_t - g_{\phi_{e}^{*}}\left( GPT^{\text{path}}(X_{<t}) \right) \right)
-\cdot g_{\phi_{\tau}}\left( GPT^{\text{path}}(X_{<t}) \right)
+& - \left( W_t - g_{\phi_{e}^{*}}\left( GPT^{\text{path}}(X_{<t}) \right) \cdot g_{\phi_{\tau}}\left( GPT^{\text{path}}(X_{<t}) \right) \right)
 \end{align*}
 
 
