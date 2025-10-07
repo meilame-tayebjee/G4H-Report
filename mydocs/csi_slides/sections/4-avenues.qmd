@@ -97,7 +97,7 @@ We want ideally to have a generative model.
 
 ## Scaling {.unnumbered .scrollable}
 
-- @chinchilla proposes a **scaling law** for LLMs
+- @chinchilla propose a **scaling law** for LLMs
   - Trade off between number of training tokens (train dataset size) and number of parameters in the model (model size)
   - Estimated optimal ratio: 
   $$\frac{\text{\# training tokens}}{\text{\# parameters}} = 20$$
