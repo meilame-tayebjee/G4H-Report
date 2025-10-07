@@ -35,4 +35,6 @@ Several methodological papers:
   - Meta-learners
 
 
-## Causal impact of PCP loss on health outcomes - WIP  {.unnumbered}
+## Causal impact of PCP loss on health outcomes  {.unnumbered}
+
+![From T. Le Calvé, PhD Student, CREST](images/capture_titouan.png)
