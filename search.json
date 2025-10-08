@@ -95,7 +95,7 @@
     "href": "mydocs/csi_slides/index.html#improving-pre-training-task",
     "title": "PhD Committee",
     "section": "Improving pre-training task",
-    "text": "Improving pre-training task\n\nExploring Posson loss - ground truth being number of events for each token, for ecah time window\nExponential loss for time-to-event task (as in MOTOR (Steinberg et al. (2024)))\n\nWe want ideally to have a generative model."
+    "text": "Improving pre-training task\n\nExploring Posson loss - ground truth being number of events for each token, for each time window\nExponential loss for time-to-event task (as in MOTOR (Steinberg et al. (2024)))\n\nWe want ideally to have a generative model."
   },
   {
     "objectID": "mydocs/csi_slides/index.html#scaling",
