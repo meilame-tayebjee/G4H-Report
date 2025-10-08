@@ -90,7 +90,7 @@ We have a lot of other meta-learners:
 
 ## Improving pre-training task {.unnumbered}
 
-- Exploring Posson loss - ground truth being **number of events** for each token, for ecah time window
+- Exploring Posson loss - ground truth being **number of events** for each token, for each time window
 - Exponential loss for time-to-event task (as in MOTOR (@steinberg2024motor))
 
 We want ideally to have a generative model.
