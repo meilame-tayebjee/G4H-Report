@@ -1,0 +1,41 @@
+---
+title: G4H Half-Day
+subtitle: "**Embeddings : from NLP to medical pathways**"
+authors:
+  - name: Meilame Tayebjee
+    roles: writing
+    corresponding: true
+date: "2025-10-15"
+date-format: "D MMMM YYYY"
+lang: en-GB
+slide-number: true
+number-sections: true
+bibliography: references.bib
+format: 
+  revealjs: 
+    theme: white
+    toc: true
+    toc-depth: 2   # show up to ## headings
+    html-math-method: katex
+    
+css: custom.css
+---
+
+# From NLP...
+
+{{< include sections/1-nlp.qmd >}}
+
+# ... to patient embeddings
+
+{{< include sections/2-pathways.qmd >}}
+
+# Next steps
+
+{{< include sections/3-avenues.qmd >}}
+
+# References {.unnumbered}
+
+## {.unnumbered}
+
+::: {#refs}
+:::

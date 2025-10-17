@@ -2,3 +2,4 @@
 _manuscript/
 .DS_Store
 /_site/
+**/*.quarto_ipynb

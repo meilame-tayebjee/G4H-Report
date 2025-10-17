@@ -1,0 +1,40 @@
+## Causal inference {.unnumbered .scrollable}
+
+- **Goal**: Estimate the impact of losing one's *Médecin Traitant* (Primary Care Provider, PCP), and looping back with Titouan's work
+
+::: {.incremental}
+- Up to a given time $t$, we have:
+
+  - The covariate $X_{<t} \coloneqq (e_{<t}, t_{<t}, f_{<t})$, the medical history of the patient
+  - $W_t$ is the (binary) treatment at time t, say: the patient has lost its PCP (death or retirement) before $t$
+  - $Y_t (W_t)$, the binary outcome, indicating **whether death has occured within a given time window** $[t, t+ \delta_d]$
+
+- We want to estimate the **Conditional Average Treatment Effect** (CATE):
+$$ \tau(x, t) \coloneqq \mathbf{E}[Y_t(1) - Y_t(0) | X_{<t} = x]$$
+:::
+
+## Improving pre-training task {.unnumbered}
+
+- Exploring Posson loss - ground truth being **number of events** for each token, for each time window
+- Exponential loss for time-to-event task (as in MOTOR (@steinberg2024motor))
+
+We want ideally to have a generative model.
+
+## Scaling {.unnumbered .scrollable}
+
+- @chinchilla propose a **scaling law** for LLMs
+  - Trade off between number of training tokens (train dataset size) and number of parameters in the model (model size)
+  - Estimated optimal ratio: 
+  $$\frac{\text{\# training tokens}}{\text{\# parameters}} = 20$$
+
+    - is it the same for medical pathways ?
+
+::: {.columns}
+::: {.column width="50%"}
+![From @Shmatko2025](../csi_slides/images/delphi-graph.png){width=100%}
+:::
+
+::: {.column width="50%"}
+![From @chinchilla](../csi_slides/images/chinchilla.jpeg){width=100%}
+:::
+:::
