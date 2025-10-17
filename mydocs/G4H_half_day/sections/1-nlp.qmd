@@ -1,0 +1,83 @@
+##  Representing words {.unnumbered}
+
+::: {.incremental}
+- Historically (up to the 2000s), words in NLP were treated as symbols — not as entities with meaning: 
+  - A one-hot vector (e.g. “cat” = [0, 0, 1, 0, 0, …])
+  - Or a string in a lookup table.
+
+- **Problems**:
+  - No notion of similarity:
+    - "hotel" = [ 1 0 0 0] et "motel" = [0 1 0 0] are orthogonal !
+  - Dimensional explosion
+:::
+
+##  Introducing embeddings {.unnumbered}
+
+::: {.incremental}
+- Each word $w$ should be mapped to a dense vector $v_w \in \mathbf{R}^d$ where $d <<< |V|$
+- Taking **context** into account (_distributional semantics_):
+  - “You shall know a word by the company it keeps” (J. R. Firth, 1957)
+
+![From [Stanford NLP Course](https://web.stanford.edu/class/cs224n/slides_w25/cs224n-2025-lecture01-wordvecs1.pdf)](images/stanford_context.png){fig-align="center"}
+
+:::
+
+---
+
+- Count-based: co-occurrence matrix, PPMI...
+- **Deep-learning based: Word2Vec**
+
+::: {.columns}
+::: {.column width="50%"}
+![From [Lena Voita](https://lena-voita.github.io/nlp_course/word_embeddings.html#pre_neural)](images/word_repr_intro-min.png){width=100%}
+:::
+
+::: {.column width="50%"}
+![From [Lena Voita](https://lena-voita.github.io/nlp_course/word_embeddings.html#pre_neural)](images/lookup_table.gif){width=100%}
+:::
+:::
+
+**Notice how the context length is important and can quickly fill the memory.**
+
+
+## How to train ? {.unnumbered}
+
+
+![From [Lena Voita](https://lena-voita.github.io/nlp_course/word_embeddings.html#pre_neural)](images/cbow_skip-min.png){fig-align="center"}
+
+## Application of word embeddings: similarity {.unnumbered}
+
+![From [GloVe project page](https://nlp.stanford.edu/projects/glove/)](images/frog-min.png){fig-align="center"}
+
+
+## Application of word embeddings: Language Models {.unnumbered .scrollable}
+
+- Language Models = models that predict the next word
+  - **Fixed-window LM**: does not scale when context size increases
+  - **RNNs**: model size independent from context size, but **sequential processing** + **vanishing gradient**
+
+::: {.columns}
+::: {.column width="50%"}
+![From [Stanford NLP Course](https://web.stanford.edu/class/cs224n/slides_w25/cs224n-2025-lecture05-rnnlm.pdf)](images/fixed_window.png){width=100%}
+:::
+
+::: {.column width="50%"}
+![From [Stanford NLP Course](https://web.stanford.edu/class/cs224n/slides_w25/cs224n-2025-lecture05-rnnlm.pdf)](images/RNN.png){width=100%}
+:::
+:::
+
+## Introducing Transformers {.unnumbered}
+
+::: {.incremental}
+- Attention matrix $\alpha_{i, j}(X)$ to produce _contextualized embeddings_
+  - Each embedding is _transformed_, via a weighted average
+  - No dimension change, but the output is now context-aware
+- Parallelizable, scalable
+- Two types:
+  - BERT
+    - pre-trained with Masked Language Modeling
+  - GPT
+    - _causal_ attention matrix
+    - pre-trained with next token prediction task
+:::
+
