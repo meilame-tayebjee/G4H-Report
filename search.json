@@ -1,5 +1,166 @@
 [
   {
+    "objectID": "mydocs/technical_report/index.html",
+    "href": "mydocs/technical_report/index.html",
+    "title": "G4H - From embeddings to causal inference",
+    "section": "",
+    "text": "We consider a dataset (X_i)_{i = 1..n} of medical pathways. For each patient i, X_i \\coloneqq (e_i, t_i, f_i), where:\n\ne_i \\in \\mathbb{R}^{cs} denotes the vector of tokenized events. It is a tensor1 which size is common for all patients2 (an hyperparameter called the context size, cs), that contains integers between 0 and the vocabulary size \\lvert \\mathcal{V} \\rvert.\nt_i \\in \\mathbb{R}^{cs} is the temporal vector, containing the dates3 for each event in e_i. For now we only consider consultation and medication type of events.\nf_i \\in \\mathbb{R}^{2} corresponds to the patient general features, for now age and gender.\n\nAt this stage, the pathways only contain consultations and pharmaceuticals events. We plan to add way more types of event, including deaths, hospitalizations, medical procedures etc.\n\n\n\n\n\n\nAn embedding matrix of size \\mathbb{R}^{\\lvert \\mathcal{V} \\rvert, d_{embed}} projects each token of the sequence to an embedding vector. Adapting from the classical Transformer, we use t_i to have a time-aware positional encoding using a sinusoidal encoding. At the beginning of the sequence, we add a symbolic [START] token, composed of the summed embeddings of age and gender.\nThese embeddings are then passed to causal4 self-attention layers, so that the Transformer-based model outputs causally contextualized embeddings for each token:  GPT_{\\theta}(X_i) \\in \\mathbb{R}^{cs, d_{embed}} where \\theta parametrizes the neural network.\n\n\n\n\nAt a given position in the pathway, we consider the pre-training task of predicting, for each token, if it will appear within the next t days. We consider, simulatenously, several t \\in \\mathcal{T}, \\mathcal{T} being the sorted set of short term horizons, typically 14, 30, 60, 90, 180 days.\nLet, for this task:\n\ng_{\\phi} \\colon \\mathbb{R}^{cs, d_{embed}} \\to [0, 1]^{cs, \\lvert \\mathcal{V} \\rvert, \\lvert \\mathcal{T} \\rvert } the neural prediction head for this task (parametrized by \\phi), on top of the Transformer layers\nfor a patient i, Y_{i, \\cdot, \\cdot, \\cdot} \\in \\{ 0, 1 \\}^{cs, \\lvert \\mathcal{V} \\rvert, \\lvert \\mathcal{T} \\rvert} the ground truth5\n\nThe pre-training solves:\n\\begin{align*}\n\\theta^{*}, \\phi^{*} \\in \\arg\\!\\min \\; & \\sum_{i=1}^{n} \\sum_{\\text{pos}=1}^{cs} \\sum_{w \\in \\mathcal{V}} \\sum_{t \\in \\mathcal{T}}\n\\text{BCE}\\left(\n    g_{\\phi} \\circ GPT_{\\theta}(X_i)_{\\text{pos}, w, t},\n    Y_{i, \\text{pos}, w, t}\n\\right) \\\\\n& + \\lambda \\, \\text{Mon}\\left( g_{\\phi} \\circ GPT_{\\theta}(X_i) \\right)\n\\end{align*}\nwhere:\n\n\\text{BCE}(x,y) = y \\log(x) + (1-y) \\log(1-x)\nfor all i, \\text{Mon}\\left( g_{\\phi} \\circ GPT_{\\theta}(X_i) \\right) \\coloneqq \\sum_{t, t' | t' &gt; t} \\max \\left(0, g_{\\phi} \\circ GPT_{\\theta}(X_i)_{\\cdot, \\cdot, t} - GPT_{\\theta}(X_i)_{\\cdot, \\cdot, t'} \\right)\n\n\n\n\nWe trained a “large” model (40M parameters) and a “small” one (5M parameters). It seems that the big model improves the result, leading us to think there is a signal to capture and that the task is “learnable”.\n\n\n\nROC curve of the pre-training task for a given specialty on a test set of 10,000 patients.\n\n\nStill, the models converge quickly, and even small models achieve good convergence. This raises the (open) question of complexifying the task at some point."
+  },
+  {
+    "objectID": "mydocs/technical_report/index.html#data",
+    "href": "mydocs/technical_report/index.html#data",
+    "title": "G4H - From embeddings to causal inference",
+    "section": "",
+    "text": "We consider a dataset (X_i)_{i = 1..n} of medical pathways. For each patient i, X_i \\coloneqq (e_i, t_i, f_i), where:\n\ne_i \\in \\mathbb{R}^{cs} denotes the vector of tokenized events. It is a tensor1 which size is common for all patients2 (an hyperparameter called the context size, cs), that contains integers between 0 and the vocabulary size \\lvert \\mathcal{V} \\rvert.\nt_i \\in \\mathbb{R}^{cs} is the temporal vector, containing the dates3 for each event in e_i. For now we only consider consultation and medication type of events.\nf_i \\in \\mathbb{R}^{2} corresponds to the patient general features, for now age and gender.\n\nAt this stage, the pathways only contain consultations and pharmaceuticals events. We plan to add way more types of event, including deaths, hospitalizations, medical procedures etc."
+  },
+  {
+    "objectID": "mydocs/technical_report/index.html#transformer-based-models",
+    "href": "mydocs/technical_report/index.html#transformer-based-models",
+    "title": "G4H - From embeddings to causal inference",
+    "section": "",
+    "text": "An embedding matrix of size \\mathbb{R}^{\\lvert \\mathcal{V} \\rvert, d_{embed}} projects each token of the sequence to an embedding vector. Adapting from the classical Transformer, we use t_i to have a time-aware positional encoding using a sinusoidal encoding. At the beginning of the sequence, we add a symbolic [START] token, composed of the summed embeddings of age and gender.\nThese embeddings are then passed to causal4 self-attention layers, so that the Transformer-based model outputs causally contextualized embeddings for each token:  GPT_{\\theta}(X_i) \\in \\mathbb{R}^{cs, d_{embed}} where \\theta parametrizes the neural network.\n\n\n\n\nAt a given position in the pathway, we consider the pre-training task of predicting, for each token, if it will appear within the next t days. We consider, simulatenously, several t \\in \\mathcal{T}, \\mathcal{T} being the sorted set of short term horizons, typically 14, 30, 60, 90, 180 days.\nLet, for this task:\n\ng_{\\phi} \\colon \\mathbb{R}^{cs, d_{embed}} \\to [0, 1]^{cs, \\lvert \\mathcal{V} \\rvert, \\lvert \\mathcal{T} \\rvert } the neural prediction head for this task (parametrized by \\phi), on top of the Transformer layers\nfor a patient i, Y_{i, \\cdot, \\cdot, \\cdot} \\in \\{ 0, 1 \\}^{cs, \\lvert \\mathcal{V} \\rvert, \\lvert \\mathcal{T} \\rvert} the ground truth5\n\nThe pre-training solves:\n\\begin{align*}\n\\theta^{*}, \\phi^{*} \\in \\arg\\!\\min \\; & \\sum_{i=1}^{n} \\sum_{\\text{pos}=1}^{cs} \\sum_{w \\in \\mathcal{V}} \\sum_{t \\in \\mathcal{T}}\n\\text{BCE}\\left(\n    g_{\\phi} \\circ GPT_{\\theta}(X_i)_{\\text{pos}, w, t},\n    Y_{i, \\text{pos}, w, t}\n\\right) \\\\\n& + \\lambda \\, \\text{Mon}\\left( g_{\\phi} \\circ GPT_{\\theta}(X_i) \\right)\n\\end{align*}\nwhere:\n\n\\text{BCE}(x,y) = y \\log(x) + (1-y) \\log(1-x)\nfor all i, \\text{Mon}\\left( g_{\\phi} \\circ GPT_{\\theta}(X_i) \\right) \\coloneqq \\sum_{t, t' | t' &gt; t} \\max \\left(0, g_{\\phi} \\circ GPT_{\\theta}(X_i)_{\\cdot, \\cdot, t} - GPT_{\\theta}(X_i)_{\\cdot, \\cdot, t'} \\right)\n\n\n\n\nWe trained a “large” model (40M parameters) and a “small” one (5M parameters). It seems that the big model improves the result, leading us to think there is a signal to capture and that the task is “learnable”.\n\n\n\nROC curve of the pre-training task for a given specialty on a test set of 10,000 patients.\n\n\nStill, the models converge quickly, and even small models achieve good convergence. This raises the (open) question of complexifying the task at some point."
+  },
+  {
+    "objectID": "mydocs/technical_report/index.html#framework",
+    "href": "mydocs/technical_report/index.html#framework",
+    "title": "G4H - From embeddings to causal inference",
+    "section": "2.1 Framework",
+    "text": "2.1 Framework\nUp to a given time t, we have:\n\nThe covariate X_{&lt;t} \\coloneqq (e_{&lt;t}, t_{&lt;t}, f_{&lt;t}), the medical history of the patient\nW_t is the treatment at time t and can either be:\n\nthe proportion of days the patient has spent without a PCP during the period [t- \\delta_{PCP}, t], \\delta_{PCP} being a hyperparameter controlling the length of the window\nthe maximum number of consecutive days without having a PCP, anytime in the past\n\nY_t (W_t), the binary outcome, indicating whether death has occured within a given time window [t, t+ \\delta_d](which length \\delta_d is again chosen)"
+  },
+  {
+    "objectID": "mydocs/technical_report/index.html#estimating-the-cate",
+    "href": "mydocs/technical_report/index.html#estimating-the-cate",
+    "title": "G4H - From embeddings to causal inference",
+    "section": "2.2 Estimating the CATE",
+    "text": "2.2 Estimating the CATE\nWe want to estimate the Conditional Average Treatment Effect (CATE):\n \\tau(x, w) \\coloneqq \\mathbb{E}[Y_t \\mid X_{&lt;t} = x, W_t = w] \n\n2.2.1 Assumptions\n\nSUTVA : Y_t(w) = Y_t \\quad \\textit{ if } W_t = w\n\nThe others not having a PCP for a given amount of time does not influence my probability to die\nOnly one version of treatment ?\n\nConditional ignorability\n\n \\forall w \\in \\mathbb{R}_{+}, Y_t(w) \\perp W_t \\mid X_{&lt;t}\n\nOverlap\n\n 0 &lt; \\mathbb{P}(W_t = w | X_{&lt;t} = x) &lt; 1, \\forall (w,x) \\in (\\mathbb{R}_{+}, \\mathbb{R}^{d_{embed}})\n\n\n2.2.2 Estimators\nFor a given time t, we define {pos}_t as being the last position in the patient’s pathway before t, and we define the embedding of the pathway:\n GPT^{\\text{path}}(X_{&lt;t}) \\coloneqq GPT_{\\theta^{*}}(X_{&lt;t})_{{pos}_t} \\in \\mathbb{R}^{d_{embed}} \n\nS-learner & T-learner\nThe S-learner is based on “outcome models” that try to capture the link between the outcome and the features (Abécassis et al. (2025)).\nMore precisely, we train on the validation set a head g_{\\phi}: \\mathbb{R}^{d_{embed}} \\times \\mathbb{R}_{+}  \\to [0,1] minimizing the binary cross-entropy loss on death prediction - to obtain \\phi^{*}6. At the end of the day:\n \\hat{\\tau}_{\\text{SLearner}}(x, w) \\coloneqq g_{\\phi^{*}} (GPT^{\\text{path}}(x), w) - g_{\\phi^{*}} (GPT^{\\text{path}}(x), 0)\nwhere the baseline is “not having lost your PCP / having a PCP during all the period”.\n🔴 There is no T-learner for continuous treatment, a priori\n\n\nR-learner\nAnother approach consists in trying to model the propensity score, the probability of being treated given X.\nA first head g_{\\phi_{m}}: \\mathbb{R}^{d_{embed}} \\to [0,1] is trained on the death prediction task, so that for a given pathway x, g_{\\phi_{m}^{*}}(GPT^{\\text{path}}(x)) is close to the conditional mean outcome m(x) = \\mathbb{E}[Y_t | x].\nAnother head g_{\\phi_{e}}: \\mathbb{R}^{d_{embed}} \\to \\mathbb{R}_+ is trained to predict the treatment W_t of a given individual (minimizing a Mean Squared Error).\nFinally, we train the CATE estimator training a head g_{\\phi_{\\tau}}: \\mathbb{R}^{d_{embed}} \\to [0,1] by minimizing the R-loss:\n\\begin{align*}\n\\phi_{\\tau}^{*} \\in \\arg\\!\\min_{\\phi_{\\tau}} \\; &\nY_t - g_{\\phi_{m}^{*}}\\left( GPT^{\\text{path}}(X_{&lt;t}) \\right) \\\\\n& - \\left( W_t - g_{\\phi_{e}^{*}}\\left( GPT^{\\text{path}}(X_{&lt;t}) \\right) \\cdot g_{\\phi_{\\tau}}\\left( GPT^{\\text{path}}(X_{&lt;t}) \\right) \\right)\n\\end{align*}\n🔴 There is no DR-learner for continuous treatment, a priori"
+  },
+  {
+    "objectID": "mydocs/technical_report/index.html#sec-benchmarks",
+    "href": "mydocs/technical_report/index.html#sec-benchmarks",
+    "title": "G4H - From embeddings to causal inference",
+    "section": "2.3 Benchmarks",
+    "text": "2.3 Benchmarks\nWIP\n\nReferences\n\n\nAbécassis, Judith, Élise Dumas, Julie Alberge, and Gaël Varoquaux. 2025. “From prediction to prescription: Machine learning and Causal Inference.” Annual Review of Biomedical Data Science, April. https://doi.org/10.1146/annurev-biodatasci-103123-095750."
+  },
+  {
+    "objectID": "mydocs/technical_report/index.html#footnotes",
+    "href": "mydocs/technical_report/index.html#footnotes",
+    "title": "G4H - From embeddings to causal inference",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nActually, we consider several tensors (and several vocabulary sizes) - one for each type of tokens, but we do not get into the details here.↩︎\nShorter sequences are padded, longer are cropped.↩︎\nTo describe a date, we actually use the number of days since 01/01/2016, the start of the available dataset↩︎\nThe rationale for having a causal mask is that we want to be able to exploit any embedding at any time (with only one inference pass through the model) without them having “seen” the future. Typically, the pre-training task (see Section 1.2.2) is such a task. However, we still plan to train a BERT - pre-training task is still in discussion (see Section 2.3).↩︎\nFor each short term horizon t, we crop the pathways t before the end date of our dataset so that we can always compute a ground truth↩︎\nIn this formulation, we assume that the embeddings are frozen (we only train \\phi at \\theta^{*} constant). Another alternative is to fine-tune the Transformer model, training both \\phi and \\theta here, with the same task, same loss, same dataset. This is true for all the remaining of this document.↩︎"
+  },
+  {
+    "objectID": "mydocs/G4H_half_day/index.html#representing-words",
+    "href": "mydocs/G4H_half_day/index.html#representing-words",
+    "title": "G4H Half-Day",
+    "section": "Representing words",
+    "text": "Representing words\n\nHistorically (up to the 2000s), words in NLP were treated as symbols — not as entities with meaning:\n\nA one-hot vector (e.g. “cat” = [0, 0, 1, 0, 0, …])\nOr a string in a lookup table.\n\nProblems:\n\nNo notion of similarity:\n\n“hotel” = [ 1 0 0 0] et “motel” = [0 1 0 0] are orthogonal !\n\nDimensional explosion"
+  },
+  {
+    "objectID": "mydocs/G4H_half_day/index.html#introducing-embeddings",
+    "href": "mydocs/G4H_half_day/index.html#introducing-embeddings",
+    "title": "G4H Half-Day",
+    "section": "Introducing embeddings",
+    "text": "Introducing embeddings\n\nEach word w should be mapped to a dense vector v_w \\in \\mathbf{R}^d where d &lt;&lt;&lt; |V|\nTaking context into account (distributional semantics):\n\n“You shall know a word by the company it keeps” (J. R. Firth, 1957)\n\n\n\nFrom Stanford NLP Course"
+  },
+  {
+    "objectID": "mydocs/G4H_half_day/index.html#how-to-train",
+    "href": "mydocs/G4H_half_day/index.html#how-to-train",
+    "title": "G4H Half-Day",
+    "section": "How to train ?",
+    "text": "How to train ?\n\nFrom Lena Voita"
+  },
+  {
+    "objectID": "mydocs/G4H_half_day/index.html#application-of-word-embeddings-similarity",
+    "href": "mydocs/G4H_half_day/index.html#application-of-word-embeddings-similarity",
+    "title": "G4H Half-Day",
+    "section": "Application of word embeddings: similarity",
+    "text": "Application of word embeddings: similarity\n\nFrom GloVe project page"
+  },
+  {
+    "objectID": "mydocs/G4H_half_day/index.html#application-of-word-embeddings-language-models",
+    "href": "mydocs/G4H_half_day/index.html#application-of-word-embeddings-language-models",
+    "title": "G4H Half-Day",
+    "section": "Application of word embeddings: Language Models",
+    "text": "Application of word embeddings: Language Models\n\nLanguage Models = models that predict the next word\n\nFixed-window LM: does not scale when context size increases\nRNNs: model size independent from context size, but sequential processing + vanishing gradient\n\n\n\n\n\n\n\nFrom Stanford NLP Course\n\n\n\n\n\n\nFrom Stanford NLP Course"
+  },
+  {
+    "objectID": "mydocs/G4H_half_day/index.html#introducing-transformers",
+    "href": "mydocs/G4H_half_day/index.html#introducing-transformers",
+    "title": "G4H Half-Day",
+    "section": "Introducing Transformers",
+    "text": "Introducing Transformers\n\nAttention matrix \\alpha_{i, j}(X) to produce contextualized embeddings\n\nEach embedding is transformed, via a weighted average\nNo dimension change, but the output is now context-aware\n\nParallelizable, scalable\nTwo types:\n\nBERT\n\npre-trained with Masked Language Modeling\n\nGPT\n\ncausal attention matrix\npre-trained with next token prediction task"
+  },
+  {
+    "objectID": "mydocs/G4H_half_day/index.html#our-data",
+    "href": "mydocs/G4H_half_day/index.html#our-data",
+    "title": "G4H Half-Day",
+    "section": "Our data",
+    "text": "Our data\n\nOur data: patient (medical) pathways\nVery similar to NLP, with differences\n\nunstructured (just as in NLP)\ntemporally irregular (not like NLP!)"
+  },
+  {
+    "objectID": "mydocs/G4H_half_day/index.html#embeddings",
+    "href": "mydocs/G4H_half_day/index.html#embeddings",
+    "title": "G4H Half-Day",
+    "section": "Embeddings",
+    "text": "Embeddings\n\nRepresent tokens and patient as a dense vector, to:\n\nmake visualizations\nuse the vector for downstream task\n\nprediction, classification\nclustering\ncausal inference"
+  },
+  {
+    "objectID": "mydocs/G4H_half_day/index.html#tokenization",
+    "href": "mydocs/G4H_half_day/index.html#tokenization",
+    "title": "G4H Half-Day",
+    "section": "Tokenization",
+    "text": "Tokenization\nDataset of medical pathways:  For i = 1, \\dots, n, X_i \\coloneqq (e_i, t_i, f_i), where:\n\ne_i \\in \\mathbb{R}^{cs} are the tokenized events, containing integers between 0 and the vocabulary size \\lvert \\mathcal{V} \\rvert\nt_i \\in \\mathbb{R}^{cs} is the temporal vector, containing the dates\nf_i \\in \\mathbb{R}^{2} corresponds to the patient general features, for now age and gender"
+  },
+  {
+    "objectID": "mydocs/G4H_half_day/index.html#pre-training-task",
+    "href": "mydocs/G4H_half_day/index.html#pre-training-task",
+    "title": "G4H Half-Day",
+    "section": "Pre-training task",
+    "text": "Pre-training task\nObjectives\n\nHaving a time-aware Transformers (\\neq NLP)\nKeeping in mind causal inference\n\nWe want to be able to efficiently compute the embedding of the pathway at any time (the trajectory of the patient)\n\nProblems with the next token task:\n\na lot of simultaneous events, especially for medications\ndifferent types of events: does it make sense to have a competition among them ?"
+  },
+  {
+    "objectID": "mydocs/G4H_half_day/index.html#first-trained-models",
+    "href": "mydocs/G4H_half_day/index.html#first-trained-models",
+    "title": "G4H Half-Day",
+    "section": "First trained models",
+    "text": "First trained models\nWe trained a “large” model (40M params) and a “small” one (5M).\n\nROC curve of the pre-training task for a given specialty on a test set of 10,000 patients."
+  },
+  {
+    "objectID": "mydocs/G4H_half_day/index.html#plot-of-the-embedding-space",
+    "href": "mydocs/G4H_half_day/index.html#plot-of-the-embedding-space",
+    "title": "G4H Half-Day",
+    "section": "Plot of the embedding space",
+    "text": "Plot of the embedding space"
+  },
+  {
+    "objectID": "mydocs/G4H_half_day/index.html#causal-inference",
+    "href": "mydocs/G4H_half_day/index.html#causal-inference",
+    "title": "G4H Half-Day",
+    "section": "Causal inference",
+    "text": "Causal inference\n\nGoal: Estimate the impact of losing one’s Médecin Traitant (Primary Care Provider, PCP), and looping back with Titouan’s work\n\n\nUp to a given time t, we have:\n\nThe covariate X_{&lt;t} \\coloneqq (e_{&lt;t}, t_{&lt;t}, f_{&lt;t}), the medical history of the patient\nW_t is the (binary) treatment at time t, say: the patient has lost its PCP (death or retirement) before t\nY_t (W_t), the binary outcome, indicating whether death has occured within a given time window [t, t+ \\delta_d]\n\nWe want to estimate the Conditional Average Treatment Effect (CATE):  \\tau(x, t) \\coloneqq \\mathbf{E}[Y_t(1) - Y_t(0) | X_{&lt;t} = x]"
+  },
+  {
+    "objectID": "mydocs/G4H_half_day/index.html#improving-pre-training-task",
+    "href": "mydocs/G4H_half_day/index.html#improving-pre-training-task",
+    "title": "G4H Half-Day",
+    "section": "Improving pre-training task",
+    "text": "Improving pre-training task\n\nExploring Posson loss - ground truth being number of events for each token, for each time window\nExponential loss for time-to-event task (as in MOTOR (Steinberg et al. (2024)))\n\nWe want ideally to have a generative model."
+  },
+  {
+    "objectID": "mydocs/G4H_half_day/index.html#scaling",
+    "href": "mydocs/G4H_half_day/index.html#scaling",
+    "title": "G4H Half-Day",
+    "section": "Scaling",
+    "text": "Scaling\n\nHoffmann et al. (2022) propose a scaling law for LLMs\n\nTrade off between number of training tokens (train dataset size) and number of parameters in the model (model size)\nEstimated optimal ratio: \\frac{\\text{\\# training tokens}}{\\text{\\# parameters}} = 20\n\nis it the same for medical pathways ?\n\n\n\n\n\n\n\n\nFrom Shmatko et al. (2025)\n\n\n\n\n\n\nFrom Hoffmann et al. (2022)"
+  },
+  {
+    "objectID": "mydocs/G4H_half_day/index.html#section",
+    "href": "mydocs/G4H_half_day/index.html#section",
+    "title": "G4H Half-Day",
+    "section": "",
+    "text": "Hoffmann, Jordan, Sebastian Borgeaud, Arthur Mensch, Elena Buchatskaya, Trevor Cai, Eliza Rutherford, Diego de Las Casas, et al. 2022. ‘Training Compute-Optimal Large Language Models’. https://arxiv.org/abs/2203.15556.\n\n\nShmatko, Artem, Alexander Wolfgang Jung, Kumar Gaurav, Søren Brunak, Laust Hvas Mortensen, Ewan Birney, Tom Fitzgerald, and Moritz Gerstung. 2025. ‘Learning the Natural History of Human Disease with Generative Transformers’. Nature, September. https://doi.org/10.1038/s41586-025-09529-3.\n\n\nSteinberg, Ethan, Jason Alan Fries, Yizhe Xu, and Nigam Shah. 2024. ‘MOTOR: A Time-to-Event Foundation Model for Structured Medical Records’. In The Twelfth International Conference on Learning Representations. https://openreview.net/forum?id=NialiwI2V6."
+  },
+  {
     "objectID": "mydocs/csi_slides/index.html#about-me",
     "href": "mydocs/csi_slides/index.html#about-me",
     "title": "PhD Committee",
@@ -110,54 +271,5 @@
     "title": "PhD Committee",
     "section": "",
     "text": "Abécassis, Judith, Élise Dumas, Julie Alberge, and Gaël Varoquaux. 2025. ‘From prediction to prescription: Machine learning and Causal Inference’. Annual Review of Biomedical Data Science, April. https://doi.org/10.1146/annurev-biodatasci-103123-095750.\n\n\nCurth, Alicia, and Mihaela van der Schaar. 2021. ‘Nonparametric Estimation of Heterogeneous Treatment Effects: From Theory to Learning Algorithms’. https://arxiv.org/abs/2101.10943.\n\n\nDoutreligne, Matthieu, and Gaël Varoquaux. 2025. ‘How to Select Predictive Models for Decision-Making or Causal Inference’. GigaScience 14 (January): giaf016. https://doi.org/10.1093/gigascience/giaf016.\n\n\nHoffmann, Jordan, Sebastian Borgeaud, Arthur Mensch, Elena Buchatskaya, Trevor Cai, Eliza Rutherford, Diego de Las Casas, et al. 2022. ‘Training Compute-Optimal Large Language Models’. https://arxiv.org/abs/2203.15556.\n\n\nLi, Yikuan, Shishir Rao, José Roberto Ayala Solares, Abdelaali Hassaine, Rema Ramakrishnan, Dexter Canoy, Yajie Zhu, Kazem Rahimi, and Gholamreza Salimi-Khorshidi. 2020. ‘BEHRT: Transformer for Electronic Health Records’. Scientific Reports 10 (1): 7155. https://doi.org/10.1038/s41598-020-62922-y.\n\n\nSavcisens, Germans, Tina Eliassi-Rad, Lars Kai Hansen, Laust Hvas Mortensen, Lau Lilleholt, Anna Rogers, Ingo Zettler, and Sune Lehmann. 2023. ‘Using Sequences of Life-Events to Predict Human Lives’. Nature Computational Science 4 (1): 43–56. https://doi.org/10.1038/s43588-023-00573-5.\n\n\nShmatko, Artem, Alexander Wolfgang Jung, Kumar Gaurav, Søren Brunak, Laust Hvas Mortensen, Ewan Birney, Tom Fitzgerald, and Moritz Gerstung. 2025. ‘Learning the Natural History of Human Disease with Generative Transformers’. Nature, September. https://doi.org/10.1038/s41586-025-09529-3.\n\n\nSteinberg, Ethan, Jason Alan Fries, Yizhe Xu, and Nigam Shah. 2024. ‘MOTOR: A Time-to-Event Foundation Model for Structured Medical Records’. In The Twelfth International Conference on Learning Representations. https://openreview.net/forum?id=NialiwI2V6.\n\n\nWager, Stefan. 2024. Causal Inference: A Statistical Learning Approach.\n\n\nYang, Zhichao, Avijit Mitra, Weisong Liu, Dan Berlowitz, and Hong Yu. 2023. ‘TransformEHR: Transformer-Based Encoder-Decoder Generative Model to Enhance Prediction of Disease Outcomes Using Electronic Health Records’. Nature Communications 14 (1): 7857. https://doi.org/10.1038/s41467-023-43715-z."
-  },
-  {
-    "objectID": "mydocs/technical_report/index.html",
-    "href": "mydocs/technical_report/index.html",
-    "title": "G4H - From embeddings to causal inference",
-    "section": "",
-    "text": "We consider a dataset (X_i)_{i = 1..n} of medical pathways. For each patient i, X_i \\coloneqq (e_i, t_i, f_i), where:\n\ne_i \\in \\mathbb{R}^{cs} denotes the vector of tokenized events. It is a tensor1 which size is common for all patients2 (an hyperparameter called the context size, cs), that contains integers between 0 and the vocabulary size \\lvert \\mathcal{V} \\rvert.\nt_i \\in \\mathbb{R}^{cs} is the temporal vector, containing the dates3 for each event in e_i. For now we only consider consultation and medication type of events.\nf_i \\in \\mathbb{R}^{2} corresponds to the patient general features, for now age and gender.\n\nAt this stage, the pathways only contain consultations and pharmaceuticals events. We plan to add way more types of event, including deaths, hospitalizations, medical procedures etc.\n\n\n\n\n\n\nAn embedding matrix of size \\mathbb{R}^{\\lvert \\mathcal{V} \\rvert, d_{embed}} projects each token of the sequence to an embedding vector. Adapting from the classical Transformer, we use t_i to have a time-aware positional encoding using a sinusoidal encoding. At the beginning of the sequence, we add a symbolic [START] token, composed of the summed embeddings of age and gender.\nThese embeddings are then passed to causal4 self-attention layers, so that the Transformer-based model outputs causally contextualized embeddings for each token:  GPT_{\\theta}(X_i) \\in \\mathbb{R}^{cs, d_{embed}} where \\theta parametrizes the neural network.\n\n\n\n\nAt a given position in the pathway, we consider the pre-training task of predicting, for each token, if it will appear within the next t days. We consider, simulatenously, several t \\in \\mathcal{T}, \\mathcal{T} being the sorted set of short term horizons, typically 14, 30, 60, 90, 180 days.\nLet, for this task:\n\ng_{\\phi} \\colon \\mathbb{R}^{cs, d_{embed}} \\to [0, 1]^{cs, \\lvert \\mathcal{V} \\rvert, \\lvert \\mathcal{T} \\rvert } the neural prediction head for this task (parametrized by \\phi), on top of the Transformer layers\nfor a patient i, Y_{i, \\cdot, \\cdot, \\cdot} \\in \\{ 0, 1 \\}^{cs, \\lvert \\mathcal{V} \\rvert, \\lvert \\mathcal{T} \\rvert} the ground truth5\n\nThe pre-training solves:\n\\begin{align*}\n\\theta^{*}, \\phi^{*} \\in \\arg\\!\\min \\; & \\sum_{i=1}^{n} \\sum_{\\text{pos}=1}^{cs} \\sum_{w \\in \\mathcal{V}} \\sum_{t \\in \\mathcal{T}}\n\\text{BCE}\\left(\n    g_{\\phi} \\circ GPT_{\\theta}(X_i)_{\\text{pos}, w, t},\n    Y_{i, \\text{pos}, w, t}\n\\right) \\\\\n& + \\lambda \\, \\text{Mon}\\left( g_{\\phi} \\circ GPT_{\\theta}(X_i) \\right)\n\\end{align*}\nwhere:\n\n\\text{BCE}(x,y) = y \\log(x) + (1-y) \\log(1-x)\nfor all i, \\text{Mon}\\left( g_{\\phi} \\circ GPT_{\\theta}(X_i) \\right) \\coloneqq \\sum_{t, t' | t' &gt; t} \\max \\left(0, g_{\\phi} \\circ GPT_{\\theta}(X_i)_{\\cdot, \\cdot, t} - GPT_{\\theta}(X_i)_{\\cdot, \\cdot, t'} \\right)\n\n\n\n\nWe trained a “large” model (40M parameters) and a “small” one (5M parameters). It seems that the big model improves the result, leading us to think there is a signal to capture and that the task is “learnable”.\n\n\n\nROC curve of the pre-training task for a given specialty on a test set of 10,000 patients.\n\n\nStill, the models converge quickly, and even small models achieve good convergence. This raises the (open) question of complexifying the task at some point."
-  },
-  {
-    "objectID": "mydocs/technical_report/index.html#data",
-    "href": "mydocs/technical_report/index.html#data",
-    "title": "G4H - From embeddings to causal inference",
-    "section": "",
-    "text": "We consider a dataset (X_i)_{i = 1..n} of medical pathways. For each patient i, X_i \\coloneqq (e_i, t_i, f_i), where:\n\ne_i \\in \\mathbb{R}^{cs} denotes the vector of tokenized events. It is a tensor1 which size is common for all patients2 (an hyperparameter called the context size, cs), that contains integers between 0 and the vocabulary size \\lvert \\mathcal{V} \\rvert.\nt_i \\in \\mathbb{R}^{cs} is the temporal vector, containing the dates3 for each event in e_i. For now we only consider consultation and medication type of events.\nf_i \\in \\mathbb{R}^{2} corresponds to the patient general features, for now age and gender.\n\nAt this stage, the pathways only contain consultations and pharmaceuticals events. We plan to add way more types of event, including deaths, hospitalizations, medical procedures etc."
-  },
-  {
-    "objectID": "mydocs/technical_report/index.html#transformer-based-models",
-    "href": "mydocs/technical_report/index.html#transformer-based-models",
-    "title": "G4H - From embeddings to causal inference",
-    "section": "",
-    "text": "An embedding matrix of size \\mathbb{R}^{\\lvert \\mathcal{V} \\rvert, d_{embed}} projects each token of the sequence to an embedding vector. Adapting from the classical Transformer, we use t_i to have a time-aware positional encoding using a sinusoidal encoding. At the beginning of the sequence, we add a symbolic [START] token, composed of the summed embeddings of age and gender.\nThese embeddings are then passed to causal4 self-attention layers, so that the Transformer-based model outputs causally contextualized embeddings for each token:  GPT_{\\theta}(X_i) \\in \\mathbb{R}^{cs, d_{embed}} where \\theta parametrizes the neural network.\n\n\n\n\nAt a given position in the pathway, we consider the pre-training task of predicting, for each token, if it will appear within the next t days. We consider, simulatenously, several t \\in \\mathcal{T}, \\mathcal{T} being the sorted set of short term horizons, typically 14, 30, 60, 90, 180 days.\nLet, for this task:\n\ng_{\\phi} \\colon \\mathbb{R}^{cs, d_{embed}} \\to [0, 1]^{cs, \\lvert \\mathcal{V} \\rvert, \\lvert \\mathcal{T} \\rvert } the neural prediction head for this task (parametrized by \\phi), on top of the Transformer layers\nfor a patient i, Y_{i, \\cdot, \\cdot, \\cdot} \\in \\{ 0, 1 \\}^{cs, \\lvert \\mathcal{V} \\rvert, \\lvert \\mathcal{T} \\rvert} the ground truth5\n\nThe pre-training solves:\n\\begin{align*}\n\\theta^{*}, \\phi^{*} \\in \\arg\\!\\min \\; & \\sum_{i=1}^{n} \\sum_{\\text{pos}=1}^{cs} \\sum_{w \\in \\mathcal{V}} \\sum_{t \\in \\mathcal{T}}\n\\text{BCE}\\left(\n    g_{\\phi} \\circ GPT_{\\theta}(X_i)_{\\text{pos}, w, t},\n    Y_{i, \\text{pos}, w, t}\n\\right) \\\\\n& + \\lambda \\, \\text{Mon}\\left( g_{\\phi} \\circ GPT_{\\theta}(X_i) \\right)\n\\end{align*}\nwhere:\n\n\\text{BCE}(x,y) = y \\log(x) + (1-y) \\log(1-x)\nfor all i, \\text{Mon}\\left( g_{\\phi} \\circ GPT_{\\theta}(X_i) \\right) \\coloneqq \\sum_{t, t' | t' &gt; t} \\max \\left(0, g_{\\phi} \\circ GPT_{\\theta}(X_i)_{\\cdot, \\cdot, t} - GPT_{\\theta}(X_i)_{\\cdot, \\cdot, t'} \\right)\n\n\n\n\nWe trained a “large” model (40M parameters) and a “small” one (5M parameters). It seems that the big model improves the result, leading us to think there is a signal to capture and that the task is “learnable”.\n\n\n\nROC curve of the pre-training task for a given specialty on a test set of 10,000 patients.\n\n\nStill, the models converge quickly, and even small models achieve good convergence. This raises the (open) question of complexifying the task at some point."
-  },
-  {
-    "objectID": "mydocs/technical_report/index.html#framework",
-    "href": "mydocs/technical_report/index.html#framework",
-    "title": "G4H - From embeddings to causal inference",
-    "section": "2.1 Framework",
-    "text": "2.1 Framework\nUp to a given time t, we have:\n\nThe covariate X_{&lt;t} \\coloneqq (e_{&lt;t}, t_{&lt;t}, f_{&lt;t}), the medical history of the patient\nW_t is the treatment at time t and can either be:\n\nthe proportion of days the patient has spent without a PCP during the period [t- \\delta_{PCP}, t], \\delta_{PCP} being a hyperparameter controlling the length of the window\nthe maximum number of consecutive days without having a PCP, anytime in the past\n\nY_t (W_t), the binary outcome, indicating whether death has occured within a given time window [t, t+ \\delta_d](which length \\delta_d is again chosen)"
-  },
-  {
-    "objectID": "mydocs/technical_report/index.html#estimating-the-cate",
-    "href": "mydocs/technical_report/index.html#estimating-the-cate",
-    "title": "G4H - From embeddings to causal inference",
-    "section": "2.2 Estimating the CATE",
-    "text": "2.2 Estimating the CATE\nWe want to estimate the Conditional Average Treatment Effect (CATE):\n \\tau(x, w) \\coloneqq \\mathbb{E}[Y_t \\mid X_{&lt;t} = x, W_t = w] \n\n2.2.1 Assumptions\n\nSUTVA : Y_t(w) = Y_t \\quad \\textit{ if } W_t = w\n\nThe others not having a PCP for a given amount of time does not influence my probability to die\nOnly one version of treatment ?\n\nConditional ignorability\n\n \\forall w \\in \\mathbb{R}_{+}, Y_t(w) \\perp W_t \\mid X_{&lt;t}\n\nOverlap\n\n 0 &lt; \\mathbb{P}(W_t = w | X_{&lt;t} = x) &lt; 1, \\forall (w,x) \\in (\\mathbb{R}_{+}, \\mathbb{R}^{d_{embed}})\n\n\n2.2.2 Estimators\nFor a given time t, we define {pos}_t as being the last position in the patient’s pathway before t, and we define the embedding of the pathway:\n GPT^{\\text{path}}(X_{&lt;t}) \\coloneqq GPT_{\\theta^{*}}(X_{&lt;t})_{{pos}_t} \\in \\mathbb{R}^{d_{embed}} \n\nS-learner & T-learner\nThe S-learner is based on “outcome models” that try to capture the link between the outcome and the features (Abécassis et al. (2025)).\nMore precisely, we train on the validation set a head g_{\\phi}: \\mathbb{R}^{d_{embed}} \\times \\mathbb{R}_{+}  \\to [0,1] minimizing the binary cross-entropy loss on death prediction - to obtain \\phi^{*}6. At the end of the day:\n \\hat{\\tau}_{\\text{SLearner}}(x, w) \\coloneqq g_{\\phi^{*}} (GPT^{\\text{path}}(x), w) - g_{\\phi^{*}} (GPT^{\\text{path}}(x), 0)\nwhere the baseline is “not having lost your PCP / having a PCP during all the period”.\n🔴 There is no T-learner for continuous treatment, a priori\n\n\nR-learner\nAnother approach consists in trying to model the propensity score, the probability of being treated given X.\nA first head g_{\\phi_{m}}: \\mathbb{R}^{d_{embed}} \\to [0,1] is trained on the death prediction task, so that for a given pathway x, g_{\\phi_{m}^{*}}(GPT^{\\text{path}}(x)) is close to the conditional mean outcome m(x) = \\mathbb{E}[Y_t | x].\nAnother head g_{\\phi_{e}}: \\mathbb{R}^{d_{embed}} \\to \\mathbb{R}_+ is trained to predict the treatment W_t of a given individual (minimizing a Mean Squared Error).\nFinally, we train the CATE estimator training a head g_{\\phi_{\\tau}}: \\mathbb{R}^{d_{embed}} \\to [0,1] by minimizing the R-loss:\n\\begin{align*}\n\\phi_{\\tau}^{*} \\in \\arg\\!\\min_{\\phi_{\\tau}} \\; &\nY_t - g_{\\phi_{m}^{*}}\\left( GPT^{\\text{path}}(X_{&lt;t}) \\right) \\\\\n& - \\left( W_t - g_{\\phi_{e}^{*}}\\left( GPT^{\\text{path}}(X_{&lt;t}) \\right) \\cdot g_{\\phi_{\\tau}}\\left( GPT^{\\text{path}}(X_{&lt;t}) \\right) \\right)\n\\end{align*}\n🔴 There is no DR-learner for continuous treatment, a priori"
-  },
-  {
-    "objectID": "mydocs/technical_report/index.html#sec-benchmarks",
-    "href": "mydocs/technical_report/index.html#sec-benchmarks",
-    "title": "G4H - From embeddings to causal inference",
-    "section": "2.3 Benchmarks",
-    "text": "2.3 Benchmarks\nWIP\n\nReferences\n\n\nAbécassis, Judith, Élise Dumas, Julie Alberge, and Gaël Varoquaux. 2025. “From prediction to prescription: Machine learning and Causal Inference.” Annual Review of Biomedical Data Science, April. https://doi.org/10.1146/annurev-biodatasci-103123-095750."
-  },
-  {
-    "objectID": "mydocs/technical_report/index.html#footnotes",
-    "href": "mydocs/technical_report/index.html#footnotes",
-    "title": "G4H - From embeddings to causal inference",
-    "section": "Footnotes",
-    "text": "Footnotes\n\n\nActually, we consider several tensors (and several vocabulary sizes) - one for each type of tokens, but we do not get into the details here.↩︎\nShorter sequences are padded, longer are cropped.↩︎\nTo describe a date, we actually use the number of days since 01/01/2016, the start of the available dataset↩︎\nThe rationale for having a causal mask is that we want to be able to exploit any embedding at any time (with only one inference pass through the model) without them having “seen” the future. Typically, the pre-training task (see Section 1.2.2) is such a task. However, we still plan to train a BERT - pre-training task is still in discussion (see Section 2.3).↩︎\nFor each short term horizon t, we crop the pathways t before the end date of our dataset so that we can always compute a ground truth↩︎\nIn this formulation, we assume that the embeddings are frozen (we only train \\phi at \\theta^{*} constant). Another alternative is to fine-tune the Transformer model, training both \\phi and \\theta here, with the same task, same loss, same dataset. This is true for all the remaining of this document.↩︎"
   }
 ]
