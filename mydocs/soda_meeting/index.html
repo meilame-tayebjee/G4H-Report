@@ -9,8 +9,8 @@
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.8.27">
 
-  <meta name="dcterms.date" content="2025-10-15">
-  <title>Graph4Health - Medical pathway embeddings and causal inference on health outcomes – G4H Half-Day</title>
+  <meta name="dcterms.date" content="2025-10-08">
+  <title>Graph4Health - Medical pathway embeddings and causal inference on health outcomes – Meeting 19/02</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -49,7 +49,7 @@
     div.csl-indent {
       margin-left: 2em;
     }  </style>
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-534cd8e3a96973385dffff3f4709048d.css">
+  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-99eeafcedac04850354b682963cedae3.css">
   <link rel="stylesheet" href="custom.css">
   <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
   <script>document.addEventListener("DOMContentLoaded", function () {
@@ -164,8 +164,8 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">G4H Half-Day</h1>
-  <p class="subtitle"><strong>Embeddings : from NLP to medical pathways</strong></p>
+  <h1 class="title">Meeting 19/02</h1>
+  <p class="subtitle"><strong>Embedding medical pathways with decoder only Transformers</strong></p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -175,36 +175,37 @@ Meilame Tayebjee
 </div>
 </div>
 
-  <p class="date">15 October 2025</p>
+  <p class="date">8 October 2025</p>
 </section><section id="TOC">
 <nav role="doc-toc"> 
 <h2 id="toc-title">Table of contents</h2>
 <ul>
-<li><a href="#/from-nlp" id="/toc-from-nlp"><span class="header-section-number">1</span> From NLP…</a>
+<li><a href="#/introduction" id="/toc-introduction"><span class="header-section-number">1</span> Introduction</a>
 <ul>
-<li><a href="#/representing-words" id="/toc-representing-words">Representing words</a></li>
-<li><a href="#/introducing-embeddings" id="/toc-introducing-embeddings">Introducing embeddings</a></li>
-
-<li><a href="#/how-to-train" id="/toc-how-to-train">How to train ?</a></li>
-<li><a href="#/application-of-word-embeddings-similarity" id="/toc-application-of-word-embeddings-similarity">Application of word embeddings: similarity</a></li>
-<li><a href="#/application-of-word-embeddings-language-models" id="/toc-application-of-word-embeddings-language-models">Application of word embeddings: Language Models</a></li>
-<li><a href="#/introducing-transformers" id="/toc-introducing-transformers">Introducing Transformers</a></li>
+<li><a href="#/about-me" id="/toc-about-me">About me</a></li>
+<li><a href="#/broader-view-of-the-graph4health-anr" id="/toc-broader-view-of-the-graph4health-anr">Broader view of the Graph4Health ANR</a></li>
+<li><a href="#/my-project-embedding-patient-pathways-for-causal-inference" id="/toc-my-project-embedding-patient-pathways-for-causal-inference">My project: embedding patient pathways for causal inference</a></li>
 </ul></li>
-<li><a href="#/to-patient-embeddings" id="/toc-to-patient-embeddings"><span class="header-section-number">2</span> … to patient embeddings</a>
+<li><a href="#/related-work" id="/toc-related-work"><span class="header-section-number">2</span> Related work</a>
 <ul>
-<li><a href="#/our-data" id="/toc-our-data">Our data</a></li>
-<li><a href="#/embeddings" id="/toc-embeddings">Embeddings</a></li>
-<li><a href="#/tokenization" id="/toc-tokenization">Tokenization</a></li>
+<li><a href="#/transformer-based-models-for-medical-pathway-embedding" id="/toc-transformer-based-models-for-medical-pathway-embedding">Transformer-based models for medical pathway embedding</a></li>
+</ul></li>
+<li><a href="#/work-done-so-far" id="/toc-work-done-so-far"><span class="header-section-number">3</span> Work done so far</a>
+<ul>
+<li><a href="#/data-management" id="/toc-data-management">Data management</a></li>
+<li><a href="#/notations" id="/toc-notations">Notations</a></li>
+
 <li><a href="#/pre-training-task" id="/toc-pre-training-task">Pre-training task</a></li>
 
-<li><a href="#/first-trained-models" id="/toc-first-trained-models">First trained models</a></li>
+
+
 <li><a href="#/plot-of-the-embedding-space" id="/toc-plot-of-the-embedding-space">Plot of the embedding space</a></li>
+<li><a href="#/evaluation-task-examples" id="/toc-evaluation-task-examples"><span class="header-section-number">3.1</span> Evaluation task examples</a></li>
+<li><a href="#/scaling-law" id="/toc-scaling-law"><span class="header-section-number">3.2</span> Scaling law</a></li>
 </ul></li>
-<li><a href="#/next-steps" id="/toc-next-steps"><span class="header-section-number">3</span> Next steps</a>
+<li><a href="#/avenues-of-work" id="/toc-avenues-of-work"><span class="header-section-number">4</span> Avenues of work</a>
 <ul>
-<li><a href="#/causal-inference" id="/toc-causal-inference">Causal inference</a></li>
 <li><a href="#/improving-pre-training-task" id="/toc-improving-pre-training-task">Improving pre-training task</a></li>
-<li><a href="#/scaling" id="/toc-scaling">Scaling</a></li>
 </ul></li>
 <li><a href="#/references" id="/toc-references">References</a>
 <ul>
@@ -214,172 +215,214 @@ Meilame Tayebjee
 </nav>
 </section>
 <section>
-<section id="from-nlp" class="title-slide slide level1 center" data-number="1">
-<h1><span class="header-section-number">1</span> From NLP…</h1>
+<section id="introduction" class="title-slide slide level1 center" data-number="1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
 
 </section>
-<section id="representing-words" class="slide level2 unnumbered">
-<h2>Representing words</h2>
+<section id="about-me" class="slide level2 unnumbered">
+<h2>About me</h2>
 <ul>
-<li class="fragment">Historically (up to the 2000s), words in NLP were treated as symbols — not as entities with meaning:
+<li>Graduated from HEC (19-24), X (X20), ENSAE and MVA (administrateur de l’Insee, 2024)</li>
+<li><strong>Research internships</strong>:
 <ul>
-<li class="fragment">A one-hot vector (e.g.&nbsp;“cat” = [0, 0, 1, 0, 0, …])</li>
-<li class="fragment">Or a string in a lookup table.</li>
+<li>2023 (3A X): MIT (Operations Research Center), <em>Microtransit system design and optimization</em></li>
+<li>2024 (ENSAE-MVA): Inria HeKA, <em>Generative models for longitudinal images</em></li>
 </ul></li>
-<li class="fragment"><strong>Problems</strong>:
+<li>Currently, <strong>first position in the Corps</strong> since sept. 2024:
 <ul>
-<li class="fragment">No notion of similarity:
-<ul>
-<li class="fragment">“hotel” = [ 1 0 0 0] et “motel” = [0 1 0 0] are orthogonal !</li>
-</ul></li>
-<li class="fragment">Dimensional explosion</li>
+<li>Data Scientist at SSP Lab (MLOps, model trustworthiness, NLP (text classification, RAG), satellite imagery…)</li>
+<li><strong>PhD in CS Candidate</strong> (part-time, <em>journées recherche</em>)</li>
 </ul></li>
 </ul>
 </section>
-<section id="introducing-embeddings" class="slide level2 unnumbered">
-<h2>Introducing embeddings</h2>
+<section id="broader-view-of-the-graph4health-anr" class="slide level2 unnumbered">
+<h2>Broader view of the Graph4Health ANR</h2>
 <ul>
-<li class="fragment">Each word <span class="math inline">w</span> should be mapped to a dense vector <span class="math inline">v_w \in \mathbf{R}^d</span> where <span class="math inline">d &lt;&lt;&lt; |V|</span></li>
-<li class="fragment">Taking <strong>context</strong> into account (<em>distributional semantics</em>):
+<li class="fragment">The general objective is to
 <ul>
-<li class="fragment">“You shall know a word by the company it keeps” (J. R. Firth, 1957)</li>
+<li class="fragment">infer the causal impact of the <strong>healthcare supply</strong> (and its geographic distribution) on <strong>health outcomes</strong>
+<ul>
+<li class="fragment">using classic econometric tools</li>
+<li class="fragment"><strong>using deep learning methods for causal inference</strong></li>
+</ul></li>
+<li class="fragment">study policies that contribute to the efficiency of the French healthcare system</li>
+</ul></li>
+<li class="fragment"><strong>11 years of exhaustive SNDS</strong>
+<ul>
+<li class="fragment">70M patients</li>
+<li class="fragment">consultations, procedures, hospitalizations, medications, deaths etc.</li>
 </ul></li>
 </ul>
-
-<img data-src="images/stanford_context.png" class="r-stretch quarto-figure-center"><p class="caption">From <a href="https://web.stanford.edu/class/cs224n/slides_w25/cs224n-2025-lecture01-wordvecs1.pdf">Stanford NLP Course</a></p></section>
-<section class="slide level2">
-
-<ul>
-<li>Count-based: co-occurrence matrix, PPMI…</li>
-<li><strong>Deep-learning based: Word2Vec</strong></li>
-</ul>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/word_repr_intro-min.png" style="width:100.0%"></p>
-<figcaption>From <a href="https://lena-voita.github.io/nlp_course/word_embeddings.html#pre_neural">Lena Voita</a></figcaption>
-</figure>
-</div>
-</div><div class="column" style="width:50%;">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/lookup_table.gif" style="width:100.0%"></p>
-<figcaption>From <a href="https://lena-voita.github.io/nlp_course/word_embeddings.html#pre_neural">Lena Voita</a></figcaption>
-</figure>
-</div>
-</div></div>
-<p><strong>Notice how the context length is important and can quickly fill the memory.</strong></p>
 </section>
-<section id="how-to-train" class="slide level2 unnumbered">
-<h2>How to train ?</h2>
-
-<img data-src="images/cbow_skip-min.png" class="r-stretch quarto-figure-center"><p class="caption">From <a href="https://lena-voita.github.io/nlp_course/word_embeddings.html#pre_neural">Lena Voita</a></p></section>
-<section id="application-of-word-embeddings-similarity" class="slide level2 unnumbered">
-<h2>Application of word embeddings: similarity</h2>
-
-<img data-src="images/frog-min.png" class="r-stretch quarto-figure-center"><p class="caption">From <a href="https://nlp.stanford.edu/projects/glove/">GloVe project page</a></p></section>
-<section id="application-of-word-embeddings-language-models" class="slide level2 unnumbered scrollable">
-<h2>Application of word embeddings: Language Models</h2>
+<section id="my-project-embedding-patient-pathways-for-causal-inference" class="slide level2 unnumbered">
+<h2>My project: embedding patient pathways for causal inference</h2>
 <ul>
-<li>Language Models = models that predict the next word
+<li>Our data: patient (medical) pathways
 <ul>
-<li><strong>Fixed-window LM</strong>: does not scale when context size increases</li>
-<li><strong>RNNs</strong>: model size independent from context size, but <strong>sequential processing</strong> + <strong>vanishing gradient</strong></li>
+<li>unstructured (just as in NLP)</li>
+<li>temporally irregular (not like NLP!)</li>
 </ul></li>
 </ul>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/fixed_window.png" style="width:100.0%"></p>
-<figcaption>From <a href="https://web.stanford.edu/class/cs224n/slides_w25/cs224n-2025-lecture05-rnnlm.pdf">Stanford NLP Course</a></figcaption>
-</figure>
-</div>
-</div><div class="column" style="width:50%;">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/RNN.png" style="width:100.0%"></p>
-<figcaption>From <a href="https://web.stanford.edu/class/cs224n/slides_w25/cs224n-2025-lecture05-rnnlm.pdf">Stanford NLP Course</a></figcaption>
-</figure>
-</div>
-</div></div>
-</section>
-<section id="introducing-transformers" class="slide level2 unnumbered">
-<h2>Introducing Transformers</h2>
-<ul>
-<li class="fragment">Attention matrix <span class="math inline">\alpha_{i, j}(X)</span> to produce <em>contextualized embeddings</em>
-<ul>
-<li class="fragment">Each embedding is <em>transformed</em>, via a weighted average</li>
-<li class="fragment">No dimension change, but the output is now context-aware</li>
-</ul></li>
-<li class="fragment">Parallelizable, scalable</li>
-<li class="fragment">Two types:
-<ul>
-<li class="fragment">BERT
-<ul>
-<li class="fragment">pre-trained with Masked Language Modeling</li>
-</ul></li>
-<li class="fragment">GPT
-<ul>
-<li class="fragment"><em>causal</em> attention matrix</li>
-<li class="fragment">pre-trained with next token prediction task</li>
-</ul></li>
-</ul></li>
-</ul>
-</section></section>
+
+<img data-src="images/pathway_data.png" class="quarto-figure quarto-figure-center r-stretch"></section></section>
 <section>
-<section id="to-patient-embeddings" class="title-slide slide level1 center" data-number="2">
-<h1><span class="header-section-number">2</span> … to patient embeddings</h1>
+<section id="related-work" class="title-slide slide level1 center" data-number="2">
+<h1><span class="header-section-number">2</span> Related work</h1>
 
 </section>
-<section id="our-data" class="slide level2 unnumbered">
-<h2>Our data</h2>
+<section id="transformer-based-models-for-medical-pathway-embedding" class="slide level2 unnumbered scrollable">
+<h2>Transformer-based models for medical pathway embedding</h2>
+<div style="font-size: 0.5em;">
+<table class="caption-top" style="width:100%;">
+<colgroup>
+<col style="width: 2%">
+<col style="width: 17%">
+<col style="width: 19%">
+<col style="width: 19%">
+<col style="width: 11%">
+<col style="width: 8%">
+<col style="width: 14%">
+<col style="width: 2%">
+<col style="width: 2%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Model name</th>
+<th>Model archi.</th>
+<th>Pre-train. Task(s)</th>
+<th>Fine-tun. task(s)</th>
+<th># Params</th>
+<th>Training data size</th>
+<th>Vocab size (type)</th>
+<th>Generative</th>
+<th>Trajectory<sup>1</sup></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>coMET (<span class="citation" data-cites="coMET">Waxler et al. (<a href="#/section" role="doc-biblioref" onclick="">2025</a>)</span>)</td>
+<td>GPT</td>
+<td>Next token pred.</td>
+<td>Disease prediction</td>
+<td>1B</td>
+<td>151B events from 118M patients</td>
+<td>7,105 (exhaustive)</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr class="even">
+<td>Delphi (<span class="citation" data-cites="Shmatko2025">Shmatko et al. (<a href="#/section" role="doc-biblioref" onclick="">2025</a>)</span>)</td>
+<td>NanoGPT</td>
+<td>Next disease event + Time to event</td>
+<td>None</td>
+<td>2M</td>
+<td>400k patients</td>
+<td>1,258 (ICD10)</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr class="odd">
+<td>MOTOR (Many Outcome Time Oriented Representation) (<span class="citation" data-cites="steinberg2024motor">Steinberg et al. (<a href="#/section" role="doc-biblioref" onclick="">2024</a>)</span>)</td>
+<td>Transformer (causal masking and local attention)</td>
+<td>Time to event (TTE)</td>
+<td>TTE for part. disease</td>
+<td>143M</td>
+<td>55M patients, 9B events</td>
+<td>8,192 (ICD10 and other specific codes)</td>
+<td>≅</td>
+<td>≅</td>
+</tr>
+<tr class="even">
+<td>Life2Vec (<span class="citation" data-cites="life2vec">Savcisens et al. (<a href="#/section" role="doc-biblioref" onclick="">2023</a>)</span>)</td>
+<td>BERT</td>
+<td>MLM + SOP</td>
+<td>Mortality Prediction</td>
+<td>8M</td>
+<td>3M patients</td>
+<td>~700<br>(labour + ICD10)</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr class="odd">
+<td>TransformEHR (<span class="citation" data-cites="yangTransformEHRTransformerbasedEncoderdecoder2023">Yang et al. (<a href="#/section" role="doc-biblioref" onclick="">2023</a>)</span>)</td>
+<td>Encoder-Decoder</td>
+<td>Visit masking: Given visits 1-3, predict all codes in visit 4</td>
+<td>Disease (pancreatic cancer) / Outcome (self harm) pred.</td>
+<td>?</td>
+<td>255M visits from 7M patients</td>
+<td>ICD10</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr class="even">
+<td>BEHRT (<span class="citation" data-cites="liBEHRTTransformerElectronic2020">Li et al. (<a href="#/section" role="doc-biblioref" onclick="">2020</a>)</span>)</td>
+<td>BERT</td>
+<td>MLM</td>
+<td>Disease prediction</td>
+<td>n.r. (~6L, 12H, h=288)</td>
+<td>1.6M patients</td>
+<td>301 disease codes</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+</tbody>
+</table>
+<!-- 
+| Med-BERT | BERT for structured diagnosis codes | Disease prediction (HF, pancreatic cancer) | ~17M | 28.5M pts |
+| ClinicalBERT | BERT-base on clinical notes (MIMIC-III) | 30-day readmission + NLP tasks | ~110M (BERT-base) | 34,560 pts (downstream) |
+| Hi-BEHRT | Hierarchical Transformer (local + global) | Risk prediction (HF, diabetes, CKD, stroke) | not reported | ~2.84M pts |
+| CEHR-BERT | BERT w/ temporal & visit tokens | Hosp., death, HF diagnosis, readmission | not reported | ~2.4M pts |
+| HEART | Relation-aware Transformer | 5 clinical tasks (2 datasets) | not reported | sizes vary |
+| Transformer patient embedding (NPJ Dig Med 2025) | Transformer (codes→embedding) | Stratification, disease prediction | not reported | 1.05M pts (eMERGE) | -->
+</div>
+<aside><ol class="aside-footnotes"><li id="fn1"><p>Efficient (i.e.&nbsp;in one forward pass) computation of embeddings at any time</p></li></ol></aside></section></section>
+<section>
+<section id="work-done-so-far" class="title-slide slide level1 center" data-number="3">
+<h1><span class="header-section-number">3</span> Work done so far</h1>
+
+</section>
+<section id="data-management" class="slide level2 unnumbered">
+<h2>Data management</h2>
 <ul>
-<li class="fragment">Our data: patient (medical) pathways</li>
-<li class="fragment">Very similar to NLP, with differences
+<li>Validation and EDA of the first delivered simplified tables: prestations and medications</li>
+<li>Jointure, cleaning and subsampling
 <ul>
-<li class="fragment">unstructured (just as in NLP)</li>
-<li class="fragment">temporally irregular (not like NLP!)</li>
+<li>So that any subsample can fit in vRAM</li>
 </ul></li>
+<li>Tokenization</li>
 </ul>
 
-<img data-src="../csi_slides/images/pathway_data.png" class="quarto-figure quarto-figure-center r-stretch"></section>
-<section id="embeddings" class="slide level2 unnumbered">
-<h2>Embeddings</h2>
-<ul>
-<li class="fragment">Represent tokens and patient as a <strong>dense vector</strong>, to:
-<ul>
-<li class="fragment">make visualizations</li>
-<li class="fragment">use the vector for downstream task
-<ul>
-<li class="fragment">prediction, classification</li>
-<li class="fragment">clustering</li>
-<li class="fragment">causal inference</li>
-</ul></li>
-</ul></li>
-</ul>
-</section>
-<section id="tokenization" class="slide level2 unnumbered">
-<h2>Tokenization</h2>
+<img data-src="images/tokenized_data.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="notations" class="slide level2 unnumbered">
+<h2>Notations</h2>
+<h3 class="unnumbered" id="notations-dataset">Notations: dataset</h3>
 <p><strong>Dataset of medical pathways: </strong> For <span class="math inline">i = 1, \dots, n</span>, <span class="math inline">X_i \coloneqq (e_i, t_i, f_i)</span>, where:</p>
 <ul>
 <li class="fragment"><span class="math inline">e_i \in \mathbb{R}^{cs}</span> are the tokenized events, containing integers between <span class="math inline">0</span> and the vocabulary size <span class="math inline">\lvert \mathcal{V} \rvert</span></li>
 <li class="fragment"><span class="math inline">t_i \in \mathbb{R}^{cs}</span> is the temporal vector, containing the dates</li>
 <li class="fragment"><span class="math inline">f_i \in \mathbb{R}^{2}</span> corresponds to the patient general features, for now age and gender</li>
 </ul>
+</section>
+<section class="slide level2">
 
-<img data-src="../csi_slides/images/tokenized_data.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<h3 class="unnumbered" id="notations-model">Notations: model</h3>
+<ul>
+<li>Embedding matrices of size <span class="math inline">\mathbb{R}^{\lvert \mathcal{V} \rvert, d_{embed}}</span> (vocab), <span class="math inline">\mathbb{R}^{2, d_{embed}}</span> (gender) and <span class="math inline">\mathbb{R}^{8, d_{embed}}</span> (age class)
+<ul>
+<li>We use <span class="math inline">t_i</span> to have a <em>time-aware</em> positional encoding using a sinusoidal encoding</li>
+<li>A symbolic [START] token, composed of the summed embeddings of age and gender.</li>
+</ul></li>
+<li><strong>Causal</strong> self-attention layers so that the Transformer-based model outputs <strong><em>causally contextualized embeddings</em></strong>: <span class="math display"> GPT_{\theta}(X_i) \in \mathbb{R}^{cs, d_{embed}}</span></li>
+</ul>
+<p>where <span class="math inline">\theta</span> parametrizes the neural network.</p>
+</section>
 <section id="pre-training-task" class="slide level2 unnumbered">
 <h2>Pre-training task</h2>
 <h3 class="unnumbered" id="objectives">Objectives</h3>
 <ul>
-<li class="fragment">Having a <strong>time-aware</strong> Transformers (<span class="math inline">\neq</span> NLP)</li>
-<li class="fragment">Keeping in mind causal inference
-<ul>
-<li class="fragment">We want to be able to efficiently compute the embedding of the pathway <strong>at any time</strong> (the <em>trajectory</em> of the patient)</li>
-</ul></li>
-<li class="fragment"><strong>Problems with the next token task:</strong>
+<li class="fragment"><p>Having a <strong>time-aware</strong> Transformers (<span class="math inline">\neq</span> NLP)</p></li>
+<li class="fragment"><p>We want to be able to efficiently compute the embedding of the pathway <strong>at any time</strong> (the <em>trajectory</em> of the patient)</p></li>
+<li class="fragment"><p><strong>Problems with the next token task:</strong></p>
 <ul>
 <li class="fragment">a lot of simultaneous events, especially for medications</li>
 <li class="fragment">different types of events: does it make sense to have a competition among them ?</li>
@@ -388,76 +431,73 @@ Meilame Tayebjee
 </section>
 <section class="slide level2">
 
-<h3 class="unnumbered" id="description">Description</h3>
-<p>We predict for each token, if it will appear within the next <span class="math inline">t</span> days.</p>
-<p>We consider, simulatenously, several <span class="math inline">t \in \mathcal{T}</span>, <span class="math inline">\mathcal{T}</span> being the sorted set of <strong><em>short term horizons</em></strong>, typically 14, 30, 90, 180 days.</p>
+<h3 class="unnumbered" id="the-delphi-loss">The Delphi loss</h3>
+<p>For each <span class="math inline">v</span>, Let <span class="math inline">\text{logits}_{i, c, v} = (W \cdot GPT_{\theta}(X))_{i, c, v}</span>, where <span class="math inline">W \in \mathbb{R}^{d_{embed}, \lvert \mathcal{V} \rvert}</span> is a linear layer, and let <span class="math inline">\lambda_{i, c, v} \coloneqq \exp(\text{logits}_{i, c, v})</span>.</p>
+<p><strong>Next Token Prediction Loss:</strong></p>
+<p><span class="math display"> \text{CE}_{i, c} \coloneqq - \sum_v y_{i, c, v} \log (\lambda_{i, c, v}) + \log (\sum_v \lambda_{i, c, v}) </span></p>
+<p>where <span class="math display">
+y_{i, c, v} \coloneqq
+\begin{cases}
+1 &amp; \text{if } v \text{ is the next token for patient } i \text{ at position } c \\
+0 &amp; \text{otherwise}
+\end{cases}
+</span></p>
+</section>
+<section class="slide level2">
 
-<img data-src="../csi_slides/images/GPT-pretraining.png" class="r-stretch"></section>
-<section id="first-trained-models" class="slide level2 unnumbered">
-<h2>First trained models</h2>
-<p>We trained a “large” model (40M params) and a “small” one (5M).</p>
+<p><strong>Time-to-Event Prediction Loss:</strong></p>
+<p><span class="math display">  \text{TTE}_{i, c} \coloneqq - \log(\sum_v \lambda_{i, c, v}) + t^{*} \sum_v \lambda_{i, c, v}  </span></p>
+<p>where <span class="math inline">t^*</span> is the ground truth time to next event.</p>
+<p>Therefore, the final loss becomes:</p>
+<p><span class="math display"> \text{Delphi}_{i,c} \coloneqq  \text{CE}_{i, c} + \text{TTE}_{i, c} = - \sum_v y_{i, c, v} \log (\lambda_{i, c, v}) + t^{*} \sum_v \lambda_{i, c, v} </span></p>
+</section>
+<section class="slide level2">
 
-<img data-src="../technical_report/images/GPT_results/roc_spe_3.png" class="r-stretch quarto-figure-center"><p class="caption">ROC curve of the pre-training task for a given specialty on a test set of 10,000 patients.</p></section>
+<p>A variant that we propose to make it more suitable for co-occurent events : <strong>Delphi-BCE</strong>.</p>
+<p>Instead of softmax NTP, we switch to a multilabel setting: <span class="math display"> \text{BCE}_{i, c} \coloneqq  - \sum_v y_{i, c, v} \log \frac{\lambda_{i, c, v}}{1 + \lambda_{i, c, v}} + (1-y_{i, c, v}) \log \frac{1}{1 + \lambda_{i, c, v}} </span></p>
+<p>And keep the TTE component:</p>
+<div style="font-size: 0.75em;">
+<p><span class="math display">
+\begin{aligned}
+\text{Delphi-BCE}_{i,c}
+&amp;\coloneqq \text{BCE}_{i,c} + \text{TTE}_{i,c} \\
+&amp;= - \sum_v y_{i, c, v} \log(\lambda_{i, c, v})
+   + \sum_v \log\bigl(1 + \lambda_{i, c, v}\bigr)
+   - \log \sum_v \lambda_{i, c, v}
+   + t^{*} \sum_v \lambda_{i, c, v} \\
+&amp;= \text{Delphi}_{i,c}
+   + \sum_v \log\bigl(1 + \lambda_{i, c, v}\bigr)
+   - \log \sum_v \lambda_{i, c, v} \, .
+\end{aligned}
+</span></p>
+</div>
+</section>
 <section id="plot-of-the-embedding-space" class="slide level2 unnumbered">
 <h2>Plot of the embedding space</h2>
 
-<img data-src="../csi_slides/images/embedding_space.png" class="quarto-figure quarto-figure-center r-stretch"></section></section>
-<section>
-<section id="next-steps" class="title-slide slide level1 center" data-number="3">
-<h1><span class="header-section-number">3</span> Next steps</h1>
+<img data-src="images/embedding_space.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="evaluation-task-examples" class="slide level2" data-number="3.1">
+<h2><span class="header-section-number">3.1</span> Evaluation task examples</h2>
 
-</section>
-<section id="causal-inference" class="slide level2 unnumbered scrollable">
-<h2>Causal inference</h2>
-<ul>
-<li><strong>Goal</strong>: Estimate the impact of losing one’s <em>Médecin Traitant</em> (Primary Care Provider, PCP), and looping back with Titouan’s work</li>
-</ul>
-<ul>
-<li class="fragment"><p>Up to a given time <span class="math inline">t</span>, we have:</p>
-<ul>
-<li class="fragment">The covariate <span class="math inline">X_{&lt;t} \coloneqq (e_{&lt;t}, t_{&lt;t}, f_{&lt;t})</span>, the medical history of the patient</li>
-<li class="fragment"><span class="math inline">W_t</span> is the (binary) treatment at time t, say: the patient has lost its PCP (death or retirement) before <span class="math inline">t</span></li>
-<li class="fragment"><span class="math inline">Y_t (W_t)</span>, the binary outcome, indicating <strong>whether death has occured within a given time window</strong> <span class="math inline">[t, t+ \delta_d]</span></li>
-</ul></li>
-<li class="fragment"><p>We want to estimate the <strong>Conditional Average Treatment Effect</strong> (CATE): <span class="math display"> \tau(x, t) \coloneqq \mathbf{E}[Y_t(1) - Y_t(0) | X_{&lt;t} = x]</span></p></li>
-</ul>
+<img data-src="images/presence.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="scaling-law" class="slide level2" data-number="3.2">
+<h2><span class="header-section-number">3.2</span> Scaling law</h2>
+
+<img data-src="images/scaling_law.png" class="quarto-figure quarto-figure-center r-stretch"></section></section>
+<section>
+<section id="avenues-of-work" class="title-slide slide level1 center" data-number="4">
+<h1><span class="header-section-number">4</span> Avenues of work</h1>
+
 </section>
 <section id="improving-pre-training-task" class="slide level2 unnumbered">
 <h2>Improving pre-training task</h2>
+<p>In the Delphi loss, the scale of the intensity is optimized only for the token that appears. Ideally at each time step, all the intensities should match the next time to appearance.</p>
 <ul>
-<li>Exploring Posson loss - ground truth being <strong>number of events</strong> for each token, for each time window</li>
 <li>Exponential loss for time-to-event task (as in MOTOR (<span class="citation" data-cites="steinberg2024motor">Steinberg et al. (<a href="#/section" role="doc-biblioref" onclick="">2024</a>)</span>))</li>
 </ul>
-<p>We want ideally to have a generative model.</p>
-</section>
-<section id="scaling" class="slide level2 unnumbered scrollable">
-<h2>Scaling</h2>
-<ul>
-<li><span class="citation" data-cites="chinchilla">Hoffmann et al. (<a href="#/section" role="doc-biblioref" onclick="">2022</a>)</span> propose a <strong>scaling law</strong> for LLMs
-<ul>
-<li><p>Trade off between number of training tokens (train dataset size) and number of parameters in the model (model size)</p></li>
-<li><p>Estimated optimal ratio: <span class="math display">\frac{\text{\# training tokens}}{\text{\# parameters}} = 20</span></p>
-<ul>
-<li>is it the same for medical pathways ?</li>
-</ul></li>
-</ul></li>
-</ul>
-<div class="columns">
-<div class="column" style="width:50%;">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="../csi_slides/images/delphi-graph.png" style="width:100.0%"></p>
-<figcaption>From <span class="citation" data-cites="Shmatko2025">Shmatko et al. (<a href="#/section" role="doc-biblioref" onclick="">2025</a>)</span></figcaption>
-</figure>
+<div style="font-size: 0.85em;">
+<p><span class="math display"> \text{All-TTE}_{i,c} =  \sum_v (- \log \lambda_{i, c, v} + \lambda_{i, c, v} \tau_{i, c, v}) \mathbf{1}_{\tau_{i, c, v} &lt; \infty} +  (T_{\text{max}} - t_{i, c}) \sum_v \lambda_{i, c, v} \mathbf{1}_{\tau_{i, c, v} = \infty} </span></p>
 </div>
-</div><div class="column" style="width:50%;">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="../csi_slides/images/chinchilla.jpeg" style="width:100.0%"></p>
-<figcaption>From <span class="citation" data-cites="chinchilla">Hoffmann et al. (<a href="#/section" role="doc-biblioref" onclick="">2022</a>)</span></figcaption>
-</figure>
-</div>
-</div></div>
 </section></section>
 <section>
 <section id="references" class="title-slide slide level1 unnumbered center">
@@ -467,8 +507,11 @@ Meilame Tayebjee
 <section id="section" class="slide level2 unnumbered smaller scrollable">
 <h2></h2>
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-chinchilla" class="csl-entry" role="listitem">
-Hoffmann, Jordan, Sebastian Borgeaud, Arthur Mensch, Elena Buchatskaya, Trevor Cai, Eliza Rutherford, Diego de Las Casas, et al. 2022. <span>‘Training Compute-Optimal Large Language Models’</span>. <a href="https://arxiv.org/abs/2203.15556">https://arxiv.org/abs/2203.15556</a>.
+<div id="ref-liBEHRTTransformerElectronic2020" class="csl-entry" role="listitem">
+Li, Yikuan, Shishir Rao, José Roberto Ayala Solares, Abdelaali Hassaine, Rema Ramakrishnan, Dexter Canoy, Yajie Zhu, Kazem Rahimi, and Gholamreza Salimi-Khorshidi. 2020. <span>‘<span>BEHRT</span>: <span>Transformer</span> for <span>Electronic Health Records</span>’</span>. <em>Scientific Reports</em> 10 (1): 7155. <a href="https://doi.org/10.1038/s41598-020-62922-y">https://doi.org/10.1038/s41598-020-62922-y</a>.
+</div>
+<div id="ref-life2vec" class="csl-entry" role="listitem">
+Savcisens, Germans, Tina Eliassi-Rad, Lars Kai Hansen, Laust Hvas Mortensen, Lau Lilleholt, Anna Rogers, Ingo Zettler, and Sune Lehmann. 2023. <span>‘Using Sequences of Life-Events to Predict Human Lives’</span>. <em>Nature Computational Science</em> 4 (1): 43–56. <a href="https://doi.org/10.1038/s43588-023-00573-5">https://doi.org/10.1038/s43588-023-00573-5</a>.
 </div>
 <div id="ref-Shmatko2025" class="csl-entry" role="listitem">
 Shmatko, Artem, Alexander Wolfgang Jung, Kumar Gaurav, Søren Brunak, Laust Hvas Mortensen, Ewan Birney, Tom Fitzgerald, and Moritz Gerstung. 2025. <span>‘Learning the Natural History of Human Disease with Generative Transformers’</span>. <em>Nature</em>, September. <a href="https://doi.org/10.1038/s41586-025-09529-3">https://doi.org/10.1038/s41586-025-09529-3</a>.
@@ -476,10 +519,17 @@ Shmatko, Artem, Alexander Wolfgang Jung, Kumar Gaurav, Søren Brunak, Laust Hvas
 <div id="ref-steinberg2024motor" class="csl-entry" role="listitem">
 Steinberg, Ethan, Jason Alan Fries, Yizhe Xu, and Nigam Shah. 2024. <span>‘<span>MOTOR</span>: A Time-to-Event Foundation Model for Structured Medical Records’</span>. In <em>The Twelfth International Conference on Learning Representations</em>. <a href="https://openreview.net/forum?id=NialiwI2V6">https://openreview.net/forum?id=NialiwI2V6</a>.
 </div>
+<div id="ref-coMET" class="csl-entry" role="listitem">
+Waxler, Shane, Paul Blazek, Davis White, Daniel Sneider, Kevin Chung, Mani Nagarathnam, Patrick Williams, et al. 2025. <span>‘Generative <span>Medical Event Models Improve</span> with <span>Scale</span>’</span>. arXiv. <a href="https://doi.org/10.48550/arXiv.2508.12104">https://doi.org/10.48550/arXiv.2508.12104</a>.
+</div>
+<div id="ref-yangTransformEHRTransformerbasedEncoderdecoder2023" class="csl-entry" role="listitem">
+Yang, Zhichao, Avijit Mitra, Weisong Liu, Dan Berlowitz, and Hong Yu. 2023. <span>‘<span>TransformEHR</span>: Transformer-Based Encoder-Decoder Generative Model to Enhance Prediction of Disease Outcomes Using Electronic Health Records’</span>. <em>Nature Communications</em> 14 (1): 7857. <a href="https://doi.org/10.1038/s41467-023-43715-z">https://doi.org/10.1038/s41467-023-43715-z</a>.
+</div>
 </div>
 
 
 </section></section>
+
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">
