@@ -1,0 +1,117 @@
+## Data management {.unnumbered}
+
+- Validation and EDA of the first delivered simplified tables: prestations and medications
+- Jointure, cleaning and subsampling
+  - So that any subsample can fit in vRAM
+- Tokenization
+
+![](images/tokenized_data.png){fig-align="center"}
+
+## Notations {.unnumbered}
+### Notations: dataset {.unnumbered}
+
+**Dataset of medical pathways: ** For $i = 1, \dots, n$, $X_i \coloneqq (e_i, t_i, f_i)$, where:
+
+::: {.incremental}
+-  $e_i \in \mathbb{R}^{cs}$ are the tokenized events,  containing integers between $0$ and the vocabulary size $\lvert \mathcal{V} \rvert$
+- $t_i \in \mathbb{R}^{cs}$ is the temporal vector, containing the dates
+- $f_i \in \mathbb{R}^{2}$ corresponds to the patient general features, for now age and gender
+:::
+
+---
+
+### Notations: model {.unnumbered}
+
+
+- Embedding matrices of size $\mathbb{R}^{\lvert \mathcal{V} \rvert, d_{embed}}$ (vocab),  $\mathbb{R}^{2, d_{embed}}$ (gender) and $\mathbb{R}^{8, d_{embed}}$ (age class)
+  - We use $t_i$ to have a _time-aware_ positional encoding using a sinusoidal encoding
+  - A symbolic [START] token, composed of the summed embeddings of age and gender.
+
+- **Causal** self-attention layers so that the Transformer-based model outputs ***causally contextualized embeddings***:
+$$ GPT_{\theta}(X_i) \in \mathbb{R}^{cs, d_{embed}}$$
+
+where $\theta$ parametrizes the neural network.
+
+## Pre-training task {.unnumbered}
+
+### Objectives {.unnumbered}
+
+:::{.incremental}
+- Having a **time-aware** Transformers ($\neq$ NLP)
+
+- We want to be able to efficiently compute the embedding of the pathway **at any time** (the *trajectory* of the patient)
+
+- **Problems with the next token task:**
+  - a lot of simultaneous events, especially for medications
+  - different types of events: does it make sense to have a competition among them ?
+:::
+
+
+---
+
+### The Delphi loss {.unnumbered}
+
+For each $v$, Let $\text{logits}_{i, c, v} = (W \cdot GPT_{\theta}(X))_{i, c, v}$, where $W \in \mathbb{R}^{d_{embed}, \lvert \mathcal{V} \rvert}$ is a linear layer, and let $\lambda_{i, c, v} \coloneqq \exp(\text{logits}_{i, c, v})$.
+
+**Next Token Prediction Loss:** 
+
+$$ \text{CE}_{i, c} \coloneqq - \sum_v y_{i, c, v} \log (\lambda_{i, c, v}) + \log (\sum_v \lambda_{i, c, v}) $$
+
+where
+$$
+y_{i, c, v} \coloneqq
+\begin{cases}
+1 & \text{if } v \text{ is the next token for patient } i \text{ at position } c \\
+0 & \text{otherwise}
+\end{cases}
+$$
+
+---
+
+**Time-to-Event Prediction Loss:** 
+
+$$  \text{TTE}_{i, c} \coloneqq - \log(\sum_v \lambda_{i, c, v}) + t^{*} \sum_v \lambda_{i, c, v}  $$
+
+where $t^*$ is the ground truth time to next event.
+
+Therefore, the final loss becomes:
+
+$$ \text{Delphi}_{i,c} \coloneqq  \text{CE}_{i, c} + \text{TTE}_{i, c} = - \sum_v y_{i, c, v} \log (\lambda_{i, c, v}) + t^{*} \sum_v \lambda_{i, c, v} $$
+
+---
+
+A variant that we propose to make it more suitable for co-occurent events : **Delphi-BCE**.
+
+Instead of softmax NTP, we switch to a multilabel setting:
+$$ \text{BCE}_{i, c} \coloneqq  - \sum_v y_{i, c, v} \log \frac{\lambda_{i, c, v}}{1 + \lambda_{i, c, v}} + (1-y_{i, c, v}) \log \frac{1}{1 + \lambda_{i, c, v}} $$
+
+And keep the TTE component:
+
+::: {style="font-size: 0.75em;"}
+$$
+\begin{aligned}
+\text{Delphi-BCE}_{i,c}
+&\coloneqq \text{BCE}_{i,c} + \text{TTE}_{i,c} \\
+&= - \sum_v y_{i, c, v} \log(\lambda_{i, c, v})
+   + \sum_v \log\bigl(1 + \lambda_{i, c, v}\bigr)
+   - \log \sum_v \lambda_{i, c, v}
+   + t^{*} \sum_v \lambda_{i, c, v} \\
+&= \text{Delphi}_{i,c}
+   + \sum_v \log\bigl(1 + \lambda_{i, c, v}\bigr)
+   - \log \sum_v \lambda_{i, c, v} \, .
+\end{aligned}
+$$
+:::
+
+## Plot of the embedding space {.unnumbered}
+
+![](images/embedding_space.png){fig-align="center"}
+
+## Evaluation task examples
+
+![](images/presence.png){fig-align="center"}
+
+## Scaling law
+
+![](images/scaling_law.png){fig-align="center"}
+

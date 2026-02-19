@@ -1,0 +1,10 @@
+---
+title: SODA Seminar
+date: "2026-03-31"
+description: |
+  Presentation of the GPT project for the SODA team seminar at Inria Saclay
+slides:
+  text: Slides
+  url: /mydocs/soda_meeting/index.html
+order: 4
+---

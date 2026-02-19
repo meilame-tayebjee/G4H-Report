@@ -1,0 +1,155 @@
+
+@article{abecassis:hal-04774700,
+  TITLE = {{From prediction to prescription: Machine learning and Causal Inference}},
+  AUTHOR = {Ab{\'e}cassis, Judith and Dumas, {\'E}lise and Alberge, Julie and Varoquaux, Ga{\"e}l},
+  URL = {https://hal.science/hal-04774700},
+  JOURNAL = {{Annual Review of Biomedical Data Science}},
+  PUBLISHER = {{Annual Review}},
+  YEAR = {2025},
+  MONTH = Apr,
+  DOI = {10.1146/annurev-biodatasci-103123-095750},
+  KEYWORDS = {personalized medicine ; data-driven decision making ; large scale data ; causal inference ; machine learning},
+  PDF = {https://hal.science/hal-04774700v1/file/CausalReview.pdf},
+  HAL_ID = {hal-04774700},
+  HAL_VERSION = {v1},
+}
+
+﻿@Article{Shmatko2025,
+author={Shmatko, Artem
+and Jung, Alexander Wolfgang
+and Gaurav, Kumar
+and Brunak, S{\o}ren
+and Mortensen, Laust Hvas
+and Birney, Ewan
+and Fitzgerald, Tom
+and Gerstung, Moritz},
+title={Learning the natural history of human disease with generative transformers},
+journal={Nature},
+year={2025},
+month={Sep},
+day={17},
+abstract={Decision-making in healthcare relies on understanding patients' past and current health states to predict and, ultimately, change their future course1--3. Artificial intelligence (AI) methods promise to aid this task by learning patterns of disease progression from large corpora of health records4,5. However, their potential has not been fully investigated at scale. Here we modify the GPT6 (generative pretrained transformer) architecture to model the progression and competing nature of human diseases. We train this model, Delphi-2M, on data from 0.4{\thinspace}million UK Biobank participants and validate it using external data from 1.9{\thinspace}million Danish individuals with no change in parameters. Delphi-2M predicts the rates of more than 1,000 diseases, conditional on each individual's past disease history, with accuracy comparable to that of existing single-disease models. Delphi-2M's generative nature also enables sampling of synthetic future health trajectories, providing meaningful estimates of potential disease burden for up to 20 years, and enabling the training of AI models that have never seen actual data. Explainable AI methods7 provide insights into Delphi-2M's predictions, revealing clusters of co-morbidities within and across disease chapters and their time-dependent consequences on future health, but also highlight biases learnt from training data. In summary, transformer-based models appear to be well suited for predictive and generative health-related tasks, are applicable to population-scale datasets and provide insights into temporal dependencies between disease events, potentially improving the understanding of personalized health risks and informing precision medicine approaches.},
+issn={1476-4687},
+doi={10.1038/s41586-025-09529-3},
+url={https://doi.org/10.1038/s41586-025-09529-3}
+}
+
+@article{life2vec,
+  title = {Using Sequences of Life-Events to Predict Human Lives},
+  author = {Savcisens, Germans and {Eliassi-Rad}, Tina and Hansen, Lars Kai and Mortensen, Laust Hvas and Lilleholt, Lau and Rogers, Anna and Zettler, Ingo and Lehmann, Sune},
+  year = {2023},
+  month = dec,
+  journal = {Nature Computational Science},
+  volume = {4},
+  number = {1},
+  pages = {43--56},
+  issn = {2662-8457},
+  doi = {10.1038/s43588-023-00573-5},
+  urldate = {2025-09-30},
+  langid = {english},
+  file = {/Users/Meilame/Zotero/storage/4Z6QQHF7/Savcisens et al. - 2023 - Using sequences of life-events to predict human lives.pdf}
+}
+
+@article{yangTransformEHRTransformerbasedEncoderdecoder2023,
+  title = {{{TransformEHR}}: Transformer-Based Encoder-Decoder Generative Model to Enhance Prediction of Disease Outcomes Using Electronic Health Records},
+  shorttitle = {{{TransformEHR}}},
+  author = {Yang, Zhichao and Mitra, Avijit and Liu, Weisong and Berlowitz, Dan and Yu, Hong},
+  year = {2023},
+  month = nov,
+  journal = {Nature Communications},
+  volume = {14},
+  number = {1},
+  pages = {7857},
+  issn = {2041-1723},
+  doi = {10.1038/s41467-023-43715-z},
+  urldate = {2025-05-09},
+  abstract = {Abstract                            Deep learning transformer-based models using longitudinal electronic health records (EHRs) have shown a great success in prediction of clinical diseases or outcomes. Pretraining on a large dataset can help such models map the input space better and boost their performance on relevant tasks through finetuning with limited data. In this study, we present TransformEHR, a generative encoder-decoder model with transformer that is pretrained using a new pretraining objective---predicting all diseases and outcomes of a patient at a future visit from previous visits. TransformEHR's encoder-decoder framework, paired with the novel pretraining objective, helps it achieve the new state-of-the-art performance on multiple clinical prediction tasks. Comparing with the previous model, TransformEHR improves area under the precision--recall curve by 2\% (               p               \,{$<$}\,0.001) for pancreatic cancer onset and by 24\% (               p               \,=\,0.007) for intentional self-harm in patients with post-traumatic stress disorder. The high performance in predicting intentional self-harm shows the potential of TransformEHR in building effective clinical intervention systems. TransformEHR is also generalizable and can be easily finetuned for clinical prediction tasks with limited data.},
+  langid = {english},
+  file = {/Users/Meilame/Zotero/storage/3W2PI88H/Yang et al. - 2023 - TransformEHR transformer-based encoder-decoder generative model to enhance prediction of disease ou.pdf}
+}
+
+@book{wagerCausalInferenceStatistical,
+  title = {Causal {{Inference}}: {{A Statistical Learning Approach}}},
+  author = {Wager, Stefan},
+  year = {2024},
+}
+
+@article{doutreligneHowSelectPredictive2025,
+  title = {How to Select Predictive Models for Decision-Making or Causal Inference},
+  author = {Doutreligne, Matthieu and Varoquaux, Ga{\"e}l},
+  year = {2025},
+  month = jan,
+  journal = {GigaScience},
+  volume = {14},
+  pages = {giaf016},
+  issn = {2047-217X},
+  doi = {10.1093/gigascience/giaf016},
+  urldate = {2025-10-03},
+  abstract = {Abstract                            Background               We investigate which procedure selects the most trustworthy predictive model to explain the effect of an intervention and support decision-making.                                         Methods               We study a large variety of model selection procedures in practical settings: finite samples settings and without a theoretical assumption of well-specified models. Beyond standard cross-validation or internal validation procedures, we also study elaborate causal risks. These build proxies of the causal error using ``nuisance'' reweighting to compute it on the observed data. We evaluate whether empirically estimated nuisances, which are necessarily noisy, add noise to model selection and compare different metrics for causal model selection in an extensive empirical study based on a simulation and 3 health care datasets based on real covariates.                                         Results               Among all metrics, the mean squared error, classically used to evaluate predictive modes, is worse. Reweighting it with a propensity score does not bring much improvement in most cases. On average, the \$R{\textbackslash}text\{-risk\}\$, which uses as nuisances a model of mean outcome and propensity scores, leads to the best performances. Nuisance corrections are best estimated with flexible estimators such as a super learner.                                         Conclusions               When predictive models are used to explain the effect of an intervention, they must be evaluated with different procedures than standard predictive settings, using the \$R{\textbackslash}text\{-risk\}\$ from causal inference.},
+  copyright = {https://creativecommons.org/licenses/by/4.0/},
+  langid = {english}
+}
+
+@article{liBEHRTTransformerElectronic2020,
+  title = {{{BEHRT}}: {{Transformer}} for {{Electronic Health Records}}},
+  shorttitle = {{{BEHRT}}},
+  author = {Li, Yikuan and Rao, Shishir and Solares, Jos{\'e} Roberto Ayala and Hassaine, Abdelaali and Ramakrishnan, Rema and Canoy, Dexter and Zhu, Yajie and Rahimi, Kazem and {Salimi-Khorshidi}, Gholamreza},
+  year = {2020},
+  month = apr,
+  journal = {Scientific Reports},
+  volume = {10},
+  number = {1},
+  pages = {7155},
+  issn = {2045-2322},
+  doi = {10.1038/s41598-020-62922-y},
+  urldate = {2025-10-03},
+  abstract = {Abstract             Today, despite decades of developments in medicine and the growing interest in precision healthcare, vast majority of diagnoses happen once patients begin to show noticeable signs of illness. Early indication and detection of diseases, however, can provide patients and carers with the chance of early intervention, better disease management, and efficient allocation of healthcare resources. The latest developments in machine learning (including deep learning) provides a great opportunity to address this unmet need. In this study, we introduce BEHRT: A deep neural sequence transduction model for electronic health records (EHR), capable of simultaneously predicting the likelihood of 301 conditions in one's future visits. When trained and evaluated on the data from nearly 1.6 million individuals, BEHRT shows a striking improvement of 8.0--13.2\% (in terms of average precision scores for different tasks), over the existing state-of-the-art deep EHR models. In addition to its scalability and superior accuracy, BEHRT enables personalised interpretation of its predictions; its flexible architecture enables it to incorporate multiple heterogeneous concepts (e.g., diagnosis, medication, measurements, and more) to further improve the accuracy of its predictions; its (pre-)training results in disease and patient representations can be useful for future studies (i.e., transfer learning).},
+  langid = {english},
+  file = {/Users/Meilame/Zotero/storage/MTYFQKLM/Li et al. - 2020 - BEHRT Transformer for Electronic Health Records.pdf}
+}
+
+@inproceedings{
+steinberg2024motor,
+title={{MOTOR}: A Time-to-Event Foundation Model For Structured Medical Records},
+author={Ethan Steinberg and Jason Alan Fries and Yizhe Xu and Nigam Shah},
+booktitle={The Twelfth International Conference on Learning Representations},
+year={2024},
+url={https://openreview.net/forum?id=NialiwI2V6}
+}
+
+@misc{chinchilla,
+      title={Training Compute-Optimal Large Language Models}, 
+      author={Jordan Hoffmann and Sebastian Borgeaud and Arthur Mensch and Elena Buchatskaya and Trevor Cai and Eliza Rutherford and Diego de Las Casas and Lisa Anne Hendricks and Johannes Welbl and Aidan Clark and Tom Hennigan and Eric Noland and Katie Millican and George van den Driessche and Bogdan Damoc and Aurelia Guy and Simon Osindero and Karen Simonyan and Erich Elsen and Jack W. Rae and Oriol Vinyals and Laurent Sifre},
+      year={2022},
+      eprint={2203.15556},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2203.15556}, 
+}
+
+@misc{meta-learners,
+      title={Nonparametric Estimation of Heterogeneous Treatment Effects: From Theory to Learning Algorithms}, 
+      author={Alicia Curth and Mihaela van der Schaar},
+      year={2021},
+      eprint={2101.10943},
+      archivePrefix={arXiv},
+      primaryClass={stat.ML},
+      url={https://arxiv.org/abs/2101.10943}, 
+}
+
+@misc{coMET,
+  title = {Generative {{Medical Event Models Improve}} with {{Scale}}},
+  author = {Waxler, Shane and Blazek, Paul and White, Davis and Sneider, Daniel and Chung, Kevin and Nagarathnam, Mani and Williams, Patrick and Voeller, Hank and Wong, Karen and Swanhorst, Matthew and Zhang, Sheng and Usuyama, Naoto and Wong, Cliff and Naumann, Tristan and Poon, Hoifung and Loza, Andrew and Meeker, Daniella and Hain, Seth and Shah, Rahul},
+  year = 2025,
+  month = nov,
+  number = {arXiv:2508.12104},
+  eprint = {2508.12104},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2508.12104},
+  urldate = {2026-02-19},
+  abstract = {Realizing personalized medicine at scale calls for methods that distill insights from longitudinal patient journeys, which can be viewed as a sequence of medical events. Foundation models pretrained on large-scale medical event data represent a promising direction for scaling real-world evidence generation and generalizing to diverse downstream tasks. Using Epic Cosmos, a dataset with medical events from de-identified longitudinal health records for 16.3 billion encounters over 300 million unique patient records from 310 health systems, we introduce the Curiosity models, a family of decoder-only transformer models pretrained on 118 million patients representing 115 billion discrete medical events (151 billion tokens). We present the largest scaling-law study of medical event data, establishing a methodology for pretraining and revealing power-law scaling relationships for compute, tokens, and model size. Consequently, we pretrained a series of compute-optimal models with up to 1 billion parameters. Conditioned on a patient's real-world history, Curiosity autoregressively predicts the next medical event to simulate patient health timelines. We studied 78 real-world tasks, including diagnosis prediction, disease prognosis, and healthcare operations. Remarkably for a foundation model with generic pretraining and simulation-based inference, Curiosity generally outperformed or matched task-specific supervised models on these tasks, without requiring task-specific fine-tuning or few-shot examples. Curiosity's predictive power consistently improves as the model and pretraining scale. Our results show that Curiosity, a generative medical event foundation model, can effectively capture complex clinical dynamics, providing an extensible and generalizable framework to support clinical decision-making, streamline healthcare operations, and improve patient outcomes.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning},
+  file = {/Users/Meilame/Zotero/storage/BSI5LK4A/Waxler et al. - 2025 - Generative Medical Event Models Improve with Scale.pdf;/Users/Meilame/Zotero/storage/VU4JQEYE/2508.html}
+}

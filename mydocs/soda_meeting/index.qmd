@@ -1,0 +1,45 @@
+---
+title: Meeting 19/02
+subtitle: "**Embedding medical pathways with decoder only Transformers**"
+authors:
+  - name: Meilame Tayebjee
+    roles: writing
+    corresponding: true
+date: "2025-10-08"
+date-format: "D MMMM YYYY"
+lang: en-GB
+bibliography: references.bib
+slide-number: true
+number-sections: true
+format: 
+  revealjs: 
+    theme: serif
+    toc: true
+    toc-depth: 2   # show up to ## headings
+    html-math-method: katex
+    
+css: custom.css
+---
+
+# Introduction
+
+{{< include sections/1-intro.qmd >}}
+
+# Related work
+
+{{< include sections/2-related_work.qmd >}}
+
+# Work done so far
+
+{{< include sections/3-so_far.qmd >}}
+
+# Avenues of work
+
+{{< include sections/4-avenues.qmd >}}
+
+# References {.unnumbered}
+
+## {.unnumbered}
+
+::: {#refs}
+:::

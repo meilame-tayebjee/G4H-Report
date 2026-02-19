@@ -1,0 +1,10 @@
+## Improving pre-training task {.unnumbered}
+
+
+In the Delphi loss, the scale of the intensity is optimized only for the token that appears. Ideally at each time step, all the intensities should match the next time to appearance.
+
+- Exponential loss for time-to-event task (as in MOTOR (@steinberg2024motor))
+
+::: {style="font-size: 0.85em;"}
+$$ \text{All-TTE}_{i,c} =  \sum_v (- \log \lambda_{i, c, v} + \lambda_{i, c, v} \tau_{i, c, v}) \mathbf{1}_{\tau_{i, c, v} < \infty} +  (T_{\text{max}} - t_{i, c}) \sum_v \lambda_{i, c, v} \mathbf{1}_{\tau_{i, c, v} = \infty} $$
+:::
