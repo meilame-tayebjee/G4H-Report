@@ -136,3 +136,20 @@ url={https://openreview.net/forum?id=NialiwI2V6}
       primaryClass={stat.ML},
       url={https://arxiv.org/abs/2101.10943}, 
 }
+
+@misc{coMET,
+  title = {Generative {{Medical Event Models Improve}} with {{Scale}}},
+  author = {Waxler, Shane and Blazek, Paul and White, Davis and Sneider, Daniel and Chung, Kevin and Nagarathnam, Mani and Williams, Patrick and Voeller, Hank and Wong, Karen and Swanhorst, Matthew and Zhang, Sheng and Usuyama, Naoto and Wong, Cliff and Naumann, Tristan and Poon, Hoifung and Loza, Andrew and Meeker, Daniella and Hain, Seth and Shah, Rahul},
+  year = 2025,
+  month = nov,
+  number = {arXiv:2508.12104},
+  eprint = {2508.12104},
+  primaryclass = {cs},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2508.12104},
+  urldate = {2026-02-19},
+  abstract = {Realizing personalized medicine at scale calls for methods that distill insights from longitudinal patient journeys, which can be viewed as a sequence of medical events. Foundation models pretrained on large-scale medical event data represent a promising direction for scaling real-world evidence generation and generalizing to diverse downstream tasks. Using Epic Cosmos, a dataset with medical events from de-identified longitudinal health records for 16.3 billion encounters over 300 million unique patient records from 310 health systems, we introduce the Curiosity models, a family of decoder-only transformer models pretrained on 118 million patients representing 115 billion discrete medical events (151 billion tokens). We present the largest scaling-law study of medical event data, establishing a methodology for pretraining and revealing power-law scaling relationships for compute, tokens, and model size. Consequently, we pretrained a series of compute-optimal models with up to 1 billion parameters. Conditioned on a patient's real-world history, Curiosity autoregressively predicts the next medical event to simulate patient health timelines. We studied 78 real-world tasks, including diagnosis prediction, disease prognosis, and healthcare operations. Remarkably for a foundation model with generic pretraining and simulation-based inference, Curiosity generally outperformed or matched task-specific supervised models on these tasks, without requiring task-specific fine-tuning or few-shot examples. Curiosity's predictive power consistently improves as the model and pretraining scale. Our results show that Curiosity, a generative medical event foundation model, can effectively capture complex clinical dynamics, providing an extensible and generalizable framework to support clinical decision-making, streamline healthcare operations, and improve patient outcomes.},
+  archiveprefix = {arXiv},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning},
+  file = {/Users/Meilame/Zotero/storage/BSI5LK4A/Waxler et al. - 2025 - Generative Medical Event Models Improve with Scale.pdf;/Users/Meilame/Zotero/storage/VU4JQEYE/2508.html}
+}

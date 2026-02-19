@@ -38,8 +38,8 @@ where $\theta$ parametrizes the neural network.
 
 :::{.incremental}
 - Having a **time-aware** Transformers ($\neq$ NLP)
-- Keeping in mind causal inference
-  - We want to be able to efficiently compute the embedding of the pathway **at any time** (the *trajectory* of the patient)
+
+- We want to be able to efficiently compute the embedding of the pathway **at any time** (the *trajectory* of the patient)
 
 - **Problems with the next token task:**
   - a lot of simultaneous events, especially for medications
@@ -49,24 +49,69 @@ where $\theta$ parametrizes the neural network.
 
 ---
 
-### Description {.unnumbered}
+### The Delphi loss {.unnumbered}
 
-We predict for each token, if it will appear within the next $t$ days.
+For each $v$, Let $\text{logits}_{i, c, v} = (W \cdot GPT_{\theta}(X))_{i, c, v}$, where $W \in \mathbb{R}^{d_{embed}, \lvert \mathcal{V} \rvert}$ is a linear layer, and let $\lambda_{i, c, v} \coloneqq \exp(\text{logits}_{i, c, v})$.
 
- We consider, simulatenously, several $t \in \mathcal{T}$, $\mathcal{T}$ being the sorted set of ***short term horizons***, typically 14, 30, 90, 180 days.
+**Next Token Prediction Loss:** 
 
+$$ \text{CE}_{i, c} \coloneqq - \sum_v y_{i, c, v} \log (\lambda_{i, c, v}) + \log (\sum_v \lambda_{i, c, v}) $$
 
-![](images/GPT-pretraining.png)
+where
+$$
+y_{i, c, v} \coloneqq
+\begin{cases}
+1 & \text{if } v \text{ is the next token for patient } i \text{ at position } c \\
+0 & \text{otherwise}
+\end{cases}
+$$
 
-## First trained models {.unnumbered}
+---
 
+**Time-to-Event Prediction Loss:** 
 
-We trained a "large" model (40M params) and a "small" one (5M).
+$$  \text{TTE}_{i, c} \coloneqq - \log(\sum_v \lambda_{i, c, v}) + t^{*} \sum_v \lambda_{i, c, v}  $$
 
-![ROC curve of the pre-training task for a given specialty on a test set of 10,000 patients.](../technical_report/images/GPT_results/roc_spe_3.png)
+where $t^*$ is the ground truth time to next event.
 
-Still, the models converge quickly, and even small models achieve good convergence. This raises the (open) question of complexifying the task at some point.
+Therefore, the final loss becomes:
+
+$$ \text{Delphi}_{i,c} \coloneqq  \text{CE}_{i, c} + \text{TTE}_{i, c} = - \sum_v y_{i, c, v} \log (\lambda_{i, c, v}) + t^{*} \sum_v \lambda_{i, c, v} $$
+
+---
+
+A variant that we propose to make it more suitable for co-occurent events : **Delphi-BCE**.
+
+Instead of softmax NTP, we switch to a multilabel setting:
+$$ \text{BCE}_{i, c} \coloneqq  - \sum_v y_{i, c, v} \log \frac{\lambda_{i, c, v}}{1 + \lambda_{i, c, v}} + (1-y_{i, c, v}) \log \frac{1}{1 + \lambda_{i, c, v}} $$
+
+And keep the TTE component:
+
+::: {style="font-size: 0.75em;"}
+$$
+\begin{aligned}
+\text{Delphi-BCE}_{i,c}
+&\coloneqq \text{BCE}_{i,c} + \text{TTE}_{i,c} \\
+&= - \sum_v y_{i, c, v} \log(\lambda_{i, c, v})
+   + \sum_v \log\bigl(1 + \lambda_{i, c, v}\bigr)
+   - \log \sum_v \lambda_{i, c, v}
+   + t^{*} \sum_v \lambda_{i, c, v} \\
+&= \text{Delphi}_{i,c}
+   + \sum_v \log\bigl(1 + \lambda_{i, c, v}\bigr)
+   - \log \sum_v \lambda_{i, c, v} \, .
+\end{aligned}
+$$
+:::
 
 ## Plot of the embedding space {.unnumbered}
 
 ![](images/embedding_space.png){fig-align="center"}
+
+## Evaluation task examples
+
+![](images/presence.png){fig-align="center"}
+
+## Scaling law
+
+![](images/scaling_law.png){fig-align="center"}
+

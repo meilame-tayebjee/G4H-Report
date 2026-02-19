@@ -1,10 +1,11 @@
-## Transformer-based models for medical pathway embedding {.unnumbered}
+## Transformer-based models for medical pathway embedding {.unnumbered .scrollable}
 
 
 ::: {style="font-size: 0.5em;"}
 
 | Model name | Model archi. | Pre-train. Task(s) | Fine-tun. task(s) | # Params | Training data size | Vocab size (type) | Generative | Trajectory^[Efficient (i.e. in one forward pass) computation of embeddings at any time] 
 |-|------|-------|-------|----|---|-----|-|-
+| coMET (@coMET) | GPT | Next token pred. | Disease prediction | 1B | 151B events from 118M patients | 7,105 (exhaustive) | ✅ | ✅ |
 | Delphi (@Shmatko2025) | NanoGPT | Next disease event + Time to event | None | 2M | 400k patients | 1,258 (ICD10)  | ✅ | ✅ |
 | MOTOR (Many Outcome Time Oriented Representation) (@steinberg2024motor) | Transformer (causal masking and local attention) | Time to event (TTE) | TTE for part. disease |  143M | 55M patients, 9B events | 8,192 (ICD10 and other specific codes) | ≅ | ≅ |
 | Life2Vec (@life2vec)| BERT | MLM + SOP | Mortality Prediction | 8M | 3M patients | ~700<br>(labour + ICD10) | ❌ | ❌ |
@@ -21,22 +22,3 @@
 | Transformer patient embedding (NPJ Dig Med 2025) | Transformer (codes→embedding) | Stratification, disease prediction | not reported | 1.05M pts (eMERGE) | -->
 
 :::
-
-## ML/DL for causal inference  {.unnumbered}
-
-Several methodological papers:
-
-- @abecassis:hal-04774700, @doutreligneHowSelectPredictive2025
-  - The best predictive model is not the best suited for causal inference
-  - Model selection using risk scores
-  - Designing a causal inference framework (Directed Acyclic Graphs (DAGs), Population-Intervention-Control-Outcome-Time (PICOT))
-- @wagerCausalInferenceStatistical:
-  - Definitions and assumptions
-  - Meta-learners
-- @meta-learners:
-  - Comparison of different meta-learners in different settings
-
-
-## Causal impact of PCP loss on health outcomes  {.unnumbered}
-
-![From T. Le Calvé, PhD Student, CREST](images/capture_titouan.png)

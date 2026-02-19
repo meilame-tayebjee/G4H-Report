@@ -1,6 +1,6 @@
 ---
-title: PhD Committee
-subtitle: "**Embedding medical pathways for causal inference on healthcare supply shocks and patient outcomes**"
+title: Meeting 19/02
+subtitle: "**Embedding medical pathways with decoder only Transformers**"
 authors:
   - name: Meilame Tayebjee
     roles: writing

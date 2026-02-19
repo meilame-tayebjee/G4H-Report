@@ -27,7 +27,6 @@
 - Our data: patient (medical) pathways
   - unstructured (just as in NLP)
   - temporally irregular (not like NLP!)
-- To feed classical causal ML estimators, we need to represent those pathways as vectors (_embeddings_)
 
 ![](images/pathway_data.png){fig-align="center"}
 
