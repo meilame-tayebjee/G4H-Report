@@ -1,0 +1,42 @@
+## Transformer-based models for medical pathway embedding {.unnumbered}
+
+
+::: {style="font-size: 0.5em;"}
+
+| Model name | Model archi. | Pre-train. Task(s) | Fine-tun. task(s) | # Params | Training data size | Vocab size (type) | Generative | Trajectory^[Efficient (i.e. in one forward pass) computation of embeddings at any time] 
+|-|------|-------|-------|----|---|-----|-|-
+| Delphi (@Shmatko2025) | NanoGPT | Next disease event + Time to event | None | 2M | 400k patients | 1,258 (ICD10)  | ✅ | ✅ |
+| MOTOR (Many Outcome Time Oriented Representation) (@steinberg2024motor) | Transformer (causal masking and local attention) | Time to event (TTE) | TTE for part. disease |  143M | 55M patients, 9B events | 8,192 (ICD10 and other specific codes) | ≅ | ≅ |
+| Life2Vec (@life2vec)| BERT | MLM + SOP | Mortality Prediction | 8M | 3M patients | ~700<br>(labour + ICD10) | ❌ | ❌ |
+| TransformEHR (@yangTransformEHRTransformerbasedEncoderdecoder2023)| Encoder-Decoder | Visit masking: Given visits 1-3, predict all codes in visit 4 | Disease (pancreatic cancer) / Outcome (self harm) pred. | ? | 255M visits from 7M patients | ICD10 | ✅ | ❌|
+| BEHRT (@liBEHRTTransformerElectronic2020) | BERT | MLM | Disease prediction| n.r. (~6L, 12H, h=288) | 1.6M patients | 301 disease codes | ❌ | ❌ |
+
+
+<!-- 
+| Med-BERT | BERT for structured diagnosis codes | Disease prediction (HF, pancreatic cancer) | ~17M | 28.5M pts |
+| ClinicalBERT | BERT-base on clinical notes (MIMIC-III) | 30-day readmission + NLP tasks | ~110M (BERT-base) | 34,560 pts (downstream) |
+| Hi-BEHRT | Hierarchical Transformer (local + global) | Risk prediction (HF, diabetes, CKD, stroke) | not reported | ~2.84M pts |
+| CEHR-BERT | BERT w/ temporal & visit tokens | Hosp., death, HF diagnosis, readmission | not reported | ~2.4M pts |
+| HEART | Relation-aware Transformer | 5 clinical tasks (2 datasets) | not reported | sizes vary |
+| Transformer patient embedding (NPJ Dig Med 2025) | Transformer (codes→embedding) | Stratification, disease prediction | not reported | 1.05M pts (eMERGE) | -->
+
+:::
+
+## ML/DL for causal inference  {.unnumbered}
+
+Several methodological papers:
+
+- @abecassis:hal-04774700, @doutreligneHowSelectPredictive2025
+  - The best predictive model is not the best suited for causal inference
+  - Model selection using risk scores
+  - Designing a causal inference framework (Directed Acyclic Graphs (DAGs), Population-Intervention-Control-Outcome-Time (PICOT))
+- @wagerCausalInferenceStatistical:
+  - Definitions and assumptions
+  - Meta-learners
+- @meta-learners:
+  - Comparison of different meta-learners in different settings
+
+
+## Causal impact of PCP loss on health outcomes  {.unnumbered}
+
+![From T. Le Calvé, PhD Student, CREST](images/capture_titouan.png)
