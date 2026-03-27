@@ -12,21 +12,12 @@
 
 ::: {.incremental}
 - The general objective is to 
-  - infer the causal impact of the **healthcare supply** (and its geographic distribution) on **health outcomes**
+  - infer the impact of the **healthcare supply** (and its geographic distribution) on **health outcomes**
     - using classic econometric tools
-    - **using deep learning methods for causal inference**
+    - **using deep learning methods**
   - study policies that contribute to the efficiency of the French healthcare system
 
 - **11 years of exhaustive SNDS**
   - 70M patients
   - consultations, procedures, hospitalizations, medications, deaths etc.
 :::
-
-## My project: embedding patient pathways for causal inference {.unnumbered}
-
-- Our data: patient (medical) pathways
-  - unstructured (just as in NLP)
-  - temporally irregular (not like NLP!)
-
-![](images/pathway_data.png){fig-align="center"}
-

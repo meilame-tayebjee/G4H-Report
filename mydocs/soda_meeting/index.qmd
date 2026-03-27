@@ -1,11 +1,11 @@
 ---
-title: Meeting 19/02
-subtitle: "**Embedding medical pathways with decoder only Transformers**"
+title: SODA Seminar
+subtitle: "**Policy evaluation using Transformer-based medical pathway embeddings**"
 authors:
   - name: Meilame Tayebjee
     roles: writing
     corresponding: true
-date: "2025-10-08"
+date: "2026-03-31"
 date-format: "D MMMM YYYY"
 lang: en-GB
 bibliography: references.bib
@@ -17,6 +17,7 @@ format:
     toc: true
     toc-depth: 2   # show up to ## headings
     html-math-method: katex
+    scrollable: true
     
 css: custom.css
 ---
@@ -25,13 +26,13 @@ css: custom.css
 
 {{< include sections/1-intro.qmd >}}
 
-# Related work
+# Transformer-based models for medical pathway embedding
 
-{{< include sections/2-related_work.qmd >}}
+{{< include sections/2-GPT.qmd >}}
 
-# Work done so far
+# Off-Policy Evaluation 
 
-{{< include sections/3-so_far.qmd >}}
+{{< include sections/3-OPE.qmd >}}
 
 # Avenues of work
 
