@@ -1,12 +1,12 @@
 ##  About me {.unnumbered}
 
 - Graduated from HEC (19-24), X (X20), ENSAE and MVA (administrateur de l'Insee, 2024)
-- **Research internships**:
-  - 2023 (3A X): MIT (Operations Research Center), _Microtransit system design and optimization_
-  - 2024 (ENSAE-MVA): Inria HeKA, _Generative models for longitudinal images_
-- Currently, **first position in the Corps** since sept. 2024:
-  - Data Scientist at SSP Lab (MLOps, model trustworthiness, NLP (text classification, RAG), satellite imagery...)
-  - **PhD in CS Candidate** (part-time, _journées recherche_)
+- **Internships**:
+  - 2023: MIT (Operations Research Center), _Microtransit system design and optimization_
+  - 2024: Inria HeKA, _Generative models for longitudinal images_
+- Currently, since sept. 2024:
+  - Data Scientist at Insee's AI & Data Science Innovation Lab (MLOps, agentic workflows and deep learning use cases: NLP, ML/DL for econometrics, satellite imagery)
+  - **PhD in CS Candidate** (part-time) - supervised by G. Lecué (Crest) and G. Varoquaux (Inria)
 
 ##  Broader view of the Graph4Health ANR {.unnumbered}
 
