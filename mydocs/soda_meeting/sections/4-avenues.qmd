@@ -8,4 +8,7 @@
 - Apply the method to specific subpopulations
   - Diabetes
   - Heart failure
+- Enriching the embedding
+  - Smarter training losses
+  - Action as token
 :::
