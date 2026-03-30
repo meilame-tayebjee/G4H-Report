@@ -1,0 +1,95 @@
+## Setting {.unnumbered}
+
+**Dataset of medical pathways: ** For $i = 1, \dots, n$, $X_i \coloneqq (e_i, t_i, f_i)$, where:
+
+::: {.incremental}
+-  $e_i \in \mathbb{R}^{cs}$ are the tokenized events,  containing integers between $0$ and the vocabulary size $\lvert \mathcal{V} \rvert$
+- $t_i \in \mathbb{R}^{cs}$ is the temporal vector, containing the dates
+- $f_i \in \mathbb{R}^{2}$ corresponds to the patient general features, for now age and gender
+:::
+
+---
+
+### Tokenization {.unnumbered}
+
+- Consultations: 83 tokens (specialties, e.g. general practitioner, cardiologist, etc.)
+- Procedures: 936 tokens (CCAM codes)
+- Medications: 704 tokens (ATC codes)
+- Hospitalization entries: 3,275 tokens (ICD10 codes)
+- Hospitalization exits: 1,110 tokens (DRG codes)
+- Emergency entry: 1 token
+- Death: 1 token
+- Long-term disease (ALD): 1,110 tokens (ICD10 codes) + 1 token for "no long-term disease"
+- Special tokens: [PAD], age, gender, "empty"...
+
+---
+
+::: {.incremental}
+- These pathways are:
+
+    - unstructured (just as in NLP)
+    - temporally irregular (not like NLP!)
+
+- To feed downstream estimators, we need to represent those pathways as vectors (_embeddings_)
+:::
+
+
+## Objectives {.unnumbered}
+
+:::{.incremental}
+- Having a **time-aware** Transformers ($\neq$ NLP) with a lot **of simultaneous events**
+    - Need to design an adapted loss function
+- Keeping in mind *policy evaluation*
+  - We want to be able to efficiently compute the embedding of the pathway **at any time** (the *trajectory* of the patient)
+  - Focus on **decoder-only** Transformers (GPT-like)
+:::
+
+## Model {.unnumbered}
+
+- Embedding matrices of size $\mathbb{R}^{\lvert \mathcal{V} \rvert, d_{embed}}$ (vocab),  $\mathbb{R}^{2, d_{embed}}$ (gender) and $\mathbb{R}^{8, d_{embed}}$ (age class)
+  - We use $t_i$ to have a _time-aware_ positional encoding using a sinusoidal encoding
+  - A symbolic [START] token, composed of the summed embeddings of age and gender.
+
+- **Causal** self-attention layers so that the Transformer-based model outputs ***causally contextualized embeddings***:
+$$ GPT_{\theta}(X_i) \in \mathbb{R}^{cs, d_{embed}}$$
+
+## Pre-training {.unnumbered} 
+
+- We use weight tying to output the logits $\in \mathbb{R}^{cs, \lvert \mathcal{V} \rvert}$
+
+$$\text{logits}_{i, c, v} = (W \cdot GPT_{\theta}(X))_{i, c, v}$$
+
+- **Next-Token Prediction**: instead of softmax as in @Shmatko2025, we use a multi-label classification loss to better handle co-occurent events:
+
+$$ \text{BCE}_{i, c} \coloneqq  - \sum_v y_{i, c, v} \log \frac{\lambda_{i, c, v}}{1 + \lambda_{i, c, v}} + (1-y_{i, c, v}) \log \frac{1}{1 + \lambda_{i, c, v}} $$
+
+---
+
+- **Time-to-Next-Event Prediction**: exactly as in @Shmatko2025:
+
+$$\text{TTE}_{i, c} \coloneqq - \log(\sum_v \lambda_{i, c, v}) + t^{*} \sum_v \lambda_{i, c, v}$$
+
+## Validating the model {.unnumbered}
+
+### Scaling law {.unnumbered}
+
+![](images/scaling_law.svg){fig-align="center"}
+
+We are matching the ~2,000 optimal ratio $\frac{\text{\# training tokens}}{\text{\# parameters}}$ found in @coMET.
+
+---
+
+### Embedding space {.unnumbered}
+
+<iframe src="images/embedding_umap_plotly.html" width="100%" height="700px" frameborder="0"></iframe>
+
+---
+
+
+### Time Calibration {.unnumbered}
+
+![](images/time_calib.png){fig-align="center"}
+
+### Predictive power {.unnumbered}
+
+![](images/APS_results.svg){fig-align="center"}
