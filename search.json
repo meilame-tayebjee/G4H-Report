@@ -74,7 +74,7 @@
     "href": "mydocs/soda_meeting/index.html#vpi_b-and-pi_e",
     "title": "SODA Seminar",
     "section": "V^{\\pi_b} and \\pi_e",
-    "text": "V^{\\pi_b} and \\pi_e\n\nThe value of the behavioral policy can be estimated using the trajectories in the dataset \\mathcal{D}:\nV^{\\pi_b} \\approx V^{\\hat{\\pi}_b} \\coloneqq \\frac{1}{N} \\sum_{i=1}^N \\sum_{t=0}^{T-1} \\gamma^t r_t^i\nThe policies we want to study: \\pi_e(1|s) = \\max(\\eta, \\hat{\\pi}_b(1|s)) for \\eta = 0 \\dots 0.99"
+    "text": "V^{\\pi_b} and \\pi_e\n\nThe value of the behavioral policy can be estimated using the trajectories in the dataset \\mathcal{D}:\nV^{\\pi_b} \\approx V^{\\hat{\\pi}_b} \\coloneqq \\frac{1}{N} \\sum_{i=1}^N \\sum_{t=0}^{T-1} \\gamma^t r_t^i\nThe policies we want to study: \\pi_e^\\eta(1|s) = \\max(\\eta, \\hat{\\pi}_b(1|s)) for \\eta = 0 \\dots 0.99"
   },
   {
     "objectID": "mydocs/soda_meeting/index.html#results",

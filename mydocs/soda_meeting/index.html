@@ -213,6 +213,7 @@ Meilame Tayebjee
 <li><a href="#/results" id="/toc-results">Results</a></li>
 
 
+
 </ul></li>
 <li><a href="#/avenues-of-work" id="/toc-avenues-of-work"><span class="header-section-number">4</span> Avenues of work</a>
 <ul>
@@ -450,7 +451,7 @@ Meilame Tayebjee
 <ul>
 <li><p>The value of the behavioral policy can be estimated using the trajectories in the dataset <span class="math inline">\mathcal{D}</span>:<br>
 <span class="math display">V^{\pi_b} \approx V^{\hat{\pi}_b} \coloneqq \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^{T-1} \gamma^t r_t^i</span></p></li>
-<li><p>The policies we want to study: <span class="math inline">\pi_e(1|s) = \max(\eta, \hat{\pi}_b(1|s))</span> for <span class="math inline">\eta = 0 \dots 0.99</span></p></li>
+<li><p>The policies we want to study: <span class="math inline">\pi_e^\eta(1|s) = \max(\eta, \hat{\pi}_b(1|s))</span> for <span class="math inline">\eta = 0 \dots 0.99</span></p></li>
 </ul>
 </section>
 <section id="results" class="slide level2 unnumbered">
@@ -458,6 +459,18 @@ Meilame Tayebjee
 <h3 class="unnumbered" id="general-population">General population</h3>
 
 <img data-src="images/fig_OPE.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section class="slide level2">
+
+<h3 class="unnumbered" id="geographical-heterogeneity">Geographical heterogeneity</h3>
+<div style="display: flex; justify-content: center; align-items: center; height: 80%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/plot_maps.svg"></p>
+<figcaption>Impact of policy <span class="math inline">\pi_e^{0.75}</span></figcaption>
+</figure>
+</div>
+</div>
+</section>
 <section class="slide level2">
 
 <table class="caption-top">
