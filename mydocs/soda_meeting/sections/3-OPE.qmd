@@ -65,13 +65,21 @@ First step of the OPE pipeline: regress $a_{i,t}$ (PCP affiliation) on $s_{i,t}$
 - The value of the behavioral policy can be estimated using the trajectories in the dataset $\mathcal{D}$:    
     $$V^{\pi_b} \approx V^{\hat{\pi}_b} \coloneqq \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^{T-1} \gamma^t r_t^i$$
 
-- The policies we want to study: $\pi_e(1|s) = \max(\eta, \hat{\pi}_b(1|s))$ for $\eta = 0 \dots 0.99$ 
+- The policies we want to study: $\pi_e^\eta(1|s) = \max(\eta, \hat{\pi}_b(1|s))$ for $\eta = 0 \dots 0.99$ 
 
 ## Results {.unnumbered}
 
 ### General population {.unnumbered}
 
 ![](images/fig_OPE.svg){fig-align="center"}
+
+---
+
+### Geographical heterogeneity {.unnumbered}
+
+:::{style="display: flex; justify-content: center; align-items: center; height: 80%;"}
+![Impact of policy $\pi_e^{0.75}$](images/plot_maps.svg)
+:::
 
 ---
 
