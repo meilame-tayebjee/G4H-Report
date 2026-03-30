@@ -81,14 +81,14 @@ We are matching the ~2,000 optimal ratio $\frac{\text{\# training tokens}}{\text
 
 ### Embedding space {.unnumbered}
 
-<iframe src="images/embedding_umap_plotly.html" width="120%" height="700px" frameborder="0"></iframe>
+<iframe src="images/embedding_umap_plotly.html" width="100%" height="700px" frameborder="0"></iframe>
 
 ---
 
 
 ### Time Calibration {.unnumbered}
 
----
+![](images/time_calib.png){fig-align="center"}
 
 ### Predictive power {.unnumbered}
 
