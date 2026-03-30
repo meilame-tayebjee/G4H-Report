@@ -6,17 +6,20 @@
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="../../site_libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.8.27">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-845c23b38eaddc0f92fda52bfe77a8c8.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.9.36">
 
-  <meta name="dcterms.date" content="2025-10-08">
-  <title>Graph4Health - Medical pathway embeddings and causal inference on health outcomes – Meeting 19/02</title>
+  <meta name="dcterms.date" content="2026-03-31">
+  <title>Graph4Health - Medical pathway embeddings and causal inference on health outcomes – SODA Seminar</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
   <link rel="stylesheet" href="../../site_libs/revealjs/dist/reset.css">
   <link rel="stylesheet" href="../../site_libs/revealjs/dist/reveal.css">
   <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
     div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -32,7 +35,6 @@
     div.csl-bib-body { }
     div.csl-entry {
       clear: both;
-      margin-bottom: 0em;
     }
     .hanging-indent div.csl-entry {
       margin-left:2em;
@@ -49,7 +51,7 @@
     div.csl-indent {
       margin-left: 2em;
     }  </style>
-  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-99eeafcedac04850354b682963cedae3.css">
+  <link rel="stylesheet" href="../../site_libs/revealjs/dist/theme/quarto-2abc1c5b7b5c7eecd6137558e106e4c3.css">
   <link rel="stylesheet" href="custom.css">
   <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
   <script>document.addEventListener("DOMContentLoaded", function () {
@@ -82,6 +84,7 @@
     }
     .reveal .slide:not(.center) {
       height: 100%;
+      overflow-y: auto;
     }
     .reveal .slide.scrollable {
       overflow-y: auto;
@@ -164,8 +167,8 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Meeting 19/02</h1>
-  <p class="subtitle"><strong>Embedding medical pathways with decoder only Transformers</strong></p>
+  <h1 class="title">SODA Seminar</h1>
+  <p class="subtitle"><strong>Policy evaluation using Transformer-based medical pathway embeddings</strong></p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -175,7 +178,7 @@ Meilame Tayebjee
 </div>
 </div>
 
-  <p class="date">8 October 2025</p>
+  <p class="date">31 March 2026</p>
 </section><section id="TOC">
 <nav role="doc-toc"> 
 <h2 id="toc-title">Table of contents</h2>
@@ -184,24 +187,32 @@ Meilame Tayebjee
 <ul>
 <li><a href="#/about-me" id="/toc-about-me">About me</a></li>
 <li><a href="#/broader-view-of-the-graph4health-anr" id="/toc-broader-view-of-the-graph4health-anr">Broader view of the Graph4Health ANR</a></li>
-<li><a href="#/my-project-embedding-patient-pathways-for-causal-inference" id="/toc-my-project-embedding-patient-pathways-for-causal-inference">My project: embedding patient pathways for causal inference</a></li>
 </ul></li>
-<li><a href="#/related-work" id="/toc-related-work"><span class="header-section-number">2</span> Related work</a>
+<li><a href="#/transformer-based-models-for-medical-pathway-embedding" id="/toc-transformer-based-models-for-medical-pathway-embedding"><span class="header-section-number">2</span> Transformer-based models for medical pathway embedding</a>
 <ul>
-<li><a href="#/transformer-based-models-for-medical-pathway-embedding" id="/toc-transformer-based-models-for-medical-pathway-embedding">Transformer-based models for medical pathway embedding</a></li>
+<li><a href="#/setting" id="/toc-setting">Setting</a></li>
+
+
+<li><a href="#/objectives" id="/toc-objectives">Objectives</a></li>
+<li><a href="#/model" id="/toc-model">Model</a></li>
+<li><a href="#/pre-training" id="/toc-pre-training">Pre-training</a></li>
+
+<li><a href="#/validating-the-model" id="/toc-validating-the-model">Validating the model</a></li>
+
+
 </ul></li>
-<li><a href="#/work-done-so-far" id="/toc-work-done-so-far"><span class="header-section-number">3</span> Work done so far</a>
+<li><a href="#/off-policy-evaluation" id="/toc-off-policy-evaluation"><span class="header-section-number">3</span> Off-Policy Evaluation</a>
 <ul>
-<li><a href="#/data-management" id="/toc-data-management">Data management</a></li>
-<li><a href="#/notations" id="/toc-notations">Notations</a></li>
-
-<li><a href="#/pre-training-task" id="/toc-pre-training-task">Pre-training task</a></li>
+<li><a href="#/markov-decision-processes-and-off-policy-evaluation" id="/toc-markov-decision-processes-and-off-policy-evaluation">Markov Decision Processes and Off-Policy Evaluation</a></li>
 
 
+<li><a href="#/in-our-case" id="/toc-in-our-case">In our case</a></li>
 
-<li><a href="#/plot-of-the-embedding-space" id="/toc-plot-of-the-embedding-space">Plot of the embedding space</a></li>
-<li><a href="#/evaluation-task-examples" id="/toc-evaluation-task-examples"><span class="header-section-number">3.1</span> Evaluation task examples</a></li>
-<li><a href="#/scaling-law" id="/toc-scaling-law"><span class="header-section-number">3.2</span> Scaling law</a></li>
+<li><a href="#/estimation-of-the-behavioral-policy" id="/toc-estimation-of-the-behavioral-policy">Estimation of the behavioral policy</a></li>
+<li><a href="#/vpi_b-and-pi_e" id="/toc-vpi_b-and-pi_e"><span class="math inline">V^{\pi_b}</span> and <span class="math inline">\pi_e</span></a></li>
+<li><a href="#/results" id="/toc-results">Results</a></li>
+
+
 </ul></li>
 <li><a href="#/avenues-of-work" id="/toc-avenues-of-work"><span class="header-section-number">4</span> Avenues of work</a>
 <ul>
@@ -240,10 +251,10 @@ Meilame Tayebjee
 <ul>
 <li class="fragment">The general objective is to
 <ul>
-<li class="fragment">infer the causal impact of the <strong>healthcare supply</strong> (and its geographic distribution) on <strong>health outcomes</strong>
+<li class="fragment">infer the impact of the <strong>healthcare supply</strong> (and its geographic distribution) on <strong>health outcomes</strong>
 <ul>
 <li class="fragment">using classic econometric tools</li>
-<li class="fragment"><strong>using deep learning methods for causal inference</strong></li>
+<li class="fragment"><strong>using deep learning methods</strong></li>
 </ul></li>
 <li class="fragment">study policies that contribute to the efficiency of the French healthcare system</li>
 </ul></li>
@@ -253,149 +264,14 @@ Meilame Tayebjee
 <li class="fragment">consultations, procedures, hospitalizations, medications, deaths etc.</li>
 </ul></li>
 </ul>
-</section>
-<section id="my-project-embedding-patient-pathways-for-causal-inference" class="slide level2 unnumbered">
-<h2>My project: embedding patient pathways for causal inference</h2>
-<ul>
-<li>Our data: patient (medical) pathways
-<ul>
-<li>unstructured (just as in NLP)</li>
-<li>temporally irregular (not like NLP!)</li>
-</ul></li>
-</ul>
-
-<img data-src="images/pathway_data.png" class="quarto-figure quarto-figure-center r-stretch"></section></section>
+</section></section>
 <section>
-<section id="related-work" class="title-slide slide level1 center" data-number="2">
-<h1><span class="header-section-number">2</span> Related work</h1>
+<section id="transformer-based-models-for-medical-pathway-embedding" class="title-slide slide level1 center" data-number="2">
+<h1><span class="header-section-number">2</span> Transformer-based models for medical pathway embedding</h1>
 
 </section>
-<section id="transformer-based-models-for-medical-pathway-embedding" class="slide level2 unnumbered scrollable">
-<h2>Transformer-based models for medical pathway embedding</h2>
-<div style="font-size: 0.5em;">
-<table class="caption-top" style="width:100%;">
-<colgroup>
-<col style="width: 2%">
-<col style="width: 17%">
-<col style="width: 19%">
-<col style="width: 19%">
-<col style="width: 11%">
-<col style="width: 8%">
-<col style="width: 14%">
-<col style="width: 2%">
-<col style="width: 2%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Model name</th>
-<th>Model archi.</th>
-<th>Pre-train. Task(s)</th>
-<th>Fine-tun. task(s)</th>
-<th># Params</th>
-<th>Training data size</th>
-<th>Vocab size (type)</th>
-<th>Generative</th>
-<th>Trajectory<sup>1</sup></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>coMET (<span class="citation" data-cites="coMET">Waxler et al. (<a href="#/section" role="doc-biblioref" onclick="">2025</a>)</span>)</td>
-<td>GPT</td>
-<td>Next token pred.</td>
-<td>Disease prediction</td>
-<td>1B</td>
-<td>151B events from 118M patients</td>
-<td>7,105 (exhaustive)</td>
-<td>✅</td>
-<td>✅</td>
-</tr>
-<tr class="even">
-<td>Delphi (<span class="citation" data-cites="Shmatko2025">Shmatko et al. (<a href="#/section" role="doc-biblioref" onclick="">2025</a>)</span>)</td>
-<td>NanoGPT</td>
-<td>Next disease event + Time to event</td>
-<td>None</td>
-<td>2M</td>
-<td>400k patients</td>
-<td>1,258 (ICD10)</td>
-<td>✅</td>
-<td>✅</td>
-</tr>
-<tr class="odd">
-<td>MOTOR (Many Outcome Time Oriented Representation) (<span class="citation" data-cites="steinberg2024motor">Steinberg et al. (<a href="#/section" role="doc-biblioref" onclick="">2024</a>)</span>)</td>
-<td>Transformer (causal masking and local attention)</td>
-<td>Time to event (TTE)</td>
-<td>TTE for part. disease</td>
-<td>143M</td>
-<td>55M patients, 9B events</td>
-<td>8,192 (ICD10 and other specific codes)</td>
-<td>≅</td>
-<td>≅</td>
-</tr>
-<tr class="even">
-<td>Life2Vec (<span class="citation" data-cites="life2vec">Savcisens et al. (<a href="#/section" role="doc-biblioref" onclick="">2023</a>)</span>)</td>
-<td>BERT</td>
-<td>MLM + SOP</td>
-<td>Mortality Prediction</td>
-<td>8M</td>
-<td>3M patients</td>
-<td>~700<br>(labour + ICD10)</td>
-<td>❌</td>
-<td>❌</td>
-</tr>
-<tr class="odd">
-<td>TransformEHR (<span class="citation" data-cites="yangTransformEHRTransformerbasedEncoderdecoder2023">Yang et al. (<a href="#/section" role="doc-biblioref" onclick="">2023</a>)</span>)</td>
-<td>Encoder-Decoder</td>
-<td>Visit masking: Given visits 1-3, predict all codes in visit 4</td>
-<td>Disease (pancreatic cancer) / Outcome (self harm) pred.</td>
-<td>?</td>
-<td>255M visits from 7M patients</td>
-<td>ICD10</td>
-<td>✅</td>
-<td>❌</td>
-</tr>
-<tr class="even">
-<td>BEHRT (<span class="citation" data-cites="liBEHRTTransformerElectronic2020">Li et al. (<a href="#/section" role="doc-biblioref" onclick="">2020</a>)</span>)</td>
-<td>BERT</td>
-<td>MLM</td>
-<td>Disease prediction</td>
-<td>n.r. (~6L, 12H, h=288)</td>
-<td>1.6M patients</td>
-<td>301 disease codes</td>
-<td>❌</td>
-<td>❌</td>
-</tr>
-</tbody>
-</table>
-<!-- 
-| Med-BERT | BERT for structured diagnosis codes | Disease prediction (HF, pancreatic cancer) | ~17M | 28.5M pts |
-| ClinicalBERT | BERT-base on clinical notes (MIMIC-III) | 30-day readmission + NLP tasks | ~110M (BERT-base) | 34,560 pts (downstream) |
-| Hi-BEHRT | Hierarchical Transformer (local + global) | Risk prediction (HF, diabetes, CKD, stroke) | not reported | ~2.84M pts |
-| CEHR-BERT | BERT w/ temporal & visit tokens | Hosp., death, HF diagnosis, readmission | not reported | ~2.4M pts |
-| HEART | Relation-aware Transformer | 5 clinical tasks (2 datasets) | not reported | sizes vary |
-| Transformer patient embedding (NPJ Dig Med 2025) | Transformer (codes→embedding) | Stratification, disease prediction | not reported | 1.05M pts (eMERGE) | -->
-</div>
-<aside><ol class="aside-footnotes"><li id="fn1"><p>Efficient (i.e.&nbsp;in one forward pass) computation of embeddings at any time</p></li></ol></aside></section></section>
-<section>
-<section id="work-done-so-far" class="title-slide slide level1 center" data-number="3">
-<h1><span class="header-section-number">3</span> Work done so far</h1>
-
-</section>
-<section id="data-management" class="slide level2 unnumbered">
-<h2>Data management</h2>
-<ul>
-<li>Validation and EDA of the first delivered simplified tables: prestations and medications</li>
-<li>Jointure, cleaning and subsampling
-<ul>
-<li>So that any subsample can fit in vRAM</li>
-</ul></li>
-<li>Tokenization</li>
-</ul>
-
-<img data-src="images/tokenized_data.png" class="quarto-figure quarto-figure-center r-stretch"></section>
-<section id="notations" class="slide level2 unnumbered">
-<h2>Notations</h2>
-<h3 class="unnumbered" id="notations-dataset">Notations: dataset</h3>
+<section id="setting" class="slide level2 unnumbered">
+<h2>Setting</h2>
 <p><strong>Dataset of medical pathways: </strong> For <span class="math inline">i = 1, \dots, n</span>, <span class="math inline">X_i \coloneqq (e_i, t_i, f_i)</span>, where:</p>
 <ul>
 <li class="fragment"><span class="math inline">e_i \in \mathbb{R}^{cs}</span> are the tokenized events, containing integers between <span class="math inline">0</span> and the vocabulary size <span class="math inline">\lvert \mathcal{V} \rvert</span></li>
@@ -405,7 +281,46 @@ Meilame Tayebjee
 </section>
 <section class="slide level2">
 
-<h3 class="unnumbered" id="notations-model">Notations: model</h3>
+<h3 class="unnumbered" id="tokenization">Tokenization</h3>
+<ul>
+<li>Consultations: 83 tokens (specialties, e.g.&nbsp;general practitioner, cardiologist, etc.)</li>
+<li>Procedures: 936 tokens (CCAM codes)</li>
+<li>Medications: 704 tokens (ATC codes)</li>
+<li>Hospitalization entries: 3,275 tokens (ICD10 codes)</li>
+<li>Hospitalization exits: 1,110 tokens (DRG codes)</li>
+<li>Emergency entry: 1 token</li>
+<li>Death: 1 token</li>
+<li>Long-term disease (ALD): 1,110 tokens (ICD10 codes) + 1 token for “no long-term disease”</li>
+<li>Special tokens: [PAD], age, gender, “empty”…</li>
+</ul>
+</section>
+<section class="slide level2">
+
+<ul>
+<li class="fragment"><p>These pathways are:</p>
+<ul>
+<li class="fragment">unstructured (just as in NLP)</li>
+<li class="fragment">temporally irregular (not like NLP!)</li>
+</ul></li>
+<li class="fragment"><p>To feed downstream estimators, we need to represent those pathways as vectors (<em>embeddings</em>)</p></li>
+</ul>
+</section>
+<section id="objectives" class="slide level2 unnumbered">
+<h2>Objectives</h2>
+<ul>
+<li class="fragment">Having a <strong>time-aware</strong> Transformers (<span class="math inline">\neq</span> NLP) with a lot <strong>of simultaneous events</strong>
+<ul>
+<li class="fragment">Need to design an adapted loss function</li>
+</ul></li>
+<li class="fragment">Keeping in mind <em>policy evaluation</em>
+<ul>
+<li class="fragment">We want to be able to efficiently compute the embedding of the pathway <strong>at any time</strong> (the <em>trajectory</em> of the patient)</li>
+<li class="fragment">Focus on <strong>decoder-only</strong> Transformers (GPT-like)</li>
+</ul></li>
+</ul>
+</section>
+<section id="model" class="slide level2 unnumbered">
+<h2>Model</h2>
 <ul>
 <li>Embedding matrices of size <span class="math inline">\mathbb{R}^{\lvert \mathcal{V} \rvert, d_{embed}}</span> (vocab), <span class="math inline">\mathbb{R}^{2, d_{embed}}</span> (gender) and <span class="math inline">\mathbb{R}^{8, d_{embed}}</span> (age class)
 <ul>
@@ -414,76 +329,342 @@ Meilame Tayebjee
 </ul></li>
 <li><strong>Causal</strong> self-attention layers so that the Transformer-based model outputs <strong><em>causally contextualized embeddings</em></strong>: <span class="math display"> GPT_{\theta}(X_i) \in \mathbb{R}^{cs, d_{embed}}</span></li>
 </ul>
-<p>where <span class="math inline">\theta</span> parametrizes the neural network.</p>
 </section>
-<section id="pre-training-task" class="slide level2 unnumbered">
-<h2>Pre-training task</h2>
-<h3 class="unnumbered" id="objectives">Objectives</h3>
+<section id="pre-training" class="slide level2 unnumbered">
+<h2>Pre-training</h2>
 <ul>
-<li class="fragment"><p>Having a <strong>time-aware</strong> Transformers (<span class="math inline">\neq</span> NLP)</p></li>
-<li class="fragment"><p>We want to be able to efficiently compute the embedding of the pathway <strong>at any time</strong> (the <em>trajectory</em> of the patient)</p></li>
-<li class="fragment"><p><strong>Problems with the next token task:</strong></p>
+<li>We use weight tying to output the logits <span class="math inline">\in \mathbb{R}^{cs, \lvert \mathcal{V} \rvert}</span></li>
+</ul>
+<p><span class="math display">\text{logits}_{i, c, v} = (W \cdot GPT_{\theta}(X))_{i, c, v}</span></p>
 <ul>
-<li class="fragment">a lot of simultaneous events, especially for medications</li>
-<li class="fragment">different types of events: does it make sense to have a competition among them ?</li>
+<li><strong>Next-Token Prediction</strong>: instead of softmax as in <span class="citation" data-cites="Shmatko2025">Shmatko et al. (<a href="#/section" role="doc-biblioref" onclick="">2025</a>)</span>, we use a multi-label classification loss to better handle co-occurent events:</li>
+</ul>
+<p><span class="math display"> \text{BCE}_{i, c} \coloneqq  - \sum_v y_{i, c, v} \log \frac{\lambda_{i, c, v}}{1 + \lambda_{i, c, v}} + (1-y_{i, c, v}) \log \frac{1}{1 + \lambda_{i, c, v}} </span></p>
+</section>
+<section class="slide level2">
+
+<ul>
+<li><strong>Time-to-Next-Event Prediction</strong>: exactly as in <span class="citation" data-cites="Shmatko2025">Shmatko et al. (<a href="#/section" role="doc-biblioref" onclick="">2025</a>)</span>:</li>
+</ul>
+<p><span class="math display">\text{TTE}_{i, c} \coloneqq - \log(\sum_v \lambda_{i, c, v}) + t^{*} \sum_v \lambda_{i, c, v}</span></p>
+</section>
+<section id="validating-the-model" class="slide level2 unnumbered">
+<h2>Validating the model</h2>
+<h3 class="unnumbered" id="scaling-law">Scaling law</h3>
+
+<img data-src="images/scaling_law.svg" class="quarto-figure quarto-figure-center r-stretch"><p>We are matching the ~2,000 optimal ratio <span class="math inline">\frac{\text{\# training tokens}}{\text{\# parameters}}</span> found in <span class="citation" data-cites="coMET">Waxler et al. (<a href="#/section" role="doc-biblioref" onclick="">2025</a>)</span>.</p>
+</section>
+<section class="slide level2">
+
+<h3 class="unnumbered" id="embedding-space">Embedding space</h3>
+<iframe src="images/embedding_umap_plotly.html" width="100%" height="700px" frameborder="0">
+</iframe>
+</section>
+<section class="slide level2">
+
+<h3 class="unnumbered" id="time-calibration">Time Calibration</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/time_calib.png" class="quarto-figure quarto-figure-center"></p>
+</figure>
+</div>
+<h3 class="unnumbered" id="predictive-power">Predictive power</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="images/APS_results.svg" class="quarto-figure quarto-figure-center"></p>
+</figure>
+</div>
+</section></section>
+<section>
+<section id="off-policy-evaluation" class="title-slide slide level1 center" data-number="3">
+<h1><span class="header-section-number">3</span> Off-Policy Evaluation</h1>
+
+</section>
+<section id="markov-decision-processes-and-off-policy-evaluation" class="slide level2 unnumbered scrollable">
+<h2>Markov Decision Processes and Off-Policy Evaluation</h2>
+<ul>
+<li class="fragment">A <strong>Markov Decision Process</strong> (MDP) is a tuple <span class="math inline">(\mathcal{S}, \mathcal{A}, P, P_0, R, \gamma)</span> where:
+<ul>
+<li class="fragment"><span class="math inline">\mathcal{S}</span> is the state space</li>
+<li class="fragment"><span class="math inline">\mathcal{A}</span> is the action space</li>
+<li class="fragment"><span class="math inline">P: \mathcal{S} \times \mathcal{A} \to \Delta(\mathcal{S})</span> is the transition probability function</li>
+<li class="fragment"><span class="math inline">P_0 \in \Delta(\mathcal{S})</span> is the initial state distribution</li>
+<li class="fragment"><span class="math inline">R: \mathcal{S} \times \mathcal{A} \to \mathbb{R}</span> is the reward function</li>
+<li class="fragment"><span class="math inline">\gamma \in [0,1]</span> is the discount factor</li>
 </ul></li>
 </ul>
 </section>
 <section class="slide level2">
 
-<h3 class="unnumbered" id="the-delphi-loss">The Delphi loss</h3>
-<p>For each <span class="math inline">v</span>, Let <span class="math inline">\text{logits}_{i, c, v} = (W \cdot GPT_{\theta}(X))_{i, c, v}</span>, where <span class="math inline">W \in \mathbb{R}^{d_{embed}, \lvert \mathcal{V} \rvert}</span> is a linear layer, and let <span class="math inline">\lambda_{i, c, v} \coloneqq \exp(\text{logits}_{i, c, v})</span>.</p>
-<p><strong>Next Token Prediction Loss:</strong></p>
-<p><span class="math display"> \text{CE}_{i, c} \coloneqq - \sum_v y_{i, c, v} \log (\lambda_{i, c, v}) + \log (\sum_v \lambda_{i, c, v}) </span></p>
-<p>where <span class="math display">
-y_{i, c, v} \coloneqq
-\begin{cases}
-1 &amp; \text{if } v \text{ is the next token for patient } i \text{ at position } c \\
-0 &amp; \text{otherwise}
-\end{cases}
-</span></p>
+<ul>
+<li class="fragment"><p>A <strong>policy</strong> <span class="math inline">\pi: \mathcal{S} \to \Delta(\mathcal{A})</span> is a mapping from states to distributions over actions (<span class="math inline">\pi(a|s)</span> is the probability of taking action <span class="math inline">a</span> in state <span class="math inline">s</span> under policy <span class="math inline">\pi</span>).</p></li>
+<li class="fragment"><p>A T-step <strong>trajectory</strong> <span class="math inline">\tau</span> generated by policy <span class="math inline">\pi</span> is a sequence of states, actions and rewards: <span class="math inline">\tau \coloneqq (s_0^i, a_0^i, r_0^i \dots s_{T-1}^i, a_{T-1}^i, r_{T-1}^i, s_T^i)</span> where:</p>
+<ul>
+<li class="fragment"><span class="math inline">s_0^i \sim P_0</span> is the initial state</li>
+<li class="fragment"><span class="math inline">a_t^i \sim \pi(\cdot | s_t^i)</span> is the action taken at time <span class="math inline">t</span></li>
+<li class="fragment"><span class="math inline">s_{t+1}^i \sim P(\cdot | s_t^i, a_t^i)</span> is the next state</li>
+<li class="fragment"><span class="math inline">r_t^i = R(s_t^i, a_t^i)</span> is the reward received at time <span class="math inline">t</span></li>
+</ul></li>
+<li class="fragment"><p>The <strong>return</strong> of a trajectory <span class="math inline">\tau</span> is the discounted sum of rewards: <span class="math inline">G(\tau) = \sum_{t=0}^{T-1} \gamma^t r_t^i</span>.</p></li>
+<li class="fragment"><p>We are interested in the <strong>value</strong> of a policy <span class="math inline">\pi</span>, defined as the expected return of trajectories generated by <span class="math inline">\pi</span>: <span class="math inline">V^{\pi} = \mathbb{E}_{\tau \sim P^{\pi}}[G(\tau)]</span> where <span class="math inline">P^{\pi}(\tau)</span> is the distribution of trajectories generated by policy <span class="math inline">\pi</span>.</p></li>
+</ul>
 </section>
 <section class="slide level2">
 
-<p><strong>Time-to-Event Prediction Loss:</strong></p>
-<p><span class="math display">  \text{TTE}_{i, c} \coloneqq - \log(\sum_v \lambda_{i, c, v}) + t^{*} \sum_v \lambda_{i, c, v}  </span></p>
-<p>where <span class="math inline">t^*</span> is the ground truth time to next event.</p>
-<p>Therefore, the final loss becomes:</p>
-<p><span class="math display"> \text{Delphi}_{i,c} \coloneqq  \text{CE}_{i, c} + \text{TTE}_{i, c} = - \sum_v y_{i, c, v} \log (\lambda_{i, c, v}) + t^{*} \sum_v \lambda_{i, c, v} </span></p>
+<ul>
+<li class="fragment">The <strong>Off-Policy Evaluation</strong> (OPE) problem assumes:
+<ul>
+<li class="fragment">We have access to a dataset of T-step trajectories <span class="math inline">\mathcal{D} = \{\tau^i\}_{i=1}^N</span> generated by an unknown <strong>behavioral policy</strong> <span class="math inline">\pi_b: \mathcal{S} \to \Delta(\mathcal{A})</span>.</li>
+<li class="fragment">We want to estimate the value <span class="math inline">V^{\pi_e}</span> of a <strong>target policy</strong> <span class="math inline">\pi_e: \mathcal{S} \to \Delta(\mathcal{A})</span> using only the dataset <span class="math inline">\mathcal{D}</span>.</li>
+</ul></li>
+<li class="fragment"><strong>Step-Weighted Importance Sampling estimator</strong>: <span class="math display">\hat{\rho}_{\mathrm{step}-\mathrm{WIS}}^{\pi_e}=\sum_{i=1}^n \sum_{t=0}^{T-1} \gamma^t \frac{\omega_{0: t}^{i} r_t^{i}}{\sum_{i=1}^n \omega_{0: t}^{i}}</span> where <span class="math inline">\omega_{0: t}^{i}=\prod_{t'=0}^t \frac{\pi_e(a_{t'}^{i} | s_{t'}^{i})}{\hat{\pi}_b(a_{t'}^{i} | s_{t'}^{i})}</span> is the importance weight of trajectory <span class="math inline">i</span> up to time <span class="math inline">t</span>.</li>
+</ul>
+<p>See <span class="citation" data-cites="robust-ope">Farajtabar et al. (<a href="#/section" role="doc-biblioref" onclick="">2018</a>)</span> for more details on OPE estimators and their properties.</p>
+</section>
+<section id="in-our-case" class="slide level2 unnumbered">
+<h2>In our case</h2>
+
+<img data-src="images/fig1.svg" class="r-stretch"></section>
+<section class="slide level2">
+
+<ul>
+<li>Reinforcement learning framework
+<ul>
+<li><strong>State</strong>: embedding of the patient at the end of each quarter
+<ul>
+<li>Sufficient statistic that summarizes the patient’s history</li>
+<li>Markov assumption: the future only depends on the current state</li>
+</ul></li>
+<li><strong>Action</strong>: whether the patient has a PCP or not at the beginning of next quarter</li>
+<li><strong>Reward</strong>: number of emergency visits within the next quarter (or hospitalization entries)</li>
+</ul></li>
+</ul>
+</section>
+<section id="estimation-of-the-behavioral-policy" class="slide level2 unnumbered">
+<h2>Estimation of the behavioral policy</h2>
+<p>First step of the OPE pipeline: regress <span class="math inline">a_{i,t}</span> (PCP affiliation) on <span class="math inline">s_{i,t}</span> (embeddings) to estimate <span class="math inline">\hat{\pi}_b(a|s)</span>, the behavioral policy.</p>
+
+<img data-src="images/fig_calib.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="vpi_b-and-pi_e" class="slide level2 unnumbered">
+<h2><span class="math inline">V^{\pi_b}</span> and <span class="math inline">\pi_e</span></h2>
+<ul>
+<li><p>The value of the behavioral policy can be estimated using the trajectories in the dataset <span class="math inline">\mathcal{D}</span>:<br>
+<span class="math display">V^{\pi_b} \approx V^{\hat{\pi}_b} \coloneqq \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^{T-1} \gamma^t r_t^i</span></p></li>
+<li><p>The policies we want to study: <span class="math inline">\pi_e(1|s) = \max(\eta, \hat{\pi}_b(1|s))</span> for <span class="math inline">\eta = 0 \dots 0.99</span></p></li>
+</ul>
+</section>
+<section id="results" class="slide level2 unnumbered">
+<h2>Results</h2>
+<h3 class="unnumbered" id="general-population">General population</h3>
+
+<img data-src="images/fig_OPE.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section class="slide level2">
+
+<table class="caption-top">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Subpopulation</th>
+<th style="text-align: center;">Emergency (%)</th>
+<th style="text-align: center;">Hospit. (%)</th>
+<th style="text-align: center;">Size</th>
+<th style="text-align: center;">PCP</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><em>General Population</em></td>
+<td style="text-align: center;">(31.8–18.8)</td>
+<td style="text-align: center;">(35.0–23.7)</td>
+<td style="text-align: center;">10.39</td>
+<td style="text-align: center;">87.4%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Age Group</strong></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;20–29</td>
+<td style="text-align: center;">(25.1–22.5)</td>
+<td style="text-align: center;">(29.3–16.1)</td>
+<td style="text-align: center;">1.38</td>
+<td style="text-align: center;">72.9%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;30–39</td>
+<td style="text-align: center;">(1.1)–0.1</td>
+<td style="text-align: center;">(0.5)–3.0</td>
+<td style="text-align: center;">1.65</td>
+<td style="text-align: center;">84.6%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;40–49</td>
+<td style="text-align: center;">0.4–1.5</td>
+<td style="text-align: center;">2.0–7.9</td>
+<td style="text-align: center;">1.65</td>
+<td style="text-align: center;">88.4%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;50–59</td>
+<td style="text-align: center;">(4.9)–1.3</td>
+<td style="text-align: center;">(4.7)–3.0</td>
+<td style="text-align: center;">1.70</td>
+<td style="text-align: center;">91.2%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;60–69</td>
+<td style="text-align: center;">(18.5–7.7)</td>
+<td style="text-align: center;">(20.0–8.3)</td>
+<td style="text-align: center;">1.55</td>
+<td style="text-align: center;">92.7%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;70–79</td>
+<td style="text-align: center;">(16.3–6.6)</td>
+<td style="text-align: center;">(17.5–7.9)</td>
+<td style="text-align: center;">1.26</td>
+<td style="text-align: center;">93.8%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;80–89</td>
+<td style="text-align: center;">(37.9–17.1)</td>
+<td style="text-align: center;">(37.6–18.6)</td>
+<td style="text-align: center;">0.76</td>
+<td style="text-align: center;">92.1%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;90+</td>
+<td style="text-align: center;">(18.5–14.2)</td>
+<td style="text-align: center;">(19.3–15.2)</td>
+<td style="text-align: center;">0.39</td>
+<td style="text-align: center;">82.7%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Sex</strong></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;Male</td>
+<td style="text-align: center;">(19.3–17.0)</td>
+<td style="text-align: center;">(24.2–21.6)</td>
+<td style="text-align: center;">5.00</td>
+<td style="text-align: center;">85.2%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;Female</td>
+<td style="text-align: center;">(33.1–19.5)</td>
+<td style="text-align: center;">(35.3–24.4)</td>
+<td style="text-align: center;">5.38</td>
+<td style="text-align: center;">89.5%</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section class="slide level2">
 
-<p>A variant that we propose to make it more suitable for co-occurent events : <strong>Delphi-BCE</strong>.</p>
-<p>Instead of softmax NTP, we switch to a multilabel setting: <span class="math display"> \text{BCE}_{i, c} \coloneqq  - \sum_v y_{i, c, v} \log \frac{\lambda_{i, c, v}}{1 + \lambda_{i, c, v}} + (1-y_{i, c, v}) \log \frac{1}{1 + \lambda_{i, c, v}} </span></p>
-<p>And keep the TTE component:</p>
-<div style="font-size: 0.75em;">
-<p><span class="math display">
-\begin{aligned}
-\text{Delphi-BCE}_{i,c}
-&amp;\coloneqq \text{BCE}_{i,c} + \text{TTE}_{i,c} \\
-&amp;= - \sum_v y_{i, c, v} \log(\lambda_{i, c, v})
-   + \sum_v \log\bigl(1 + \lambda_{i, c, v}\bigr)
-   - \log \sum_v \lambda_{i, c, v}
-   + t^{*} \sum_v \lambda_{i, c, v} \\
-&amp;= \text{Delphi}_{i,c}
-   + \sum_v \log\bigl(1 + \lambda_{i, c, v}\bigr)
-   - \log \sum_v \lambda_{i, c, v} \, .
-\end{aligned}
-</span></p>
-</div>
-</section>
-<section id="plot-of-the-embedding-space" class="slide level2 unnumbered">
-<h2>Plot of the embedding space</h2>
-
-<img data-src="images/embedding_space.png" class="quarto-figure quarto-figure-center r-stretch"></section>
-<section id="evaluation-task-examples" class="slide level2" data-number="3.1">
-<h2><span class="header-section-number">3.1</span> Evaluation task examples</h2>
-
-<img data-src="images/presence.png" class="quarto-figure quarto-figure-center r-stretch"></section>
-<section id="scaling-law" class="slide level2" data-number="3.2">
-<h2><span class="header-section-number">3.2</span> Scaling law</h2>
-
-<img data-src="images/scaling_law.png" class="quarto-figure quarto-figure-center r-stretch"></section></section>
+<table class="caption-top">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Subpopulation</th>
+<th style="text-align: center;">Emergency (%)</th>
+<th style="text-align: center;">Hospit. (%)</th>
+<th style="text-align: center;">Size</th>
+<th style="text-align: center;">PCP</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><em>General Population</em></td>
+<td style="text-align: center;">(31.8–18.8)</td>
+<td style="text-align: center;">(35.0–23.7)</td>
+<td style="text-align: center;">10.39</td>
+<td style="text-align: center;">87.4%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Clinical (ALD)</strong></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;Type 2 diabetes</td>
+<td style="text-align: center;">(30.5–21.2)</td>
+<td style="text-align: center;">(34.0–25.5)</td>
+<td style="text-align: center;">0.59</td>
+<td style="text-align: center;">87.4%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;Primary hypertension</td>
+<td style="text-align: center;">(32.9–17.3)</td>
+<td style="text-align: center;">(36.2–21.5)</td>
+<td style="text-align: center;">0.16</td>
+<td style="text-align: center;">87.4%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;Mal. neoplasm of breast</td>
+<td style="text-align: center;">(17.2–9.6)</td>
+<td style="text-align: center;">(21.9–13.9)</td>
+<td style="text-align: center;">0.18</td>
+<td style="text-align: center;">87.4%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;Mal. neoplasm of prostate</td>
+<td style="text-align: center;">(25.2–5.1)</td>
+<td style="text-align: center;">(28.5–14.7)</td>
+<td style="text-align: center;">0.12</td>
+<td style="text-align: center;">87.4%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;Depressive episodes</td>
+<td style="text-align: center;">(18.7–4.3)</td>
+<td style="text-align: center;">(25.6–16.9)</td>
+<td style="text-align: center;">0.11</td>
+<td style="text-align: center;">87.6%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;Stroke</td>
+<td style="text-align: center;">(15.2–3.7)</td>
+<td style="text-align: center;">(23.7–15.1)</td>
+<td style="text-align: center;">0.09</td>
+<td style="text-align: center;">87.4%</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;Dementia in Alzheimer</td>
+<td style="text-align: center;">(20.1–7.8)</td>
+<td style="text-align: center;">(25.6–14.0)</td>
+<td style="text-align: center;">0.08</td>
+<td style="text-align: center;">87.4%</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;Heart failure</td>
+<td style="text-align: center;">(15.2)–1.9</td>
+<td style="text-align: center;">(24.4–13.2)</td>
+<td style="text-align: center;">0.08</td>
+<td style="text-align: center;">87.4%</td>
+</tr>
+</tbody>
+</table>
+</section></section>
 <section>
 <section id="avenues-of-work" class="title-slide slide level1 center" data-number="4">
 <h1><span class="header-section-number">4</span> Avenues of work</h1>
@@ -491,13 +672,26 @@ y_{i, c, v} \coloneqq
 </section>
 <section id="improving-pre-training-task" class="slide level2 unnumbered">
 <h2>Improving pre-training task</h2>
-<p>In the Delphi loss, the scale of the intensity is optimized only for the token that appears. Ideally at each time step, all the intensities should match the next time to appearance.</p>
 <ul>
-<li>Exponential loss for time-to-event task (as in MOTOR (<span class="citation" data-cites="steinberg2024motor">Steinberg et al. (<a href="#/section" role="doc-biblioref" onclick="">2024</a>)</span>))</li>
+<li class="fragment">Other actions
+<ul>
+<li class="fragment">HAS recommendations</li>
+</ul></li>
+<li class="fragment">Other rewards
+<ul>
+<li class="fragment">Total expenditures…</li>
+</ul></li>
+<li class="fragment">Apply the method to specific subpopulations
+<ul>
+<li class="fragment">Diabetes</li>
+<li class="fragment">Heart failure</li>
+</ul></li>
+<li class="fragment">Enriching the embedding
+<ul>
+<li class="fragment">Smarter training losses</li>
+<li class="fragment">Action as token</li>
+</ul></li>
 </ul>
-<div style="font-size: 0.85em;">
-<p><span class="math display"> \text{All-TTE}_{i,c} =  \sum_v (- \log \lambda_{i, c, v} + \lambda_{i, c, v} \tau_{i, c, v}) \mathbf{1}_{\tau_{i, c, v} &lt; \infty} +  (T_{\text{max}} - t_{i, c}) \sum_v \lambda_{i, c, v} \mathbf{1}_{\tau_{i, c, v} = \infty} </span></p>
-</div>
 </section></section>
 <section>
 <section id="references" class="title-slide slide level1 unnumbered center">
@@ -506,30 +700,20 @@ y_{i, c, v} \coloneqq
 </section>
 <section id="section" class="slide level2 unnumbered smaller scrollable">
 <h2></h2>
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-liBEHRTTransformerElectronic2020" class="csl-entry" role="listitem">
-Li, Yikuan, Shishir Rao, José Roberto Ayala Solares, Abdelaali Hassaine, Rema Ramakrishnan, Dexter Canoy, Yajie Zhu, Kazem Rahimi, and Gholamreza Salimi-Khorshidi. 2020. <span>‘<span>BEHRT</span>: <span>Transformer</span> for <span>Electronic Health Records</span>’</span>. <em>Scientific Reports</em> 10 (1): 7155. <a href="https://doi.org/10.1038/s41598-020-62922-y">https://doi.org/10.1038/s41598-020-62922-y</a>.
-</div>
-<div id="ref-life2vec" class="csl-entry" role="listitem">
-Savcisens, Germans, Tina Eliassi-Rad, Lars Kai Hansen, Laust Hvas Mortensen, Lau Lilleholt, Anna Rogers, Ingo Zettler, and Sune Lehmann. 2023. <span>‘Using Sequences of Life-Events to Predict Human Lives’</span>. <em>Nature Computational Science</em> 4 (1): 43–56. <a href="https://doi.org/10.1038/s43588-023-00573-5">https://doi.org/10.1038/s43588-023-00573-5</a>.
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-robust-ope" class="csl-entry" role="listitem">
+Farajtabar, Mehrdad, Yinlam Chow, and Mohammad Ghavamzadeh. 2018. <span>‘More Robust Doubly Robust Off-Policy Evaluation’</span>. In <em>Proceedings of the 35th International Conference on Machine Learning</em>, edited by Jennifer Dy and Andreas Krause, vol. 80. Proceedings of Machine Learning Research. PMLR. <a href="https://proceedings.mlr.press/v80/farajtabar18a.html">https://proceedings.mlr.press/v80/farajtabar18a.html</a>.
 </div>
 <div id="ref-Shmatko2025" class="csl-entry" role="listitem">
-Shmatko, Artem, Alexander Wolfgang Jung, Kumar Gaurav, Søren Brunak, Laust Hvas Mortensen, Ewan Birney, Tom Fitzgerald, and Moritz Gerstung. 2025. <span>‘Learning the Natural History of Human Disease with Generative Transformers’</span>. <em>Nature</em>, September. <a href="https://doi.org/10.1038/s41586-025-09529-3">https://doi.org/10.1038/s41586-025-09529-3</a>.
-</div>
-<div id="ref-steinberg2024motor" class="csl-entry" role="listitem">
-Steinberg, Ethan, Jason Alan Fries, Yizhe Xu, and Nigam Shah. 2024. <span>‘<span>MOTOR</span>: A Time-to-Event Foundation Model for Structured Medical Records’</span>. In <em>The Twelfth International Conference on Learning Representations</em>. <a href="https://openreview.net/forum?id=NialiwI2V6">https://openreview.net/forum?id=NialiwI2V6</a>.
+Shmatko, Artem, Alexander Wolfgang Jung, Kumar Gaurav, et al. 2025. <span>‘Learning the Natural History of Human Disease with Generative Transformers’</span>. <em>Nature</em>, ahead of print, September 17. <a href="https://doi.org/10.1038/s41586-025-09529-3">https://doi.org/10.1038/s41586-025-09529-3</a>.
 </div>
 <div id="ref-coMET" class="csl-entry" role="listitem">
-Waxler, Shane, Paul Blazek, Davis White, Daniel Sneider, Kevin Chung, Mani Nagarathnam, Patrick Williams, et al. 2025. <span>‘Generative <span>Medical Event Models Improve</span> with <span>Scale</span>’</span>. arXiv. <a href="https://doi.org/10.48550/arXiv.2508.12104">https://doi.org/10.48550/arXiv.2508.12104</a>.
-</div>
-<div id="ref-yangTransformEHRTransformerbasedEncoderdecoder2023" class="csl-entry" role="listitem">
-Yang, Zhichao, Avijit Mitra, Weisong Liu, Dan Berlowitz, and Hong Yu. 2023. <span>‘<span>TransformEHR</span>: Transformer-Based Encoder-Decoder Generative Model to Enhance Prediction of Disease Outcomes Using Electronic Health Records’</span>. <em>Nature Communications</em> 14 (1): 7857. <a href="https://doi.org/10.1038/s41467-023-43715-z">https://doi.org/10.1038/s41467-023-43715-z</a>.
+Waxler, Shane, Paul Blazek, Davis White, et al. 2025. <em>Generative <span>Medical Event Models Improve</span> with <span>Scale</span></em>. arXiv:2508.12104. arXiv. <a href="https://doi.org/10.48550/arXiv.2508.12104">https://doi.org/10.48550/arXiv.2508.12104</a>.
 </div>
 </div>
 
 
 </section></section>
-
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">

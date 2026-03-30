@@ -2,86 +2,100 @@
   {
     "objectID": "mydocs/soda_meeting/index.html#about-me",
     "href": "mydocs/soda_meeting/index.html#about-me",
-    "title": "Meeting 19/02",
+    "title": "SODA Seminar",
     "section": "About me",
     "text": "About me\n\nGraduated from HEC (19-24), X (X20), ENSAE and MVA (administrateur de l’Insee, 2024)\nResearch internships:\n\n2023 (3A X): MIT (Operations Research Center), Microtransit system design and optimization\n2024 (ENSAE-MVA): Inria HeKA, Generative models for longitudinal images\n\nCurrently, first position in the Corps since sept. 2024:\n\nData Scientist at SSP Lab (MLOps, model trustworthiness, NLP (text classification, RAG), satellite imagery…)\nPhD in CS Candidate (part-time, journées recherche)"
   },
   {
     "objectID": "mydocs/soda_meeting/index.html#broader-view-of-the-graph4health-anr",
     "href": "mydocs/soda_meeting/index.html#broader-view-of-the-graph4health-anr",
-    "title": "Meeting 19/02",
+    "title": "SODA Seminar",
     "section": "Broader view of the Graph4Health ANR",
-    "text": "Broader view of the Graph4Health ANR\n\nThe general objective is to\n\ninfer the causal impact of the healthcare supply (and its geographic distribution) on health outcomes\n\nusing classic econometric tools\nusing deep learning methods for causal inference\n\nstudy policies that contribute to the efficiency of the French healthcare system\n\n11 years of exhaustive SNDS\n\n70M patients\nconsultations, procedures, hospitalizations, medications, deaths etc."
+    "text": "Broader view of the Graph4Health ANR\n\nThe general objective is to\n\ninfer the impact of the healthcare supply (and its geographic distribution) on health outcomes\n\nusing classic econometric tools\nusing deep learning methods\n\nstudy policies that contribute to the efficiency of the French healthcare system\n\n11 years of exhaustive SNDS\n\n70M patients\nconsultations, procedures, hospitalizations, medications, deaths etc."
   },
   {
-    "objectID": "mydocs/soda_meeting/index.html#my-project-embedding-patient-pathways-for-causal-inference",
-    "href": "mydocs/soda_meeting/index.html#my-project-embedding-patient-pathways-for-causal-inference",
-    "title": "Meeting 19/02",
-    "section": "My project: embedding patient pathways for causal inference",
-    "text": "My project: embedding patient pathways for causal inference\n\nOur data: patient (medical) pathways\n\nunstructured (just as in NLP)\ntemporally irregular (not like NLP!)"
+    "objectID": "mydocs/soda_meeting/index.html#setting",
+    "href": "mydocs/soda_meeting/index.html#setting",
+    "title": "SODA Seminar",
+    "section": "Setting",
+    "text": "Setting\nDataset of medical pathways:  For i = 1, \\dots, n, X_i \\coloneqq (e_i, t_i, f_i), where:\n\ne_i \\in \\mathbb{R}^{cs} are the tokenized events, containing integers between 0 and the vocabulary size \\lvert \\mathcal{V} \\rvert\nt_i \\in \\mathbb{R}^{cs} is the temporal vector, containing the dates\nf_i \\in \\mathbb{R}^{2} corresponds to the patient general features, for now age and gender"
   },
   {
-    "objectID": "mydocs/soda_meeting/index.html#transformer-based-models-for-medical-pathway-embedding",
-    "href": "mydocs/soda_meeting/index.html#transformer-based-models-for-medical-pathway-embedding",
-    "title": "Meeting 19/02",
-    "section": "Transformer-based models for medical pathway embedding",
-    "text": "Transformer-based models for medical pathway embedding\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nModel name\nModel archi.\nPre-train. Task(s)\nFine-tun. task(s)\n# Params\nTraining data size\nVocab size (type)\nGenerative\nTrajectory1\n\n\n\n\ncoMET (Waxler et al. (2025))\nGPT\nNext token pred.\nDisease prediction\n1B\n151B events from 118M patients\n7,105 (exhaustive)\n✅\n✅\n\n\nDelphi (Shmatko et al. (2025))\nNanoGPT\nNext disease event + Time to event\nNone\n2M\n400k patients\n1,258 (ICD10)\n✅\n✅\n\n\nMOTOR (Many Outcome Time Oriented Representation) (Steinberg et al. (2024))\nTransformer (causal masking and local attention)\nTime to event (TTE)\nTTE for part. disease\n143M\n55M patients, 9B events\n8,192 (ICD10 and other specific codes)\n≅\n≅\n\n\nLife2Vec (Savcisens et al. (2023))\nBERT\nMLM + SOP\nMortality Prediction\n8M\n3M patients\n~700(labour + ICD10)\n❌\n❌\n\n\nTransformEHR (Yang et al. (2023))\nEncoder-Decoder\nVisit masking: Given visits 1-3, predict all codes in visit 4\nDisease (pancreatic cancer) / Outcome (self harm) pred.\n?\n255M visits from 7M patients\nICD10\n✅\n❌\n\n\nBEHRT (Li et al. (2020))\nBERT\nMLM\nDisease prediction\nn.r. (~6L, 12H, h=288)\n1.6M patients\n301 disease codes\n❌\n❌\n\n\n\n\n\nEfficient (i.e. in one forward pass) computation of embeddings at any time"
+    "objectID": "mydocs/soda_meeting/index.html#objectives",
+    "href": "mydocs/soda_meeting/index.html#objectives",
+    "title": "SODA Seminar",
+    "section": "Objectives",
+    "text": "Objectives\n\nHaving a time-aware Transformers (\\neq NLP) with a lot of simultaneous events\n\nNeed to design an adapted loss function\n\nKeeping in mind policy evaluation\n\nWe want to be able to efficiently compute the embedding of the pathway at any time (the trajectory of the patient)\nFocus on decoder-only Transformers (GPT-like)"
   },
   {
-    "objectID": "mydocs/soda_meeting/index.html#data-management",
-    "href": "mydocs/soda_meeting/index.html#data-management",
-    "title": "Meeting 19/02",
-    "section": "Data management",
-    "text": "Data management\n\nValidation and EDA of the first delivered simplified tables: prestations and medications\nJointure, cleaning and subsampling\n\nSo that any subsample can fit in vRAM\n\nTokenization"
+    "objectID": "mydocs/soda_meeting/index.html#model",
+    "href": "mydocs/soda_meeting/index.html#model",
+    "title": "SODA Seminar",
+    "section": "Model",
+    "text": "Model\n\nEmbedding matrices of size \\mathbb{R}^{\\lvert \\mathcal{V} \\rvert, d_{embed}} (vocab), \\mathbb{R}^{2, d_{embed}} (gender) and \\mathbb{R}^{8, d_{embed}} (age class)\n\nWe use t_i to have a time-aware positional encoding using a sinusoidal encoding\nA symbolic [START] token, composed of the summed embeddings of age and gender.\n\nCausal self-attention layers so that the Transformer-based model outputs causally contextualized embeddings:  GPT_{\\theta}(X_i) \\in \\mathbb{R}^{cs, d_{embed}}"
   },
   {
-    "objectID": "mydocs/soda_meeting/index.html#notations",
-    "href": "mydocs/soda_meeting/index.html#notations",
-    "title": "Meeting 19/02",
-    "section": "Notations",
-    "text": "Notations\nNotations: dataset\nDataset of medical pathways:  For i = 1, \\dots, n, X_i \\coloneqq (e_i, t_i, f_i), where:\n\ne_i \\in \\mathbb{R}^{cs} are the tokenized events, containing integers between 0 and the vocabulary size \\lvert \\mathcal{V} \\rvert\nt_i \\in \\mathbb{R}^{cs} is the temporal vector, containing the dates\nf_i \\in \\mathbb{R}^{2} corresponds to the patient general features, for now age and gender"
+    "objectID": "mydocs/soda_meeting/index.html#pre-training",
+    "href": "mydocs/soda_meeting/index.html#pre-training",
+    "title": "SODA Seminar",
+    "section": "Pre-training",
+    "text": "Pre-training\n\nWe use weight tying to output the logits \\in \\mathbb{R}^{cs, \\lvert \\mathcal{V} \\rvert}\n\n\\text{logits}_{i, c, v} = (W \\cdot GPT_{\\theta}(X))_{i, c, v}\n\nNext-Token Prediction: instead of softmax as in Shmatko et al. (2025), we use a multi-label classification loss to better handle co-occurent events:\n\n \\text{BCE}_{i, c} \\coloneqq  - \\sum_v y_{i, c, v} \\log \\frac{\\lambda_{i, c, v}}{1 + \\lambda_{i, c, v}} + (1-y_{i, c, v}) \\log \\frac{1}{1 + \\lambda_{i, c, v}}"
   },
   {
-    "objectID": "mydocs/soda_meeting/index.html#pre-training-task",
-    "href": "mydocs/soda_meeting/index.html#pre-training-task",
-    "title": "Meeting 19/02",
-    "section": "Pre-training task",
-    "text": "Pre-training task\nObjectives\n\nHaving a time-aware Transformers (\\neq NLP)\nWe want to be able to efficiently compute the embedding of the pathway at any time (the trajectory of the patient)\nProblems with the next token task:\n\na lot of simultaneous events, especially for medications\ndifferent types of events: does it make sense to have a competition among them ?"
+    "objectID": "mydocs/soda_meeting/index.html#validating-the-model",
+    "href": "mydocs/soda_meeting/index.html#validating-the-model",
+    "title": "SODA Seminar",
+    "section": "Validating the model",
+    "text": "Validating the model\nScaling law\n\nWe are matching the ~2,000 optimal ratio \\frac{\\text{\\# training tokens}}{\\text{\\# parameters}} found in Waxler et al. (2025)."
   },
   {
-    "objectID": "mydocs/soda_meeting/index.html#plot-of-the-embedding-space",
-    "href": "mydocs/soda_meeting/index.html#plot-of-the-embedding-space",
-    "title": "Meeting 19/02",
-    "section": "Plot of the embedding space",
-    "text": "Plot of the embedding space"
+    "objectID": "mydocs/soda_meeting/index.html#markov-decision-processes-and-off-policy-evaluation",
+    "href": "mydocs/soda_meeting/index.html#markov-decision-processes-and-off-policy-evaluation",
+    "title": "SODA Seminar",
+    "section": "Markov Decision Processes and Off-Policy Evaluation",
+    "text": "Markov Decision Processes and Off-Policy Evaluation\n\nA Markov Decision Process (MDP) is a tuple (\\mathcal{S}, \\mathcal{A}, P, P_0, R, \\gamma) where:\n\n\\mathcal{S} is the state space\n\\mathcal{A} is the action space\nP: \\mathcal{S} \\times \\mathcal{A} \\to \\Delta(\\mathcal{S}) is the transition probability function\nP_0 \\in \\Delta(\\mathcal{S}) is the initial state distribution\nR: \\mathcal{S} \\times \\mathcal{A} \\to \\mathbb{R} is the reward function\n\\gamma \\in [0,1] is the discount factor"
   },
   {
-    "objectID": "mydocs/soda_meeting/index.html#evaluation-task-examples",
-    "href": "mydocs/soda_meeting/index.html#evaluation-task-examples",
-    "title": "Meeting 19/02",
-    "section": "3.1 Evaluation task examples",
-    "text": "3.1 Evaluation task examples"
+    "objectID": "mydocs/soda_meeting/index.html#in-our-case",
+    "href": "mydocs/soda_meeting/index.html#in-our-case",
+    "title": "SODA Seminar",
+    "section": "In our case",
+    "text": "In our case"
   },
   {
-    "objectID": "mydocs/soda_meeting/index.html#scaling-law",
-    "href": "mydocs/soda_meeting/index.html#scaling-law",
-    "title": "Meeting 19/02",
-    "section": "3.2 Scaling law",
-    "text": "3.2 Scaling law"
+    "objectID": "mydocs/soda_meeting/index.html#estimation-of-the-behavioral-policy",
+    "href": "mydocs/soda_meeting/index.html#estimation-of-the-behavioral-policy",
+    "title": "SODA Seminar",
+    "section": "Estimation of the behavioral policy",
+    "text": "Estimation of the behavioral policy\nFirst step of the OPE pipeline: regress a_{i,t} (PCP affiliation) on s_{i,t} (embeddings) to estimate \\hat{\\pi}_b(a|s), the behavioral policy."
+  },
+  {
+    "objectID": "mydocs/soda_meeting/index.html#vpi_b-and-pi_e",
+    "href": "mydocs/soda_meeting/index.html#vpi_b-and-pi_e",
+    "title": "SODA Seminar",
+    "section": "V^{\\pi_b} and \\pi_e",
+    "text": "V^{\\pi_b} and \\pi_e\n\nThe value of the behavioral policy can be estimated using the trajectories in the dataset \\mathcal{D}:\nV^{\\pi_b} \\approx V^{\\hat{\\pi}_b} \\coloneqq \\frac{1}{N} \\sum_{i=1}^N \\sum_{t=0}^{T-1} \\gamma^t r_t^i\nThe policies we want to study: \\pi_e(1|s) = \\max(\\eta, \\hat{\\pi}_b(1|s)) for \\eta = 0 \\dots 0.99"
+  },
+  {
+    "objectID": "mydocs/soda_meeting/index.html#results",
+    "href": "mydocs/soda_meeting/index.html#results",
+    "title": "SODA Seminar",
+    "section": "Results",
+    "text": "Results\nGeneral population"
   },
   {
     "objectID": "mydocs/soda_meeting/index.html#improving-pre-training-task",
     "href": "mydocs/soda_meeting/index.html#improving-pre-training-task",
-    "title": "Meeting 19/02",
+    "title": "SODA Seminar",
     "section": "Improving pre-training task",
-    "text": "Improving pre-training task\nIn the Delphi loss, the scale of the intensity is optimized only for the token that appears. Ideally at each time step, all the intensities should match the next time to appearance.\n\nExponential loss for time-to-event task (as in MOTOR (Steinberg et al. (2024)))\n\n\n \\text{All-TTE}_{i,c} =  \\sum_v (- \\log \\lambda_{i, c, v} + \\lambda_{i, c, v} \\tau_{i, c, v}) \\mathbf{1}_{\\tau_{i, c, v} &lt; \\infty} +  (T_{\\text{max}} - t_{i, c}) \\sum_v \\lambda_{i, c, v} \\mathbf{1}_{\\tau_{i, c, v} = \\infty}"
+    "text": "Improving pre-training task\n\nOther actions\n\nHAS recommendations\n\nOther rewards\n\nTotal expenditures…\n\nApply the method to specific subpopulations\n\nDiabetes\nHeart failure\n\nEnriching the embedding\n\nSmarter training losses\nAction as token"
   },
   {
     "objectID": "mydocs/soda_meeting/index.html#section",
     "href": "mydocs/soda_meeting/index.html#section",
-    "title": "Meeting 19/02",
+    "title": "SODA Seminar",
     "section": "",
-    "text": "Li, Yikuan, Shishir Rao, José Roberto Ayala Solares, Abdelaali Hassaine, Rema Ramakrishnan, Dexter Canoy, Yajie Zhu, Kazem Rahimi, and Gholamreza Salimi-Khorshidi. 2020. ‘BEHRT: Transformer for Electronic Health Records’. Scientific Reports 10 (1): 7155. https://doi.org/10.1038/s41598-020-62922-y.\n\n\nSavcisens, Germans, Tina Eliassi-Rad, Lars Kai Hansen, Laust Hvas Mortensen, Lau Lilleholt, Anna Rogers, Ingo Zettler, and Sune Lehmann. 2023. ‘Using Sequences of Life-Events to Predict Human Lives’. Nature Computational Science 4 (1): 43–56. https://doi.org/10.1038/s43588-023-00573-5.\n\n\nShmatko, Artem, Alexander Wolfgang Jung, Kumar Gaurav, Søren Brunak, Laust Hvas Mortensen, Ewan Birney, Tom Fitzgerald, and Moritz Gerstung. 2025. ‘Learning the Natural History of Human Disease with Generative Transformers’. Nature, September. https://doi.org/10.1038/s41586-025-09529-3.\n\n\nSteinberg, Ethan, Jason Alan Fries, Yizhe Xu, and Nigam Shah. 2024. ‘MOTOR: A Time-to-Event Foundation Model for Structured Medical Records’. In The Twelfth International Conference on Learning Representations. https://openreview.net/forum?id=NialiwI2V6.\n\n\nWaxler, Shane, Paul Blazek, Davis White, Daniel Sneider, Kevin Chung, Mani Nagarathnam, Patrick Williams, et al. 2025. ‘Generative Medical Event Models Improve with Scale’. arXiv. https://doi.org/10.48550/arXiv.2508.12104.\n\n\nYang, Zhichao, Avijit Mitra, Weisong Liu, Dan Berlowitz, and Hong Yu. 2023. ‘TransformEHR: Transformer-Based Encoder-Decoder Generative Model to Enhance Prediction of Disease Outcomes Using Electronic Health Records’. Nature Communications 14 (1): 7857. https://doi.org/10.1038/s41467-023-43715-z."
+    "text": "Farajtabar, Mehrdad, Yinlam Chow, and Mohammad Ghavamzadeh. 2018. ‘More Robust Doubly Robust Off-Policy Evaluation’. In Proceedings of the 35th International Conference on Machine Learning, edited by Jennifer Dy and Andreas Krause, vol. 80. Proceedings of Machine Learning Research. PMLR. https://proceedings.mlr.press/v80/farajtabar18a.html.\n\n\nShmatko, Artem, Alexander Wolfgang Jung, Kumar Gaurav, et al. 2025. ‘Learning the Natural History of Human Disease with Generative Transformers’. Nature, ahead of print, September 17. https://doi.org/10.1038/s41586-025-09529-3.\n\n\nWaxler, Shane, Paul Blazek, Davis White, et al. 2025. Generative Medical Event Models Improve with Scale. arXiv:2508.12104. arXiv. https://doi.org/10.48550/arXiv.2508.12104."
   },
   {
     "objectID": "mydocs/G4H_half_day/index.html#representing-words",
@@ -193,7 +207,7 @@
     "href": "mydocs/G4H_half_day/index.html#section",
     "title": "G4H Half-Day",
     "section": "",
-    "text": "Hoffmann, Jordan, Sebastian Borgeaud, Arthur Mensch, Elena Buchatskaya, Trevor Cai, Eliza Rutherford, Diego de Las Casas, et al. 2022. ‘Training Compute-Optimal Large Language Models’. https://arxiv.org/abs/2203.15556.\n\n\nShmatko, Artem, Alexander Wolfgang Jung, Kumar Gaurav, Søren Brunak, Laust Hvas Mortensen, Ewan Birney, Tom Fitzgerald, and Moritz Gerstung. 2025. ‘Learning the Natural History of Human Disease with Generative Transformers’. Nature, September. https://doi.org/10.1038/s41586-025-09529-3.\n\n\nSteinberg, Ethan, Jason Alan Fries, Yizhe Xu, and Nigam Shah. 2024. ‘MOTOR: A Time-to-Event Foundation Model for Structured Medical Records’. In The Twelfth International Conference on Learning Representations. https://openreview.net/forum?id=NialiwI2V6."
+    "text": "Hoffmann, Jordan, Sebastian Borgeaud, Arthur Mensch, et al. 2022. Training Compute-Optimal Large Language Models. https://arxiv.org/abs/2203.15556.\n\n\nShmatko, Artem, Alexander Wolfgang Jung, Kumar Gaurav, et al. 2025. ‘Learning the Natural History of Human Disease with Generative Transformers’. Nature, ahead of print, September 17. https://doi.org/10.1038/s41586-025-09529-3.\n\n\nSteinberg, Ethan, Jason Alan Fries, Yizhe Xu, and Nigam Shah. 2024. ‘MOTOR: A Time-to-Event Foundation Model for Structured Medical Records’. The Twelfth International Conference on Learning Representations. https://openreview.net/forum?id=NialiwI2V6."
   },
   {
     "objectID": "mydocs/csi_slides/index.html#about-me",
@@ -305,7 +319,7 @@
     "href": "mydocs/csi_slides/index.html#section",
     "title": "PhD Committee",
     "section": "",
-    "text": "Abécassis, Judith, Élise Dumas, Julie Alberge, and Gaël Varoquaux. 2025. ‘From prediction to prescription: Machine learning and Causal Inference’. Annual Review of Biomedical Data Science, April. https://doi.org/10.1146/annurev-biodatasci-103123-095750.\n\n\nCurth, Alicia, and Mihaela van der Schaar. 2021. ‘Nonparametric Estimation of Heterogeneous Treatment Effects: From Theory to Learning Algorithms’. https://arxiv.org/abs/2101.10943.\n\n\nDoutreligne, Matthieu, and Gaël Varoquaux. 2025. ‘How to Select Predictive Models for Decision-Making or Causal Inference’. GigaScience 14 (January): giaf016. https://doi.org/10.1093/gigascience/giaf016.\n\n\nHoffmann, Jordan, Sebastian Borgeaud, Arthur Mensch, Elena Buchatskaya, Trevor Cai, Eliza Rutherford, Diego de Las Casas, et al. 2022. ‘Training Compute-Optimal Large Language Models’. https://arxiv.org/abs/2203.15556.\n\n\nLi, Yikuan, Shishir Rao, José Roberto Ayala Solares, Abdelaali Hassaine, Rema Ramakrishnan, Dexter Canoy, Yajie Zhu, Kazem Rahimi, and Gholamreza Salimi-Khorshidi. 2020. ‘BEHRT: Transformer for Electronic Health Records’. Scientific Reports 10 (1): 7155. https://doi.org/10.1038/s41598-020-62922-y.\n\n\nSavcisens, Germans, Tina Eliassi-Rad, Lars Kai Hansen, Laust Hvas Mortensen, Lau Lilleholt, Anna Rogers, Ingo Zettler, and Sune Lehmann. 2023. ‘Using Sequences of Life-Events to Predict Human Lives’. Nature Computational Science 4 (1): 43–56. https://doi.org/10.1038/s43588-023-00573-5.\n\n\nShmatko, Artem, Alexander Wolfgang Jung, Kumar Gaurav, Søren Brunak, Laust Hvas Mortensen, Ewan Birney, Tom Fitzgerald, and Moritz Gerstung. 2025. ‘Learning the Natural History of Human Disease with Generative Transformers’. Nature, September. https://doi.org/10.1038/s41586-025-09529-3.\n\n\nSteinberg, Ethan, Jason Alan Fries, Yizhe Xu, and Nigam Shah. 2024. ‘MOTOR: A Time-to-Event Foundation Model for Structured Medical Records’. In The Twelfth International Conference on Learning Representations. https://openreview.net/forum?id=NialiwI2V6.\n\n\nWager, Stefan. 2024. Causal Inference: A Statistical Learning Approach.\n\n\nYang, Zhichao, Avijit Mitra, Weisong Liu, Dan Berlowitz, and Hong Yu. 2023. ‘TransformEHR: Transformer-Based Encoder-Decoder Generative Model to Enhance Prediction of Disease Outcomes Using Electronic Health Records’. Nature Communications 14 (1): 7857. https://doi.org/10.1038/s41467-023-43715-z."
+    "text": "Abécassis, Judith, Élise Dumas, Julie Alberge, and Gaël Varoquaux. 2025. ‘From prediction to prescription: Machine learning and Causal Inference’. Annual Review of Biomedical Data Science, ahead of print, April. https://doi.org/10.1146/annurev-biodatasci-103123-095750.\n\n\nCurth, Alicia, and Mihaela van der Schaar. 2021. Nonparametric Estimation of Heterogeneous Treatment Effects: From Theory to Learning Algorithms. https://arxiv.org/abs/2101.10943.\n\n\nDoutreligne, Matthieu, and Gaël Varoquaux. 2025. ‘How to Select Predictive Models for Decision-Making or Causal Inference’. GigaScience 14 (January): giaf016. https://doi.org/10.1093/gigascience/giaf016.\n\n\nHoffmann, Jordan, Sebastian Borgeaud, Arthur Mensch, et al. 2022. Training Compute-Optimal Large Language Models. https://arxiv.org/abs/2203.15556.\n\n\nLi, Yikuan, Shishir Rao, José Roberto Ayala Solares, et al. 2020. ‘BEHRT: Transformer for Electronic Health Records’. Scientific Reports 10 (1): 7155. https://doi.org/10.1038/s41598-020-62922-y.\n\n\nSavcisens, Germans, Tina Eliassi-Rad, Lars Kai Hansen, et al. 2023. ‘Using Sequences of Life-Events to Predict Human Lives’. Nature Computational Science 4 (1): 43–56. https://doi.org/10.1038/s43588-023-00573-5.\n\n\nShmatko, Artem, Alexander Wolfgang Jung, Kumar Gaurav, et al. 2025. ‘Learning the Natural History of Human Disease with Generative Transformers’. Nature, ahead of print, September 17. https://doi.org/10.1038/s41586-025-09529-3.\n\n\nSteinberg, Ethan, Jason Alan Fries, Yizhe Xu, and Nigam Shah. 2024. ‘MOTOR: A Time-to-Event Foundation Model for Structured Medical Records’. The Twelfth International Conference on Learning Representations. https://openreview.net/forum?id=NialiwI2V6.\n\n\nWager, Stefan. 2024. Causal Inference: A Statistical Learning Approach.\n\n\nYang, Zhichao, Avijit Mitra, Weisong Liu, Dan Berlowitz, and Hong Yu. 2023. ‘TransformEHR: Transformer-Based Encoder-Decoder Generative Model to Enhance Prediction of Disease Outcomes Using Electronic Health Records’. Nature Communications 14 (1): 7857. https://doi.org/10.1038/s41467-023-43715-z."
   },
   {
     "objectID": "mydocs/technical_report/index.html",
@@ -347,7 +361,7 @@
     "href": "mydocs/technical_report/index.html#sec-benchmarks",
     "title": "G4H - From embeddings to causal inference",
     "section": "2.3 Benchmarks",
-    "text": "2.3 Benchmarks\nWIP\n\nReferences\n\n\nAbécassis, Judith, Élise Dumas, Julie Alberge, and Gaël Varoquaux. 2025. “From prediction to prescription: Machine learning and Causal Inference.” Annual Review of Biomedical Data Science, April. https://doi.org/10.1146/annurev-biodatasci-103123-095750."
+    "text": "2.3 Benchmarks\nWIP\n\nReferences\n\n\nAbécassis, Judith, Élise Dumas, Julie Alberge, and Gaël Varoquaux. 2025. “From prediction to prescription: Machine learning and Causal Inference.” Annual Review of Biomedical Data Science, ahead of print, April. https://doi.org/10.1146/annurev-biodatasci-103123-095750."
   },
   {
     "objectID": "mydocs/technical_report/index.html#footnotes",
