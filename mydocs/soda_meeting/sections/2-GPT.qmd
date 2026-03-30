@@ -75,11 +75,21 @@ $$\text{TTE}_{i, c} \coloneqq - \log(\sum_v \lambda_{i, c, v}) + t^{*} \sum_v \l
 
 ![](images/scaling_law.svg){fig-align="center"}
 
-We are matching the ~2,000 optimal ratio $\frac{\text{\# training tokens}}{\text{\# parameters}}$ found in @coMET. 
+We are matching the ~2,000 optimal ratio $\frac{\text{\# training tokens}}{\text{\# parameters}}$ found in @coMET.
+
+---
 
 ### Embedding space {.unnumbered}
 
+<iframe src="images/embedding_umap_plotly.html" width="120%" height="700px" frameborder="0"></iframe>
+
+---
+
+
 ### Time Calibration {.unnumbered}
+
+---
 
 ### Predictive power {.unnumbered}
 
+![](images/APS_results.svg){fig-align="center"}
