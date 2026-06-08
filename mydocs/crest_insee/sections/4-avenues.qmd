@@ -1,0 +1,15 @@
+## Future work {.unnumbered}
+
+:::{.incremental}
+- **Other OPE use cases**
+  - HAS recommendations
+  - Other rewards: total expenditures...
+
+- **Other GPT for medical pathways use cases:**
+  - causal inference
+  - **generation of synthetic trajectories**
+
+- **Improve the foudation model:**
+  - Benchmarks
+  - Make the embeddings *really* Markovian...
+:::
