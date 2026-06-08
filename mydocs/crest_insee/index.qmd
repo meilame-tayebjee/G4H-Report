@@ -1,0 +1,50 @@
+---
+title: Journées I2E
+subtitle: "**Policy evaluation using Transformer-based medical pathway embeddings**"
+authors:
+  - name: Meilame Tayebjee
+    roles: writing
+    corresponding: true
+date: "2026-06-10"
+date-format: "D MMMM YYYY"
+lang: en-GB
+bibliography: references.bib
+slide-number: true
+number-sections: true
+format: 
+  revealjs: 
+    theme: serif
+    toc: true
+    toc-depth: 2   # show up to ## headings
+    html-math-method: katex
+    scrollable: true
+    
+css: custom.css
+---
+
+# Introduction
+
+{{< include sections/1-intro.qmd >}}
+
+# Transformer-based models for medical pathway embedding
+
+{{< include sections/2-GPT.qmd >}}
+
+# Use Case: Off-Policy Evaluation 
+
+{{< include sections/3-OPE.qmd >}}
+
+# Avenues of work
+
+{{< include sections/4-avenues.qmd >}}
+
+# References {.unnumbered}
+
+## {.unnumbered}
+
+::: {#refs}
+:::
+
+## Pres. link {.unnumbered}
+
+![](images/QRcode.svg){fig-align="center" width="200px"}
