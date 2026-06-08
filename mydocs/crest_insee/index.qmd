@@ -45,6 +45,8 @@ css: custom.css
 ::: {#refs}
 :::
 
-## Pres. link {.unnumbered}
+--- 
+
+**Pres. link**
 
 ![](images/QRcode.svg){fig-align="center" width="200px"}
