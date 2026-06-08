@@ -9,8 +9,8 @@
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.9.38">
 
-  <meta name="dcterms.date" content="2026-03-31">
-  <title>Graph4Health - Medical pathway embeddings and causal inference on health outcomes – SODA Seminar</title>
+  <meta name="dcterms.date" content="2026-06-10">
+  <title>Graph4Health - Medical pathway embeddings and causal inference on health outcomes – Journées I2E</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -167,7 +167,7 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">SODA Seminar</h1>
+  <h1 class="title">Journées I2E</h1>
   <p class="subtitle"><strong>Policy evaluation using Transformer-based medical pathway embeddings</strong></p>
 
 <div class="quarto-title-authors">
@@ -178,7 +178,7 @@ Meilame Tayebjee
 </div>
 </div>
 
-  <p class="date">31 March 2026</p>
+  <p class="date">10 June 2026</p>
 </section><section id="TOC">
 <nav role="doc-toc"> 
 <h2 id="toc-title">Table of contents</h2>
@@ -197,20 +197,25 @@ Meilame Tayebjee
 <li><a href="#/model" id="/toc-model">Model</a></li>
 <li><a href="#/pre-training" id="/toc-pre-training">Pre-training</a></li>
 
+<li><a href="#/overview" id="/toc-overview">Overview</a></li>
 <li><a href="#/validating-the-model" id="/toc-validating-the-model">Validating the model</a></li>
 
 
+
 </ul></li>
-<li><a href="#/off-policy-evaluation" id="/toc-off-policy-evaluation"><span class="header-section-number">3</span> Off-Policy Evaluation</a>
+<li><a href="#/use-case-off-policy-evaluation" id="/toc-use-case-off-policy-evaluation"><span class="header-section-number">3</span> Use Case: Off-Policy Evaluation</a>
 <ul>
 <li><a href="#/markov-decision-processes-and-off-policy-evaluation" id="/toc-markov-decision-processes-and-off-policy-evaluation">Markov Decision Processes and Off-Policy Evaluation</a></li>
 
 
 <li><a href="#/in-our-case" id="/toc-in-our-case">In our case</a></li>
 
-<li><a href="#/estimation-of-the-behavioral-policy" id="/toc-estimation-of-the-behavioral-policy">Estimation of the behavioral policy</a></li>
-<li><a href="#/vpi_b-and-pi_e" id="/toc-vpi_b-and-pi_e"><span class="math inline">V^{\pi_b}</span> and <span class="math inline">\pi_e</span></a></li>
-<li><a href="#/results" id="/toc-results">Results</a></li>
+
+<li><a href="#/doubly-robust-evaluation" id="/toc-doubly-robust-evaluation">Doubly robust evaluation</a></li>
+
+
+
+
 
 
 
@@ -222,6 +227,7 @@ Meilame Tayebjee
 <li><a href="#/references" id="/toc-references">References</a>
 <ul>
 
+<li><a href="#/pres.-link" id="/toc-pres.-link">Pres.&nbsp;link</a></li>
 </ul></li>
 </ul>
 </nav>
@@ -235,11 +241,6 @@ Meilame Tayebjee
 <h2>About me</h2>
 <ul>
 <li>Graduated from HEC (19-24), X (X20), ENSAE and MVA (administrateur de l’Insee, 2024)</li>
-<li><strong>Internships</strong>:
-<ul>
-<li>2023: MIT (Operations Research Center), <em>Microtransit system design and optimization</em></li>
-<li>2024: Inria HeKA, <em>Generative models for longitudinal images</em></li>
-</ul></li>
 <li>Currently, since sept. 2024:
 <ul>
 <li>Data Scientist at Insee’s AI &amp; Data Science Innovation Lab (MLOps, agentic workflows and deep learning use cases: NLP, ML/DL for econometrics, satellite imagery)</li>
@@ -277,7 +278,7 @@ Meilame Tayebjee
 <ul>
 <li class="fragment"><span class="math inline">e_i \in \mathbb{R}^{cs}</span> are the tokenized events, containing integers between <span class="math inline">0</span> and the vocabulary size <span class="math inline">\lvert \mathcal{V} \rvert</span></li>
 <li class="fragment"><span class="math inline">t_i \in \mathbb{R}^{cs}</span> is the temporal vector, containing the dates</li>
-<li class="fragment"><span class="math inline">f_i \in \mathbb{R}^{2}</span> corresponds to the patient general features, for now age and gender</li>
+<li class="fragment"><span class="math inline">f_i \in \mathbb{R}^{2}</span> corresponds to the patient general features, (e.g.&nbsp;age and gender)</li>
 </ul>
 </section>
 <section class="slide level2">
@@ -292,7 +293,7 @@ Meilame Tayebjee
 <li>Emergency entry: 1 token</li>
 <li>Death: 1 token</li>
 <li>Long-term disease (ALD): 1,110 tokens (ICD10 codes) + 1 token for “no long-term disease”</li>
-<li>Special tokens: [PAD], age, gender, “empty”…</li>
+<li>Special tokens: [PAD], age, gender, “history token”…</li>
 </ul>
 </section>
 <section class="slide level2">
@@ -349,36 +350,34 @@ Meilame Tayebjee
 </ul>
 <p><span class="math display">\text{TTE}_{i, c} \coloneqq - \log(\sum_v \lambda_{i, c, v}) + t^{*} \sum_v \lambda_{i, c, v}</span></p>
 </section>
+<section id="overview" class="slide level2 unnumbered">
+<h2>Overview</h2>
+
+<img data-src="images/gpt_pipeline.svg" class="quarto-figure quarto-figure-center r-stretch" style="width:100.0%"></section>
 <section id="validating-the-model" class="slide level2 unnumbered">
 <h2>Validating the model</h2>
 <h3 class="unnumbered" id="scaling-law">Scaling law</h3>
 
-<img data-src="images/scaling_law.svg" class="quarto-figure quarto-figure-center r-stretch"><p>We are matching the ~2,000 optimal ratio <span class="math inline">\frac{\text{\# training tokens}}{\text{\# parameters}}</span> found in <span class="citation" data-cites="coMET">Waxler et al. (<a href="#/section" role="doc-biblioref" onclick="">2025</a>)</span>.</p>
+<img data-src="images/scaling_law.svg" class="r-stretch quarto-figure-center"><p class="caption">Scaling laws showing the power-law decay (dashed) of validation loss as a function of model parameters and data volume.</p><p>We are matching the ~2,000 optimal ratio <span class="math inline">\frac{\text{\# training tokens}}{\text{\# parameters}}</span> found in <span class="citation" data-cites="coMET">Waxler et al. (<a href="#/section" role="doc-biblioref" onclick="">2025</a>)</span>.</p>
 </section>
 <section class="slide level2">
 
 <h3 class="unnumbered" id="embedding-space">Embedding space</h3>
-<iframe src="images/embedding_umap_plotly.html" width="100%" height="700px" frameborder="0">
-</iframe>
-</section>
+
+<img data-src="images/umap_embedding_space_final.png" class="r-stretch quarto-figure-center"><p class="caption">Spatial proximity reflects co-occurrence patterns learned during training on raw medical trajectories, without any explicit clinical labeling. The embedding space spontaneously organizes into interpretable clinical clusters, suggesting the model has learned a coherent representation of medical care.</p></section>
 <section class="slide level2">
 
 <h3 class="unnumbered" id="time-calibration">Time Calibration</h3>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/time_calib.png" class="quarto-figure quarto-figure-center"></p>
-</figure>
-</div>
+
+<img data-src="images/fig_ax_time_calib.png" class="r-stretch quarto-figure-center"><p class="caption">Temporal calibration comparing expected versus observed days to the next medical token; the identity line (dashed) indicates high temporal precision.</p></section>
+<section class="slide level2">
+
 <h3 class="unnumbered" id="predictive-power">Predictive power</h3>
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/APS_results.svg" class="quarto-figure quarto-figure-center"></p>
-</figure>
-</div>
-</section></section>
+
+<img data-src="images/APS_Nature.svg" class="r-stretch quarto-figure-center"><p class="caption">APS across 7 clinical events at 30 and 365-day horizons (<em>n</em> = 100,000 held-out). Each individual’s embedding is sampled at a random time along their trajectory. Blue: logistic probes trained on a separate cohort of 100,000; orange: GPT zero-shot; grey: age/sex baseline.</p></section></section>
 <section>
-<section id="off-policy-evaluation" class="title-slide slide level1 center" data-number="3">
-<h1><span class="header-section-number">3</span> Off-Policy Evaluation</h1>
+<section id="use-case-off-policy-evaluation" class="title-slide slide level1 center" data-number="3">
+<h1><span class="header-section-number">3</span> Use Case: Off-Policy Evaluation</h1>
 
 </section>
 <section id="markov-decision-processes-and-off-policy-evaluation" class="slide level2 unnumbered scrollable">
@@ -418,266 +417,115 @@ Meilame Tayebjee
 <li class="fragment">We have access to a dataset of T-step trajectories <span class="math inline">\mathcal{D} = \{\tau^i\}_{i=1}^N</span> generated by an unknown <strong>behavioral policy</strong> <span class="math inline">\pi_b: \mathcal{S} \to \Delta(\mathcal{A})</span>.</li>
 <li class="fragment">We want to estimate the value <span class="math inline">V^{\pi_e}</span> of a <strong>target policy</strong> <span class="math inline">\pi_e: \mathcal{S} \to \Delta(\mathcal{A})</span> using only the dataset <span class="math inline">\mathcal{D}</span>.</li>
 </ul></li>
-<li class="fragment"><strong>Step-Weighted Importance Sampling estimator</strong>: <span class="math display">\hat{\rho}_{\mathrm{step}-\mathrm{WIS}}^{\pi_e}=\sum_{i=1}^n \sum_{t=0}^{T-1} \gamma^t \frac{\omega_{0: t}^{i} r_t^{i}}{\sum_{i=1}^n \omega_{0: t}^{i}}</span> where <span class="math inline">\omega_{0: t}^{i}=\prod_{t'=0}^t \frac{\pi_e(a_{t'}^{i} | s_{t'}^{i})}{\hat{\pi}_b(a_{t'}^{i} | s_{t'}^{i})}</span> is the importance weight of trajectory <span class="math inline">i</span> up to time <span class="math inline">t</span>.</li>
+<li class="fragment"><strong>Markov property</strong>: <span class="math inline">\Pr\{s_{t+1}=s', r_{t+1}=r \mid s_t, a_t\} = \Pr\{s_{t+1}=s', r_{t+1}=r \mid s_t, a_t, r_t, s_{t-1}, a_{t-1}, \ldots, r_1, s_0, a_0\}</span> — the future is conditionally independent of the past given the present state.</li>
 </ul>
-<p>See <span class="citation" data-cites="robust-ope">Farajtabar et al. (<a href="#/section" role="doc-biblioref" onclick="">2018</a>)</span> for more details on OPE estimators and their properties.</p>
 </section>
 <section id="in-our-case" class="slide level2 unnumbered">
 <h2>In our case</h2>
 
-<img data-src="images/fig1.svg" class="r-stretch"></section>
+<img data-src="images/fig1.svg" class="r-stretch"><ul>
+<li>Dataset: 2 years, discretized into 8 quarters; we define <span class="math inline">t=0</span> as the first day of 2017 and <span class="math inline">T=7</span> as October 1st, 2018.</li>
+<li><span class="math inline">\pi_e(1 | s_t) ≔ 0.99</span>: assign a PCP to a cohort of patients</li>
+</ul>
+</section>
+<section class="slide level2">
+
+<p><strong>Reinforcement learning framework:</strong></p>
+<ul>
+<li><strong>State vector <span class="math inline">s_t</span></strong>:</li>
+</ul>
+<p><span class="math display">s_t = \left[ \phi_t^\top,\ \mathbf{m}_t^\top,\ \mathbf{d}_t^\top,\ \mathbf{o}^\top \right]^\top</span></p>
+<ul>
+<li><span class="math inline">\phi_t \in \mathbb{R}^d</span> — generative GPT history embedding</li>
+<li><span class="math inline">\mathbf{m}_t \in \{0, 1\}^4</span> — binary vector of PCP affiliation status over the past 4 quarters</li>
+<li><span class="math inline">\mathbf{d}_t</span> — local health infrastructure features (density of active physicians relative to population within municipality or 10-min travel radius)</li>
+<li><span class="math inline">\mathbf{o}</span> — one-hot encoding of cohort membership</li>
+</ul>
+<p><strong>Assumption</strong>: the state vector <span class="math inline">s_t</span> satisfies the Markov property, making it a sufficient statistic of the patient’s trajectory up to time <span class="math inline">t</span>, and enables to predict the next state and the next reward given the current state and action.</p>
+</section>
 <section class="slide level2">
 
 <ul>
-<li>Reinforcement learning framework
-<ul>
-<li><strong>State</strong>: embedding of the patient at the end of each quarter
-<ul>
-<li>Sufficient statistic that summarizes the patient’s history</li>
-<li>Markov assumption: the future only depends on the current state</li>
-</ul></li>
 <li><strong>Action</strong>: whether the patient has a PCP or not at the beginning of next quarter</li>
-<li><strong>Reward</strong>: number of emergency visits within the next quarter (or hospitalization entries)</li>
-</ul></li>
+<li><strong>Reward</strong>: number of emergency visits within the next quarter (or hospitalization entries, or whether death occurs)</li>
 </ul>
 </section>
-<section id="estimation-of-the-behavioral-policy" class="slide level2 unnumbered">
-<h2>Estimation of the behavioral policy</h2>
-<p>First step of the OPE pipeline: regress <span class="math inline">a_{i,t}</span> (PCP affiliation) on <span class="math inline">s_{i,t}</span> (embeddings) to estimate <span class="math inline">\hat{\pi}_b(a|s)</span>, the behavioral policy.</p>
-
-<img data-src="images/fig_calib.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
-<section id="vpi_b-and-pi_e" class="slide level2 unnumbered">
-<h2><span class="math inline">V^{\pi_b}</span> and <span class="math inline">\pi_e</span></h2>
+<section id="doubly-robust-evaluation" class="slide level2 unnumbered">
+<h2>Doubly robust evaluation</h2>
 <ul>
-<li><p>The value of the behavioral policy can be estimated using the trajectories in the dataset <span class="math inline">\mathcal{D}</span>:<br>
-<span class="math display">V^{\pi_b} \approx V^{\hat{\pi}_b} \coloneqq \frac{1}{N} \sum_{i=1}^N \sum_{t=0}^{T-1} \gamma^t r_t^i</span></p></li>
-<li><p>The policies we want to study: <span class="math inline">\pi_e^\eta(1|s) = \max(\eta, \hat{\pi}_b(1|s))</span> for <span class="math inline">\eta = 0 \dots 0.99</span></p></li>
+<li class="fragment"><p><strong>Goal</strong>: estimate the value <span class="math inline">V^{\pi_e}</span> from data collected under <span class="math inline">\pi_b</span>, without running <span class="math inline">\pi_e</span>.</p></li>
+<li class="fragment"><p>Two classical estimators, each with a flaw:</p>
+<ul>
+<li class="fragment"><strong>Direct Method (DM)</strong>: fit <span class="math inline">q_t(s,a)</span>, plug in. Biased if <span class="math inline">q_t</span> is misspecified.</li>
+<li class="fragment"><strong>Importance Sampling (IS)</strong>: reweight trajectories by <span class="math inline">\pi_e / \pi_b</span>. High variance.</li>
+</ul></li>
+<li class="fragment"><p><strong>Doubly Robust (DR)</strong> <span class="citation" data-cites="kallus2020double">(<a href="#/section" role="doc-biblioref" onclick="">Kallus and Uehara 2020</a>)</span>: combines both. Consistent if <em>either</em> nuisance is well-estimated.</p></li>
 </ul>
 </section>
-<section id="results" class="slide level2 unnumbered">
-<h2>Results</h2>
-<h3 class="unnumbered" id="general-population">General population</h3>
-
-<img data-src="images/fig_OPE.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
 <section class="slide level2">
 
-<h3 class="unnumbered" id="geographical-heterogeneity">Geographical heterogeneity</h3>
-<div style="display: flex; justify-content: center; align-items: center; height: 80%;">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="images/plot_maps.svg"></p>
-<figcaption>Impact of policy <span class="math inline">\pi_e^{0.75}</span></figcaption>
-</figure>
-</div>
-</div>
+<p><strong>Two nuisance components to estimate:</strong></p>
+<ul>
+<li class="fragment"><strong>State-action value function</strong> <span class="math inline">q_t</span>: expected cumulative future return under <span class="math inline">\pi_e</span></li>
+</ul>
+<p><span class="math display">q_t(s,a) = \mathbb{E}_{\pi_e}\!\left[ \sum_{t'=t}^T r_{t'} \,\middle|\, s_t = s,\, a_t = a \right]</span></p>
+<ul>
+<li class="fragment"><strong>Marginalized density ratio</strong> <span class="math inline">\mu_t</span>: cumulative importance weight up to time <span class="math inline">t</span></li>
+</ul>
+<p><span class="math display">\mu_t(s,a) = \mathbb{E}_{\pi_e}\!\left[ \prod_{t'=0}^t \frac{\pi_e(a_{t'}|s_{t'})}{\pi_b(a_{t'}|s_{t'})} \,\middle|\, s_t = s,\, a_t = a \right]</span></p>
 </section>
 <section class="slide level2">
 
-<table class="caption-top">
-<colgroup>
-<col style="width: 16%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Subpopulation</th>
-<th style="text-align: center;">Emergency (%)</th>
-<th style="text-align: center;">Hospit. (%)</th>
-<th style="text-align: center;">Size</th>
-<th style="text-align: center;">PCP</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><em>General Population</em></td>
-<td style="text-align: center;">(31.8–18.8)</td>
-<td style="text-align: center;">(35.0–23.7)</td>
-<td style="text-align: center;">10.39</td>
-<td style="text-align: center;">87.4%</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><strong>Age Group</strong></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;20–29</td>
-<td style="text-align: center;">(25.1–22.5)</td>
-<td style="text-align: center;">(29.3–16.1)</td>
-<td style="text-align: center;">1.38</td>
-<td style="text-align: center;">72.9%</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;30–39</td>
-<td style="text-align: center;">(1.1)–0.1</td>
-<td style="text-align: center;">(0.5)–3.0</td>
-<td style="text-align: center;">1.65</td>
-<td style="text-align: center;">84.6%</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;40–49</td>
-<td style="text-align: center;">0.4–1.5</td>
-<td style="text-align: center;">2.0–7.9</td>
-<td style="text-align: center;">1.65</td>
-<td style="text-align: center;">88.4%</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;50–59</td>
-<td style="text-align: center;">(4.9)–1.3</td>
-<td style="text-align: center;">(4.7)–3.0</td>
-<td style="text-align: center;">1.70</td>
-<td style="text-align: center;">91.2%</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;60–69</td>
-<td style="text-align: center;">(18.5–7.7)</td>
-<td style="text-align: center;">(20.0–8.3)</td>
-<td style="text-align: center;">1.55</td>
-<td style="text-align: center;">92.7%</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;70–79</td>
-<td style="text-align: center;">(16.3–6.6)</td>
-<td style="text-align: center;">(17.5–7.9)</td>
-<td style="text-align: center;">1.26</td>
-<td style="text-align: center;">93.8%</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;80–89</td>
-<td style="text-align: center;">(37.9–17.1)</td>
-<td style="text-align: center;">(37.6–18.6)</td>
-<td style="text-align: center;">0.76</td>
-<td style="text-align: center;">92.1%</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;90+</td>
-<td style="text-align: center;">(18.5–14.2)</td>
-<td style="text-align: center;">(19.3–15.2)</td>
-<td style="text-align: center;">0.39</td>
-<td style="text-align: center;">82.7%</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;"><strong>Sex</strong></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;Male</td>
-<td style="text-align: center;">(19.3–17.0)</td>
-<td style="text-align: center;">(24.2–21.6)</td>
-<td style="text-align: center;">5.00</td>
-<td style="text-align: center;">85.2%</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;Female</td>
-<td style="text-align: center;">(33.1–19.5)</td>
-<td style="text-align: center;">(35.3–24.4)</td>
-<td style="text-align: center;">5.38</td>
-<td style="text-align: center;">89.5%</td>
-</tr>
-</tbody>
-</table>
+<h3 class="unnumbered" id="estimating-mu_t-behavior-policy-first">Estimating <span class="math inline">\mu_t</span>: behavior policy first</h3>
+<ul>
+<li class="fragment"><p>Estimate <span class="math inline">\hat{\pi}_b</span> as a <strong>binary classifier</strong>: features are the state <span class="math inline">s_t</span>, target is whether the patient has a PCP.</p></li>
+<li class="fragment"><p>Compute the product of importance weights along each trajectory: <span class="math display">\prod_{t'=0}^t \frac{\pi_e(a_{t'}|s_{t'})}{\hat{\pi}_b(a_{t'}|s_{t'})}</span></p></li>
+<li class="fragment"><p>Learn a <strong>single</strong> <span class="math inline">\hat{\mu}</span> by regressing these products on features <span class="math inline">(t, s_t, a_t)</span>, avoiding one model per time step.</p></li>
+</ul>
 </section>
 <section class="slide level2">
 
-<table class="caption-top">
-<colgroup>
-<col style="width: 16%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-<col style="width: 20%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">Subpopulation</th>
-<th style="text-align: center;">Emergency (%)</th>
-<th style="text-align: center;">Hospit. (%)</th>
-<th style="text-align: center;">Size</th>
-<th style="text-align: center;">PCP</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;"><em>General Population</em></td>
-<td style="text-align: center;">(31.8–18.8)</td>
-<td style="text-align: center;">(35.0–23.7)</td>
-<td style="text-align: center;">10.39</td>
-<td style="text-align: center;">87.4%</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;"><strong>Clinical (ALD)</strong></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;Type 2 diabetes</td>
-<td style="text-align: center;">(30.5–21.2)</td>
-<td style="text-align: center;">(34.0–25.5)</td>
-<td style="text-align: center;">0.59</td>
-<td style="text-align: center;">87.4%</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;Primary hypertension</td>
-<td style="text-align: center;">(32.9–17.3)</td>
-<td style="text-align: center;">(36.2–21.5)</td>
-<td style="text-align: center;">0.16</td>
-<td style="text-align: center;">87.4%</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;Mal. neoplasm of breast</td>
-<td style="text-align: center;">(17.2–9.6)</td>
-<td style="text-align: center;">(21.9–13.9)</td>
-<td style="text-align: center;">0.18</td>
-<td style="text-align: center;">87.4%</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;Mal. neoplasm of prostate</td>
-<td style="text-align: center;">(25.2–5.1)</td>
-<td style="text-align: center;">(28.5–14.7)</td>
-<td style="text-align: center;">0.12</td>
-<td style="text-align: center;">87.4%</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;Depressive episodes</td>
-<td style="text-align: center;">(18.7–4.3)</td>
-<td style="text-align: center;">(25.6–16.9)</td>
-<td style="text-align: center;">0.11</td>
-<td style="text-align: center;">87.6%</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;Stroke</td>
-<td style="text-align: center;">(15.2–3.7)</td>
-<td style="text-align: center;">(23.7–15.1)</td>
-<td style="text-align: center;">0.09</td>
-<td style="text-align: center;">87.4%</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;Dementia in Alzheimer</td>
-<td style="text-align: center;">(20.1–7.8)</td>
-<td style="text-align: center;">(25.6–14.0)</td>
-<td style="text-align: center;">0.08</td>
-<td style="text-align: center;">87.4%</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">&nbsp;&nbsp;&nbsp;&nbsp;Heart failure</td>
-<td style="text-align: center;">(15.2)–1.9</td>
-<td style="text-align: center;">(24.4–13.2)</td>
-<td style="text-align: center;">0.08</td>
-<td style="text-align: center;">87.4%</td>
-</tr>
-</tbody>
-</table>
-</section></section>
+<h3 class="unnumbered" id="estimating-q_t-backward-recursion">Estimating <span class="math inline">q_t</span>: backward recursion</h3>
+<ul>
+<li class="fragment"><p>Train backwards from <span class="math inline">t = T</span> down to <span class="math inline">t = 0</span>.</p></li>
+<li class="fragment"><p>At <span class="math inline">t = T</span>: regress <span class="math inline">r_T</span> on <span class="math inline">(s_T, a_T)</span> to get <span class="math inline">\hat{q}_T</span>.</p></li>
+<li class="fragment"><p>At <span class="math inline">t &lt; T</span>: regress the <strong>pseudo-outcome</strong> <span class="math display">r_t + \pi_e(0|s_{t+1})\,\hat{q}_{t+1}(s_{t+1}, 0) + \pi_e(1|s_{t+1})\,\hat{q}_{t+1}(s_{t+1}, 1)</span> on <span class="math inline">(s_t, a_t)</span> to get <span class="math inline">\hat{q}_t</span>.</p></li>
+<li class="fragment"><p>Loss: Poisson regression for counts (emergencies, hospitalizations), binary cross-entropy for death.</p></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 class="unnumbered" id="cross-fitting-and-median-ensemble">Cross-fitting and median ensemble</h3>
+<ul>
+<li class="fragment"><p><span class="math inline">N \approx 50\text{M}</span> individuals split into <span class="math inline">K = 100</span> folds (~500K each). One model pair <span class="math inline">(\hat{q}^k, \hat{\mu}^k)</span> per fold.</p></li>
+<li class="fragment"><p>For individual <span class="math inline">i</span> in fold <span class="math inline">k</span>, nuisances are evaluated using the <strong>out-of-fold median</strong>:</p></li>
+</ul>
+<p><span class="math display">\hat{q}_t^{(-k)}(s,a) := \operatorname{median}\!\left(\{\hat{q}_t^j(s,a)\}_{j \neq k}\right)</span></p>
+<ul>
+<li class="fragment"><p>Median over <span class="math inline">K-1</span> models rather than mean: robust to outlier predictions <span class="citation" data-cites="chernozhukov2018double">(<a href="#/section" role="doc-biblioref" onclick="">Chernozhukov et al. 2018</a>)</span>.</p></li>
+<li class="fragment"><p>GPT embeddings follow the same split-sample logic.</p></li>
+</ul>
+</section>
+<section class="slide level2">
+
+<h3 class="unnumbered" id="the-dr-estimator">The DR estimator</h3>
+<p>For each individual <span class="math inline">i</span>, the <strong>influence function</strong> <span class="math inline">\psi_i</span> is:</p>
+<p><span class="math display">\psi_i = \sum_{t=0}^T \hat{\mu}_t^{(-k)}(s_t^i, a_t^i)\bigl[r_t^i - \hat{q}_t^{(-k)}(s_t^i, a_t^i)\bigr] + \hat{\mu}_{t-1}^{(-k)}\!\left[\sum_{a}\hat{q}_t^{(-k)}(s_t^i, a)\,\pi_e(a|s_t^i)\right]</span></p>
+<p>with <span class="math inline">\hat{\mu}_{-1}^{(-k)} \equiv 1</span>.</p>
+<p>The <strong>policy value estimate</strong> is <span class="math inline">\hat{\rho}_{\pi_e} = \frac{1}{N}\sum_i \psi_i</span>, with standard error <span class="math inline">\hat{\sigma}/\sqrt{N}</span>.</p>
+<p>Valid inference comes directly from the <strong>sample variance</strong> of the <span class="math inline">\psi_i</span>: no bootstrap needed.</p>
+</section>
+<section class="slide level2">
+
+<h3 class="unnumbered" id="results">Results</h3>
+<p><strong>Validation of nuisance parameters</strong>:</p>
+
+<img data-src="images/gof_ope.png" class="r-stretch quarto-figure-center"><p class="caption">Out-of-fold diagnostics for the three nuisance functions. <strong>Left:</strong> <span class="math inline">\hat{\pi}_b</span> calibration and <span class="math inline">\hat{\mu}</span> residuals confirm reliable trajectory re-weighting. <strong>Top-right:</strong> rank-ordered <span class="math inline">\hat{q}_7</span> estimates — observed deaths (red) concentrate at the highest predicted-risk deciles, confirming mortality discrimination. <strong>Bottom:</strong> feature importance shows GPT history embeddings (<span class="math inline">\phi_t</span>) are the primary predictors, secondary only to biological sex (<span class="math inline">\mathbf{o}^1</span>).</p></section>
+<section class="slide level2">
+
+<p><strong>OPE estimates</strong>:</p>
+
+<img data-src="images/cohort_impact_elasticity_plot.png" class="r-stretch quarto-figure-center"><p class="caption">Doubly-robust OPE estimates of the G4H intervention effect across cohort subgroups and three outcomes (Emergency, Hospitalization, Death). Bars show the estimated response rate (95 % CI); green = beneficial reduction, red = adverse increase.</p></section></section>
 <section>
 <section id="avenues-of-work" class="title-slide slide level1 center" data-number="4">
 <h1><span class="header-section-number">4</span> Avenues of work</h1>
@@ -686,23 +534,20 @@ Meilame Tayebjee
 <section id="future-work" class="slide level2 unnumbered">
 <h2>Future work</h2>
 <ul>
-<li class="fragment">Other actions
+<li class="fragment"><strong>Other OPE use cases</strong>
 <ul>
 <li class="fragment">HAS recommendations</li>
+<li class="fragment">Other rewards: total expenditures…</li>
 </ul></li>
-<li class="fragment">Other rewards
+<li class="fragment"><strong>Other GPT for medical pathways use cases:</strong>
 <ul>
-<li class="fragment">Total expenditures…</li>
+<li class="fragment">causal inference</li>
+<li class="fragment"><strong>generation of synthetic trajectories</strong></li>
 </ul></li>
-<li class="fragment">Apply the method to specific subpopulations
+<li class="fragment"><strong>Improve the foudation model:</strong>
 <ul>
-<li class="fragment">Diabetes</li>
-<li class="fragment">Heart failure</li>
-</ul></li>
-<li class="fragment">Enriching the embedding
-<ul>
-<li class="fragment">Smarter training losses</li>
-<li class="fragment">Action as token</li>
+<li class="fragment">Benchmarks</li>
+<li class="fragment">Make the embeddings <em>really</em> Markovian…</li>
 </ul></li>
 </ul>
 </section></section>
@@ -714,8 +559,11 @@ Meilame Tayebjee
 <section id="section" class="slide level2 unnumbered smaller scrollable">
 <h2></h2>
 <div id="refs" class="references csl-bib-body hanging-indent" role="list">
-<div id="ref-robust-ope" class="csl-entry" role="listitem">
-Farajtabar, Mehrdad, Yinlam Chow, and Mohammad Ghavamzadeh. 2018. <span>‘More Robust Doubly Robust Off-Policy Evaluation’</span>. In <em>Proceedings of the 35th International Conference on Machine Learning</em>, edited by Jennifer Dy and Andreas Krause, vol. 80. Proceedings of Machine Learning Research. PMLR. <a href="https://proceedings.mlr.press/v80/farajtabar18a.html">https://proceedings.mlr.press/v80/farajtabar18a.html</a>.
+<div id="ref-chernozhukov2018double" class="csl-entry" role="listitem">
+Chernozhukov, Victor, Denis Chetverikov, Mert Demirer, et al. 2018. <em>Double/Debiased Machine Learning for Treatment and Structural Parameters</em>. Oxford University Press Oxford, UK.
+</div>
+<div id="ref-kallus2020double" class="csl-entry" role="listitem">
+Kallus, Nathan, and Masatoshi Uehara. 2020. <span>‘Double Reinforcement Learning for Efficient Off-Policy Evaluation in Markov Decision Processes’</span>. <em>Journal of Machine Learning Research</em> 21 (167): 1–63.
 </div>
 <div id="ref-Shmatko2025" class="csl-entry" role="listitem">
 Shmatko, Artem, Alexander Wolfgang Jung, Kumar Gaurav, et al. 2025. <span>‘Learning the Natural History of Human Disease with Generative Transformers’</span>. <em>Nature</em>, ahead of print, September 17. <a href="https://doi.org/10.1038/s41586-025-09529-3">https://doi.org/10.1038/s41586-025-09529-3</a>.
@@ -724,9 +572,13 @@ Shmatko, Artem, Alexander Wolfgang Jung, Kumar Gaurav, et al. 2025. <span>‘Lea
 Waxler, Shane, Paul Blazek, Davis White, et al. 2025. <em>Generative <span>Medical Event Models Improve</span> with <span>Scale</span></em>. arXiv:2508.12104. arXiv. <a href="https://doi.org/10.48550/arXiv.2508.12104">https://doi.org/10.48550/arXiv.2508.12104</a>.
 </div>
 </div>
+</section>
+<section id="pres.-link" class="slide level2 unnumbered">
+<h2>Pres.&nbsp;link</h2>
 
 
-</section></section>
+
+<img data-src="images/QRcode.svg" class="quarto-figure quarto-figure-center r-stretch" width="200"></section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">
