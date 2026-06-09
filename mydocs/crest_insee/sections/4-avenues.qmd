@@ -9,7 +9,7 @@
   - causal inference
   - **generation of synthetic trajectories**
 
-- **Improve the foudation model:**
+- **Improve the foundation model:**
   - Benchmarks
   - Make the embeddings *really* Markovian...
 :::
