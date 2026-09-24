@@ -9,8 +9,8 @@
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.10.18">
 
-  <meta name="dcterms.date" content="2026-07-27">
-  <title>Graph4Health - Medical pathway embeddings and causal inference on health outcomes – TFC - Presentation</title>
+  <meta name="dcterms.date" content="2026-06-10">
+  <title>Graph4Health - Medical pathway embeddings and causal inference on health outcomes – Journées I2E</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -170,7 +170,7 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">TFC - Presentation</h1>
+  <h1 class="title">Journées I2E</h1>
   <p class="subtitle"><strong>Policy evaluation using Transformer-based medical pathway embeddings</strong></p>
 
 <div class="quarto-title-authors">
@@ -181,16 +181,57 @@ Meilame Tayebjee
 </div>
 </div>
 
-  <p class="date">27 July 2026</p>
+  <p class="date">10 June 2026</p>
 </section><section id="TOC">
 <nav role="doc-toc"> 
 <h2 id="toc-title">Table of contents</h2>
 <ul>
-<li><a href="#/introduction" id="/toc-introduction"><span class="header-section-number">1</span> Introduction</a></li>
-<li><a href="#/transformer-based-models-for-medical-pathway-embedding" id="/toc-transformer-based-models-for-medical-pathway-embedding"><span class="header-section-number">2</span> Transformer-based models for medical pathway embedding</a></li>
-<li><a href="#/use-case-off-policy-evaluation" id="/toc-use-case-off-policy-evaluation"><span class="header-section-number">3</span> Use Case: Off-Policy Evaluation</a></li>
-<li><a href="#/avenues-of-work" id="/toc-avenues-of-work"><span class="header-section-number">4</span> Avenues of work</a></li>
-<li><a href="#/references" id="/toc-references">References</a></li>
+<li><a href="#/introduction" id="/toc-introduction"><span class="header-section-number">1</span> Introduction</a>
+<ul>
+<li><a href="#/about-me" id="/toc-about-me">About me</a></li>
+<li><a href="#/broader-view-of-the-graph4health-anr" id="/toc-broader-view-of-the-graph4health-anr">Broader view of the Graph4Health ANR</a></li>
+</ul></li>
+<li><a href="#/transformer-based-models-for-medical-pathway-embedding" id="/toc-transformer-based-models-for-medical-pathway-embedding"><span class="header-section-number">2</span> Transformer-based models for medical pathway embedding</a>
+<ul>
+<li><a href="#/setting" id="/toc-setting">Setting</a></li>
+
+
+<li><a href="#/objectives" id="/toc-objectives">Objectives</a></li>
+<li><a href="#/model" id="/toc-model">Model</a></li>
+<li><a href="#/pre-training" id="/toc-pre-training">Pre-training</a></li>
+
+<li><a href="#/overview" id="/toc-overview">Overview</a></li>
+<li><a href="#/validating-the-model" id="/toc-validating-the-model">Validating the model</a></li>
+
+
+
+</ul></li>
+<li><a href="#/use-case-off-policy-evaluation" id="/toc-use-case-off-policy-evaluation"><span class="header-section-number">3</span> Use Case: Off-Policy Evaluation</a>
+<ul>
+<li><a href="#/markov-decision-processes-and-off-policy-evaluation" id="/toc-markov-decision-processes-and-off-policy-evaluation">Markov Decision Processes and Off-Policy Evaluation</a></li>
+
+
+<li><a href="#/in-our-case" id="/toc-in-our-case">In our case</a></li>
+
+
+<li><a href="#/doubly-robust-evaluation" id="/toc-doubly-robust-evaluation">Doubly robust evaluation</a></li>
+
+
+
+
+
+
+
+</ul></li>
+<li><a href="#/avenues-of-work" id="/toc-avenues-of-work"><span class="header-section-number">4</span> Avenues of work</a>
+<ul>
+<li><a href="#/future-work" id="/toc-future-work">Future work</a></li>
+</ul></li>
+<li><a href="#/references" id="/toc-references">References</a>
+<ul>
+
+
+</ul></li>
 </ul>
 </nav>
 </section>
@@ -510,48 +551,9 @@ Meilame Tayebjee
 </ul></li>
 <li class="fragment"><strong>Improve the foundation model:</strong>
 <ul>
-<li class="fragment">Benchmarks <strong>- Make the embeddings <em>really</em> Markovian…</strong></li>
+<li class="fragment">Benchmarks</li>
+<li class="fragment">Make the embeddings <em>really</em> Markovian…</li>
 </ul></li>
-</ul>
-</section>
-<section id="marble-making-the-state-really-markovian" class="slide level2 unnumbered">
-<h2>MarBLE: making the state <em>really</em> Markovian</h2>
-<p><strong>The problem (why).</strong></p>
-<ul>
-<li class="fragment"><p>The whole OPE pipeline rests on <strong>one assumption</strong>: the state <span class="math inline">s_t</span> (built from the GPT history embedding <span class="math inline">\phi_t</span>) is <strong>Markov</strong>, i.e.&nbsp;a sufficient statistic of the trajectory so far.</p></li>
-<li class="fragment"><p>But an unconstrained causal Transformer has <strong>no bounded Markov state</strong>. Its representation at position <span class="math inline">t</span> is a function of the <em>entire</em> past, diffused across a growing residual stream.</p></li>
-<li class="fragment"><p><span class="math inline">\phi_t</span> is just a lossy read of that stream: nothing forces “the future is conditionally independent of the past given <span class="math inline">\phi_t</span>”.</p></li>
-<li class="fragment"><p>We want a <strong>fixed-size running summary</strong> <span class="math inline">h_t</span> that is a genuine sufficient statistic, exactly what an OPE estimator (or any RL value function) needs.</p></li>
-</ul>
-</section>
-<section id="marble-a-markovian-transformer" class="slide level2 unnumbered">
-<h2>MarBLE: a Markovian Transformer</h2>
-<p><strong>The method (what).</strong></p>
-<p>MarBLE wraps our decoder-only GPT with a bounded <strong>history token</strong> <span class="math inline">h_t</span>, refreshed at chosen boundaries (a quarter, a hospital admission).</p>
-
-<img data-src="images/marble_arch.svg" style="width:85.0%" class="r-stretch quarto-figure-center"><p class="caption">Block-recurrent structure: events feed into a per-block summary <span class="math inline">h_t</span>, and <span class="math inline">h_{t-1}</span> is the only path from the past into block <span class="math inline">t</span>.</p></section>
-<section class="slide level2">
-
-<p>Two components, each targeting a <strong>precise sense of sufficiency</strong>:</p>
-<ul>
-<li class="fragment"><p><strong>Block-diagonal Markov mask</strong> gives <strong>predictive sufficiency</strong>: the future is conditionally independent of the past given <span class="math inline">h_t</span>. The chain is Markov <em>by construction</em>.</p></li>
-<li class="fragment"><p><strong>Discounted backward reconstruction (DBR)</strong> loss gives <strong>retrospective sufficiency</strong>: <span class="math inline">h_t</span> is a decodable, recency-weighted record of the events it summarized.</p></li>
-</ul>
-</section>
-<section id="how-it-works" class="slide level2 unnumbered">
-<h2>How it works</h2>
-<ul>
-<li class="fragment"><p>Insert learned history tokens at boundaries: block <span class="math inline">t</span> is <span class="math inline">B_t = (h_{t-1}, e_{t,1}, \dots, e_{t,k_t})</span>, with recurrence <span class="math inline">h_t = \mathrm{LayerNorm}(W z_{t,k_t} + b)</span>.</p></li>
-<li class="fragment"><p><strong>Block-diagonal causal mask</strong>: no event in block <span class="math inline">t</span> may attend before <span class="math inline">h_{t-1}</span>. So <span class="math inline">h_{t-1}</span> is the <em>sole gateway</em> from the past, making <span class="math inline">h_0 \to h_1 \to \cdots</span> strictly Markov (distribution-free, no change to the attention operator).</p></li>
-<li class="fragment"><p><strong>Forward loss</strong>: the same TPP likelihood as our GPT (multi-label BCE + time-to-event). Under realizability, its minimizer makes <span class="math inline">h_t</span> predictively sufficient.</p></li>
-</ul>
-</section>
-<section class="slide level2">
-
-<ul>
-<li class="fragment"><p><strong>DBR loss</strong>: a backward decoder reconstructs each block’s recency-discounted per-mark intensity, with an <em>exact</em>, zero-variance closed form: <span class="math display">\mathcal{L}^{(t)}_{\text{back}} = \sum_{v} r_v\, E(\Delta T) - \sum_{v} \tilde{c}_v \log r_v, \qquad \tilde{c}_v = \sum_{j:\,y_j=v} e^{-\beta u_j}</span> where <span class="math inline">u_j</span> is the backward age of event <span class="math inline">j</span> and <span class="math inline">\beta</span> sets the memory horizon.</p></li>
-<li class="fragment"><p><strong>Training</strong>: parallel within blocks, a short recurrent scan across them. <strong>Inference</strong> is streaming: constant memory and per-event compute in the history length.</p></li>
-<li class="fragment"><p>Backbone-agnostic: the mask and DBR attach to <em>any</em> decoder-only model.</p></li>
 </ul>
 </section></section>
 <section>
