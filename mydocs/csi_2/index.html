@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-GB" xml:lang="en-GB"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Meilame Tayebjee">
+<meta name="dcterms.date" content="2026-09-24">
+
+<title>Policy evaluation using Transformer-based medical pathway embeddings – Graph4Health - Medical pathway embeddings and causal inference on health outcomes</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-a0a9983a8253e9dd9a07b0aaf6515d1e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Graph4Health - Medical pathway embeddings and causal inference on health outcomes</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/meilame-tayebjee/G4H-Report"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#sec-intro" id="toc-sec-intro" class="nav-link active" data-scroll-target="#sec-intro"><span class="header-section-number">1</span> Introduction</a>
+  <ul class="collapse">
+  <li><a href="#context" id="toc-context" class="nav-link" data-scroll-target="#context"><span class="header-section-number">1.1</span> Context</a></li>
+  <li><a href="#sec-evolution" id="toc-sec-evolution" class="nav-link" data-scroll-target="#sec-evolution"><span class="header-section-number">1.2</span> How the project evolved</a></li>
+  </ul></li>
+  <li><a href="#sec-gpt" id="toc-sec-gpt" class="nav-link" data-scroll-target="#sec-gpt"><span class="header-section-number">2</span> A generative foundation model of French medical pathways</a>
+  <ul class="collapse">
+  <li><a href="#data-and-model" id="toc-data-and-model" class="nav-link" data-scroll-target="#data-and-model"><span class="header-section-number">2.1</span> Data and model</a></li>
+  <li><a href="#pre-training-objective" id="toc-pre-training-objective" class="nav-link" data-scroll-target="#pre-training-objective"><span class="header-section-number">2.2</span> Pre-training objective</a></li>
+  <li><a href="#validation" id="toc-validation" class="nav-link" data-scroll-target="#validation"><span class="header-section-number">2.3</span> Validation</a></li>
+  </ul></li>
+  <li><a href="#sec-ope" id="toc-sec-ope" class="nav-link" data-scroll-target="#sec-ope"><span class="header-section-number">3</span> Use case: off-policy evaluation of PCP assignment</a>
+  <ul class="collapse">
+  <li><a href="#framework" id="toc-framework" class="nav-link" data-scroll-target="#framework"><span class="header-section-number">3.1</span> Framework</a></li>
+  <li><a href="#doubly-robust-estimation" id="toc-doubly-robust-estimation" class="nav-link" data-scroll-target="#doubly-robust-estimation"><span class="header-section-number">3.2</span> Doubly robust estimation</a></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results"><span class="header-section-number">3.3</span> Results</a></li>
+  </ul></li>
+  <li><a href="#sec-future" id="toc-sec-future" class="nav-link" data-scroll-target="#sec-future"><span class="header-section-number">4</span> Ongoing and future work</a>
+  <ul class="collapse">
+  <li><a href="#marble-a-markovian-state-for-event-sequences" id="toc-marble-a-markovian-state-for-event-sequences" class="nav-link" data-scroll-target="#marble-a-markovian-state-for-event-sequences"><span class="header-section-number">4.1</span> MarBLE: a Markovian state for event sequences</a></li>
+  <li><a href="#a-pre-training-objective-for-simultaneous-events" id="toc-a-pre-training-objective-for-simultaneous-events" class="nav-link" data-scroll-target="#a-pre-training-objective-for-simultaneous-events"><span class="header-section-number">4.2</span> A pre-training objective for simultaneous events</a></li>
+  <li><a href="#a-zipfian-tokenizer-for-event-logs" id="toc-a-zipfian-tokenizer-for-event-logs" class="nav-link" data-scroll-target="#a-zipfian-tokenizer-for-event-logs"><span class="header-section-number">4.3</span> A Zipfian tokenizer for event logs</a></li>
+  </ul></li>
+  <li><a href="#communications-and-publications" id="toc-communications-and-publications" class="nav-link" data-scroll-target="#communications-and-publications">Communications and publications</a></li>
+  <li><a href="#short-cv" id="toc-short-cv" class="nav-link" data-scroll-target="#short-cv">Short CV</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+<div class="toc-actions"><ul class="collapse"><li><a href="https://github.com/meilame-tayebjee/G4H-Report/blob/main/mydocs/csi_2/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/meilame-tayebjee/G4H-Report/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/meilame-tayebjee/G4H-Report/edit/main/mydocs/csi_2/index.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li></ul></div><div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="CSI2-manuscript.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div><div class="quarto-other-links"><h2>Other Links</h2><ul><li><a href="../csi_slides_2/index.html"><i class="bi bi-easel"></i>Committee slides</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Policy evaluation using Transformer-based medical pathway embeddings</h1>
+<p class="subtitle lead">Second-year PhD committee — progress manuscript</p>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Author</div>
+  <div class="quarto-title-meta-heading">Affiliations</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Meilame Tayebjee </p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            CREST (ENSAE, Institut Polytechnique de Paris)
+          </p>
+        <p class="affiliation">
+            Insee
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">24 September 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+<div>
+  <div class="abstract">
+    <div class="block-title">Abstract</div>
+    <p>This PhD (Graph4Health ANR project, supervised by Guillaume Lecué, CREST, and Gaël Varoquaux, Inria) studies how Transformer-based representations of medical pathways can support policy evaluation on the French national health data system (SNDS). In the second year we moved from a first time-aware GPT and a static treatment-effect plan to a validated, full-vocabulary generative model whose embeddings serve as the state of a Markov decision process, in which we estimated the value of giving every patient a primary care provider with a doubly robust off-policy estimator on about 50 million individuals. This application exposed three weaknesses, each now the subject of a paper in preparation: a state that is not Markov (MarBLE), a pre-training loss unsuited to simultaneous events (discrete-time competing risks), and an inherited vocabulary (ZipfTok).</p>
+  </div>
+</div>
+
+
+</header>
+
+
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>The slides presented at the committee are available <a href="https://meilame-tayebjee.github.io/G4H-Report/mydocs/csi_slides_2/">here</a>.</p>
+</div>
+</div>
+</div>
+<section id="sec-intro" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
+<section id="context" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="context"><span class="header-section-number">1.1</span> Context</h2>
+<p>This PhD in computer science started in September 2024. I work on it part-time alongside my position as a data scientist at Insee’s AI &amp; Data Science Innovation Lab. It is part of the <strong>Graph4Health</strong> ANR project, which studies how the supply of healthcare, and its geographic distribution, affects health outcomes, and which policies could make the French healthcare system more efficient. The project uses classical econometric tools and deep learning methods on 11 years of the exhaustive SNDS: about 70 million patients, with their consultations, procedures, hospital stays, medications and deaths.</p>
+<p>My part of the project is methodological. Downstream causal estimators need each patient’s history as a fixed-size vector, together with a treatment and an outcome. Medical pathways are hard to turn into such vectors. They are <strong>unstructured</strong>, like text (sequences of codes from several administrative classifications), but <strong>irregular in time</strong>, unlike text (gaps range from zero to several years), and many events <strong>share a timestamp</strong> (a pharmacy delivery or a hospital stay emits several codes at once).</p>
+<p>The thesis therefore builds a <em>foundation model</em> of medical pathways whose representations summarise a patient’s history <em>at any date</em>, plugs them into causal and policy estimators, and studies what the estimators need from them. Our running application is the <em>médecin traitant</em> (declared primary care provider, PCP). Every year about 1,000 French GPs retire or die, and each is the PCP of about 1,000 patients.</p>
+</section>
+<section id="sec-evolution" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="sec-evolution"><span class="header-section-number">1.2</span> How the project evolved</h2>
+<p><a href="#tbl-evolution" class="quarto-xref">Table&nbsp;1</a> compares the state of the project at the first committee (October 2025) with its state today. It also lists what comes next (<a href="#sec-future" class="quarto-xref">Section&nbsp;4</a>). The thesis title changed from <em>Embedding medical pathways for causal inference on healthcare supply shocks and patient outcomes</em> to <em>Policy evaluation using Transformer-based medical pathway embeddings</em>. The change reflects the main shift of the year: from a one-shot treatment effect to the evaluation of a <strong>sequential policy</strong>.</p>
+<div id="tbl-evolution" class="quarto-float quarto-figure quarto-figure-center anchored" data-tbl-colwidths="[13,27,32,28]">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-evolution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: The project at the first committee, today, and next.
+</figcaption>
+<div aria-describedby="tbl-evolution-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 27%">
+<col style="width: 32%">
+<col style="width: 28%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>End of year 1 (Oct.&nbsp;2025)</th>
+<th>End of year 2 (now)</th>
+<th>Next (<a href="#sec-future" class="quarto-xref">Section&nbsp;4</a>)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Data</strong></td>
+<td>Consultations and medications</td>
+<td>Adds procedures, hospital stays (ICD-10 and DRG codes), emergencies, deaths and long-term conditions: about 7,200 tokens</td>
+<td>Data-driven vocabulary (ZipfTok)</td>
+</tr>
+<tr class="even">
+<td><strong>Pre-training</strong></td>
+<td>Does each token appear within 14, 30, 90 or 180 days? (binary cross-entropy with a monotonicity penalty)</td>
+<td>Generative: multi-label next event and time to next event</td>
+<td>Discrete-time competing risks (DCR)</td>
+</tr>
+<tr class="odd">
+<td><strong>Validation</strong></td>
+<td>ROC curves on the pre-training task; 5M- and 40M-parameter models</td>
+<td>Scaling law, time calibration, zero-shot and probed prediction, embedding space</td>
+<td>Controlled benchmarks (synthetic data, MIMIC-IV)</td>
+</tr>
+<tr class="even">
+<td><strong>Causal use</strong></td>
+<td>Planned: CATE of PCP loss with S- and R-learners</td>
+<td>Done: doubly robust off-policy evaluation on about 50M patients</td>
+<td>A state that is Markov by construction (MarBLE)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Two lessons from the first year shaped the second. <strong>The pre-training task</strong> (does a code appear within fixed horizons?) converged quickly even at small size, suggesting it was too easy, and it gave no generative model; we replaced it with a next-event task that handles simultaneous events (<a href="#sec-gpt" class="quarto-xref">Section&nbsp;2</a>). <strong>The causal question</strong> is sequential: patients lose a PCP, go without one, then declare a new one, so a static conditional average treatment effect (CATE) with a single treatment date misses the point. With Lucas Resende (CREST), we recast “what if every patient had a PCP?” as <strong>off-policy evaluation</strong> (OPE) in a Markov decision process (<a href="#sec-ope" class="quarto-xref">Section&nbsp;3</a>).</p>
+</section>
+</section>
+<section id="sec-gpt" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> A generative foundation model of French medical pathways</h1>
+<section id="data-and-model" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="data-and-model"><span class="header-section-number">2.1</span> Data and model</h2>
+<p>We observe patients <span class="math inline">i = 1, \dots, n</span>, each described by <span class="math inline">X_i \coloneqq (e_i, t_i, f_i)</span>: the sequence of tokenised events <span class="math inline">e_i</span>, their dates <span class="math inline">t_i</span>, and static features <span class="math inline">f_i</span> (age class, sex). The vocabulary has 83 consultation specialties, 936 CCAM procedure codes, 704 ATC medication codes, 3,275 ICD-10 hospital-entry codes, 1,110 DRG hospital-exit codes, one emergency token, one death token, and 1,111 long-term condition (ALD) tokens.</p>
+<p>The model is a <strong>decoder-only (GPT-like) Transformer</strong>. Tokens, age and sex have their own embedding matrices. A special [START] token is the sum of the age and sex embeddings. The dates <span class="math inline">t_i</span> enter through a sinusoidal positional encoding, which makes the model <em>time-aware</em>. With causal self-attention, the output <span class="math inline">\mathrm{GPT}_\theta(X_i)</span> is a sequence of contextualised embeddings in which each position depends only on the past. One forward pass therefore gives the patient’s representation at every date, which is what longitudinal estimators need.</p>
+</section>
+<section id="pre-training-objective" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="pre-training-objective"><span class="header-section-number">2.2</span> Pre-training objective</h2>
+<p>With weight tying, the output at position <span class="math inline">c</span> gives an intensity <span class="math inline">\lambda_{i,c,v} &gt; 0</span> for each token <span class="math inline">v</span>. Delphi <span class="citation" data-cites="Shmatko2025">(<a href="#ref-Shmatko2025" role="doc-biblioref">Shmatko et al. 2025</a>)</span> uses a softmax over tokens. Instead, we use a <strong>multi-label</strong> loss, so that events sharing a timestamp do not compete for probability mass: <span class="math display">
+\mathrm{BCE}_{i,c} \coloneqq -\sum_{v} \Big[ y_{i,c,v} \log \frac{\lambda_{i,c,v}}{1+\lambda_{i,c,v}} + (1-y_{i,c,v}) \log \frac{1}{1+\lambda_{i,c,v}} \Big].
+</span> We combine it with Delphi’s exponential <strong>time-to-next-event</strong> loss, <span class="math inline">\mathrm{TTE}_{i,c} \coloneqq -\log \sum_v \lambda_{i,c,v} + t^\star \sum_v \lambda_{i,c,v}</span>, where <span class="math inline">t^\star</span> is the observed waiting time. The resulting model is generative: we can sample the next event and its date, and repeat.</p>
+</section>
+<section id="validation" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="validation"><span class="header-section-number">2.3</span> Validation</h2>
+<p>Our validation has four parts.</p>
+<ul>
+<li><strong>Scaling law.</strong> Validation loss decreases as a power law in model size and in data volume (<a href="#fig-scaling" class="quarto-xref">Figure&nbsp;1</a>). The best ratio of training tokens to parameters is about 2,000, close to what <span class="citation" data-cites="coMET">Waxler et al. (<a href="#ref-coMET" role="doc-biblioref">2025</a>)</span> report on US medical event data, and far from the ratio of 20 found for language models <span class="citation" data-cites="chinchilla">(<a href="#ref-chinchilla" role="doc-biblioref">Hoffmann et al. 2022</a>)</span>.</li>
+<li><strong>Embedding space.</strong> A UMAP projection of the token embeddings forms interpretable clinical clusters. The model learned them from co-occurrence patterns alone, without any clinical labels.</li>
+<li><strong>Time calibration.</strong> The expected time to the next event closely matches the observed time.</li>
+<li><strong>Prediction.</strong> We sampled each held-out patient’s embedding at a random date and predicted seven clinical events at 30 and 365 days (<a href="#fig-aps" class="quarto-xref">Figure&nbsp;2</a>, 100,000 held-out patients). The zero-shot model is far above an age-and-sex baseline. Linear probes on the frozen embeddings improve on it further, for example from about 0 to 0.8 average precision for chemotherapy at 30 days.</li>
+</ul>
+<div id="fig-scaling" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-scaling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/scaling_law.png" class="img-fluid figure-img" style="width:46.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-scaling-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Validation loss against model size, for 0.7B, 1.4B and 2.8B training tokens; dashed lines are power-law fits.
+</figcaption>
+</figure>
+</div>
+<div id="fig-aps" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-aps-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/APS_Nature.png" class="img-fluid figure-img" style="width:80.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-aps-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Average precision for seven events at 30 and 365 days on 100,000 held-out patients. Grey: logistic regression on age and sex; orange: GPT zero-shot; blue: logistic probe on the frozen embeddings, trained on a separate cohort of 100,000 patients.
+</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="sec-ope" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Use case: off-policy evaluation of PCP assignment</h1>
+<section id="framework" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="framework"><span class="header-section-number">3.1</span> Framework</h2>
+<p>We model each patient’s care as a finite-horizon Markov decision process. The period covers two years (2017–2018), cut into <span class="math inline">T+1 = 8</span> quarters. At quarter <span class="math inline">t</span>, the <strong>state</strong> is <span class="math display">
+s_t = \big[\phi_t^\top,\ \mathbf{m}_t^\top,\ \mathbf{d}_t^\top,\ \mathbf{o}^\top\big]^\top,
+</span> where <span class="math inline">\phi_t</span> is the GPT embedding of the patient’s history up to <span class="math inline">t</span>, <span class="math inline">\mathbf{m}_t \in \{0,1\}^4</span> records PCP affiliation over the last four quarters, <span class="math inline">\mathbf{d}_t</span> measures local healthcare supply (density of active physicians in the municipality or within a 10-minute drive), and <span class="math inline">\mathbf{o}</span> is the patient’s cohort (one-hot).</p>
+<p>The <strong>action</strong> <span class="math inline">a_t</span> is whether the patient has a PCP at the start of the next quarter. The <strong>reward</strong> <span class="math inline">r_t</span> is the number of emergency visits (or hospital admissions, or death) in that quarter. The data come from an unknown behaviour policy <span class="math inline">\pi_b</span>. We estimate the value of a target policy that assigns a PCP with probability <span class="math inline">0.99</span>, <span class="math inline">\pi_e(1 \mid s_t) \coloneqq 0.99</span> (<a href="#fig-mdp" class="quarto-xref">Figure&nbsp;3</a>).</p>
+<div id="fig-mdp" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mdp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/fig1.png" class="img-fluid figure-img" style="width:76.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mdp-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: (A) A patient’s pathway cut into quarters, with PCP status shaded. (B) The GPT maps the history to a vector state. (C) The observed trajectory under <span class="math inline">\pi_b</span> and a counterfactual one under <span class="math inline">\pi_e</span>.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="doubly-robust-estimation" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="doubly-robust-estimation"><span class="header-section-number">3.2</span> Doubly robust estimation</h2>
+<p>We use the doubly robust (DR) estimator of <span class="citation" data-cites="kallus2020double">Kallus and Uehara (<a href="#ref-kallus2020double" role="doc-biblioref">2020</a>)</span>. It remains consistent if <em>either</em> of its two nuisance functions is well estimated: the <strong>state–action value</strong> <span class="math inline">q_t(s,a)</span>, the expected future return under <span class="math inline">\pi_e</span>, or the <strong>marginalised density ratio</strong> <span class="math inline">\mu_t(s,a)</span>, the expected product of the ratios <span class="math inline">\pi_e/\pi_b</span> up to time <span class="math inline">t</span>. We estimate them as follows.</p>
+<ul>
+<li><strong>Behaviour policy.</strong> We estimate <span class="math inline">\hat\pi_b</span> with a binary classifier on <span class="math inline">s_t</span>.</li>
+<li><strong>Density ratio.</strong> We fit a single <span class="math inline">\hat\mu</span> by regressing the cumulative importance weights on <span class="math inline">(t, s_t, a_t)</span>, rather than one model per quarter.</li>
+<li><strong>Value function.</strong> We fit <span class="math inline">\hat q_t</span> backwards from <span class="math inline">t = T</span>. At each step, we regress the pseudo-outcome <span class="math inline">r_t + \sum_a \pi_e(a \mid s_{t+1})\,\hat q_{t+1}(s_{t+1}, a)</span> on <span class="math inline">(s_t, a_t)</span>. We use a Poisson loss for counts and binary cross-entropy for death.</li>
+<li><strong>Cross-fitting.</strong> We split about 50M individuals into <span class="math inline">K = 100</span> folds and fit one pair <span class="math inline">(\hat q^k, \hat\mu^k)</span> per fold. Each individual’s nuisances are the median over the models fitted on the other folds <span class="citation" data-cites="chernozhukov2018double">(<a href="#ref-chernozhukov2018double" role="doc-biblioref">Chernozhukov et al. 2018</a>)</span>. The GPT embeddings follow the same split.</li>
+</ul>
+<p>For each individual, this gives an influence-function value <span class="math inline">\psi_i</span>. The policy value is estimated by <span class="math inline">\hat\rho_{\pi_e} = \frac1N \sum_i \psi_i</span>, with standard error <span class="math inline">\hat\sigma_\psi/\sqrt N</span>, so no bootstrap is needed.</p>
+</section>
+<section id="results" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="results"><span class="header-section-number">3.3</span> Results</h2>
+<div id="fig-ope" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ope-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/cohort_impact.png" class="img-fluid figure-img" style="width:52.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ope-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Doubly robust estimates of the PCP-assignment policy by subgroup and outcome, with 95% confidence intervals. Green: reduction; red: increase.
+</figcaption>
+</figure>
+</div>
+<p>The out-of-fold diagnostics are satisfactory: <span class="math inline">\hat\pi_b</span> is well calibrated, observed deaths concentrate in the top deciles of <span class="math inline">\hat q_7</span>, and, after biological sex, the GPT history embeddings are the most important predictors. The policy estimates (<a href="#fig-ope" class="quarto-xref">Figure&nbsp;4</a>) vary across subgroups. <strong>Hospital admissions</strong> decrease in almost every subgroup. <strong>Emergency visits</strong> decrease most for patients with chronic conditions (kidney disease, atherosclerosis, diabetes, hypertension) and increase for others (over-80s, myocardial infarction, breast cancer, asthma). The effect on <strong>death</strong> is heterogeneous. These results are part of a joint working paper on primary care gatekeeping <span class="citation" data-cites="resende2026gatekeeping">(<a href="#ref-resende2026gatekeeping" role="doc-biblioref">Resende et al. 2026</a>)</span>.</p>
+<p><strong>What this application taught us.</strong> The whole pipeline relies on an assumption we cannot check: that <span class="math inline">s_t</span> is <strong>Markov</strong>, i.e.&nbsp;that given <span class="math inline">s_t</span>, the future is independent of the past. The DR estimator, the backward recursion and the sequential ignorability condition all require it <span class="citation" data-cites="shi2020testing gottesman2019guidelines">(<a href="#ref-shi2020testing" role="doc-biblioref">Shi et al. 2020</a>; <a href="#ref-gottesman2019guidelines" role="doc-biblioref">Gottesman et al. 2019</a>)</span>. A causal Transformer gives no such guarantee: its representation at <span class="math inline">t</span> depends on the entire past, and <span class="math inline">\phi_t</span> is only a lossy read of it. The application also exposed two issues in the foundation model itself. The treatment of simultaneous events was ad hoc. The vocabulary was inherited from administrative classifications, with arbitrary truncations. These three issues define the work for the rest of the PhD.</p>
+</section>
+</section>
+<section id="sec-future" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Ongoing and future work</h1>
+<section id="marble-a-markovian-state-for-event-sequences" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="marble-a-markovian-state-for-event-sequences"><span class="header-section-number">4.1</span> MarBLE: a Markovian state for event sequences</h2>
+<p><strong>Goal.</strong> MarBLE (<em>Markovian Bottlenecks with backward Likelihood reconstruction for temporal Event sequences</em>) wraps any decoder-only backbone so that its state is Markov <strong>by construction</strong>. It is joint work with Lucas Resende. We split the timeline into blocks at chosen boundaries (a quarter, a hospital admission). Each block <span class="math inline">t</span> starts with a learned <strong>history token</strong>: <span class="math inline">B_t' = (h_{t-1}, e_{t,1}, \dots, e_{t,k_t})</span> (<a href="#fig-marble" class="quarto-xref">Figure&nbsp;5</a>). After the block, a gated update produces the next summary <span class="math inline">h_t</span> from <span class="math inline">h_{t-1}</span> and the block’s last contextualised position.</p>
+<div id="fig-marble" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-marble-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/marble_arch.png" class="img-fluid figure-img" style="width:38.0%">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-marble-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: MarBLE: past blocks can reach block <span class="math inline">t+1</span> only through <span class="math inline">h_t</span>.
+</figcaption>
+</figure>
+</div>
+<p><strong>Method.</strong> MarBLE has two components.</p>
+<ul>
+<li><strong>Block-diagonal mask.</strong> No event in block <span class="math inline">t</span> may attend to anything before <span class="math inline">h_{t-1}</span>. As a result, <span class="math inline">h_{t-1}</span> is the only path from the past, and <span class="math inline">h_t</span> is a deterministic function of <span class="math inline">(h_{t-1}, B_t)</span>. For <em>any</em> data distribution, <span class="math inline">h_0 \to h_1 \to \cdots</span> is therefore a Markov chain (<strong>predictive sufficiency</strong>). The forward loss is the same point-process likelihood as our GPT.</li>
+<li><strong>Discounted backward reconstruction (DBR).</strong> A forward loss alone lets <span class="math inline">h_t</span> discard any past that does not help predict the future. DBR adds a decoder that reconstructs each block’s recency-discounted count for each token <span class="math inline">v</span>, <span class="math inline">\tilde c_v = \sum_{j: y_j = v} e^{-\beta u_j}</span>, where <span class="math inline">u_j</span> is the backward age of event <span class="math inline">j</span>. Its loss is an exact closed-form marked-Poisson likelihood, computed in <span class="math inline">O(V)</span> with zero variance (<strong>retrospective sufficiency</strong>). Unlike memory-token architectures <span class="citation" data-cites="bulatov2022rmt karpukhinHTTransformerEventSequences2025">(<a href="#ref-bulatov2022rmt" role="doc-biblioref">Bulatov et al. 2022</a>; <a href="#ref-karpukhinHTTransformerEventSequences2025" role="doc-biblioref">Karpukhin and Savchenko 2025</a>)</span>, the chain is strictly Markov and the summary is trained to be readable.</li>
+</ul>
+<p><strong>First results.</strong> On synthetic streams with known Bayes-optimal quantities, an unconstrained GPT recovers the latent state from its block-end token at 0.670 accuracy (ceiling 0.686), but drops to 0.591 when restricted at inference to MarBLE’s information <span class="math inline">\{h_{t-1}, B_t\}</span>, barely above the single-block level of 0.565: <strong>its block-end token is not a state</strong>. The same backbone <em>trained</em> under the mask reaches 0.669 through its bounded summary, at no forward-loss cost. DBR makes the summary keep the past when prediction does not reward it: on an i.i.d. control stream, recall of the previous block goes from chance (0.147) to 0.581.</p>
+<p>On <strong>MIMIC-IV</strong> <span class="citation" data-cites="johnson2023mimiciv">(<a href="#ref-johnson2023mimiciv" role="doc-biblioref">Johnson et al. 2023</a>)</span>, with one block per admission and a shared 14.6M-parameter backbone, the mask <em>improves</em> forward likelihood over Delphi. Frozen linear probes at admission boundaries (<a href="#tbl-marble" class="quarto-xref">Table&nbsp;2</a>) show that MarBLE’s summary is much better at reconstructing the admission it just closed and at forecasting the next one. It is worse at recovering static attributes such as sex, which the chain has no reason to carry. This is the expected cost of a Markov bottleneck.</p>
+<div id="tbl-marble" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-marble-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2: Frozen probes on MIMIC-IV (2,687 admissions shared by all models). Excerpt from the MarBLE paper draft.
+</figcaption>
+<div aria-describedby="tbl-marble-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Frozen probe at an admission boundary</th>
+<th style="text-align: center;">Delphi</th>
+<th style="text-align: center;">MarBLE (mask)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Length of stay of the closed admission (<span class="math inline">R^2</span>)</td>
+<td style="text-align: center;">0.50</td>
+<td style="text-align: center;"><strong>0.82</strong></td>
+</tr>
+<tr class="even">
+<td>Gap to the next admission (<span class="math inline">R^2</span>)</td>
+<td style="text-align: center;">0.02</td>
+<td style="text-align: center;"><strong>0.12</strong></td>
+</tr>
+<tr class="odd">
+<td>30-day readmission (AUROC)</td>
+<td style="text-align: center;">0.57</td>
+<td style="text-align: center;"><strong>0.65</strong></td>
+</tr>
+<tr class="even">
+<td>Sex (AUROC)</td>
+<td style="text-align: center;"><strong>0.83</strong></td>
+<td style="text-align: center;">0.72</td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p><strong>Next steps.</strong> We will write the section on plugging <span class="math inline">h_t</span> into the OPE estimator, then submit the paper. We then plan to train MarBLE on the SNDS with quarterly blocks, so that <span class="math inline">h_t</span> replaces <span class="math inline">\phi_t</span> in the state of <a href="#sec-ope" class="quarto-xref">Section&nbsp;3</a>. The Markov assumption behind the policy estimates would then hold by construction.</p>
+</section>
+<section id="a-pre-training-objective-for-simultaneous-events" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="a-pre-training-objective-for-simultaneous-events"><span class="header-section-number">4.2</span> A pre-training objective for simultaneous events</h2>
+<p><strong>Motivation.</strong> Most event-stream foundation models (Delphi, ETHOS, MOTOR) train on a point-process likelihood: a continuous waiting-time density, plus a categorical distribution over the next token. Records are dated to the day, and many codes share a date, so practitioners serialise each day in an arbitrary order with zero gaps. In a draft with Lucas Resende and Guillaume Lecué, <em>Events do not queue</em>, we show that this step is not harmless:</p>
+<ul>
+<li><strong>The time likelihood is ill-posed.</strong> With ties, the continuous waiting-time likelihood has population infimum <span class="math inline">-\infty</span>. The exponential head used in practice inflates the fitted rate by exactly <span class="math inline">(1-\rho)^{-1}</span>, where <span class="math inline">\rho</span> is the tie fraction.</li>
+<li><strong>The next-token head is not a hazard.</strong> Under a fixed code order, its optimum is the true hazard multiplied by a factor that decays exponentially with the code’s arbitrary rank.</li>
+<li><strong>The Poisson approximation misplaces mass.</strong> It puts mass <span class="math inline">\tfrac12 \sum_v h_v^2</span> on days where a code repeats, which is not small under Zipfian vocabularies.</li>
+</ul>
+<p><strong>Proposed objective.</strong> We propose to treat a record as a sequence of <em>sets</em> indexed by day, and to train on the <strong>discrete-time competing risks</strong> likelihood: <span class="math display">
+\ell_{\mathrm{DCR}} = -\sum_{d} \Big[ \sum_{v \in \mathcal{E}_d} \log h_{v,d} + \sum_{v \notin \mathcal{E}_d} \log (1 - h_{v,d}) \Big],
+</span> where <span class="math inline">\mathcal{E}_d</span> is the set of codes recorded on day <span class="math inline">d</span> and <span class="math inline">h_{v,d}</span> is the modelled hazard of code <span class="math inline">v</span> that day <span class="citation" data-cites="tutz2016 lee2018deephit">(<a href="#ref-tutz2016" role="doc-biblioref">Tutz and Schmid 2016</a>; <a href="#ref-lee2018deephit" role="doc-biblioref">Lee et al. 2018</a>)</span>. Event-free stretches collapse in closed form, so the network is called only on event days. The point-process loss is exactly the first-order expansion of this objective in the hazards. The only cost of the multi-label form is the conditional total correlation of a day, which a mixture-of-products head removes; and the objective is invariant to the order of the vocabulary.</p>
+<p>Our multi-label loss (<a href="#sec-gpt" class="quarto-xref">Section&nbsp;2</a>) was a first step in this direction. The theory is written; the pre-registered experiments (MIMIC-IV, synthetic generator) remain to be run.</p>
+</section>
+<section id="a-zipfian-tokenizer-for-event-logs" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="a-zipfian-tokenizer-for-event-logs"><span class="header-section-number">4.3</span> A Zipfian tokenizer for event logs</h2>
+<p><strong>Motivation.</strong> Event-log models inherit their vocabulary from administrative classifications (ICD-10, CCAM, ATC). These hierarchies have tens of thousands of codes, and code frequencies span six orders of magnitude. The usual fixes (raw codes, top-<span class="math inline">V</span> plus an unknown token, rolling up to a fixed hierarchy level) are unchecked statistical choices, several of which our current vocabulary makes.</p>
+<p><strong>Approach.</strong> In a single-author draft, we treat a tokenizer as a partition of the code alphabet. We split its excess risk into a <strong>distortion</strong> term (a frequency-weighted Jensen–Shannon divergence, bounded by the entropy the partition destroys) and an <strong>estimation</strong> term that <em>saturates</em>: a token seen too rarely is simply not learned.</p>
+<p>At the optimum, each merged group of codes carries the same frequency mass. Because single codes cannot be split, the head of the distribution keeps its power law while the tail is pooled into a flat shelf at an estimability threshold <span class="math inline">\pi^\star = \Theta(k/N)</span>. This profile looks Zipfian, which explains why pre-trained models work best with Zipfian token frequencies <span class="citation" data-cites="he2025zipf">(<a href="#ref-he2025zipf" role="doc-biblioref"><span class="nocase">He et al.</span> 2025</a>)</span>; the analysis also gives an optimal vocabulary size <span class="math inline">V^\star \le 2\kappa N/k</span>, linear in corpus size. The resulting algorithm, <strong>ZipfTok</strong>, prunes the code hierarchy exactly (Lagrangian tree pruning, giving the whole vocabulary-size path at once), then merges the tail agglomeratively. Experiments are designed but not yet run.</p>
+<p><strong>Applications and roadmap to the defence.</strong> Further applications include other policies (e.g.&nbsp;HAS recommendations) and rewards (total expenditure), subpopulations (diabetes, heart failure), and synthetic counterfactual rollouts from MarBLE’s state. Provisional roadmap: <strong>autumn 2026 – winter 2027</strong>, submit MarBLE, run the DCR experiments and complete the gatekeeping paper; <strong>spring – summer 2027</strong>, ZipfTok experiments, then retrain the SNDS model with the new objective, tokenizer and quarterly MarBLE blocks; <strong>final year</strong>, OPE with the Markovian state, further applications, thesis writing and defence.</p>
+</section>
+</section>
+<section id="communications-and-publications" class="level1 unnumbered">
+<h1 class="unnumbered">Communications and publications</h1>
+<p><strong>Working papers and drafts</strong></p>
+<ul>
+<li>L. Resende<sup>*</sup>, <strong>M. Tayebjee</strong><sup>*</sup>, G. Lecué, P. Choné. <em>Evaluating primary care gatekeeping policy via foundation models.</em> Working paper, 2026. (<sup>*</sup> Equal contribution.)</li>
+<li><strong>M. Tayebjee</strong>, L. Resende. <em>MarBLE: Markovian summaries for event sequences.</em> In preparation.</li>
+<li><strong>M. Tayebjee</strong>, L. Resende, G. Lecué. <em>Events do not queue: discrete-time competing risks objectives for event-stream foundation models.</em> In preparation.</li>
+<li><strong>M. Tayebjee</strong>. <em>A Zipfian tokenizer for event-log foundation models.</em> In preparation.</li>
+</ul>
+<p><strong>Talks</strong></p>
+<ul>
+<li>Journées CREST–Insee, ENSAI campus, June 2026: <em>Policy evaluation using Transformer-based medical pathway embeddings.</em></li>
+<li>SODA team seminar, Inria Saclay, March 2026: the GPT project.</li>
+<li>Graph4Health half-day, October 2025: non-technical presentation of the project.</li>
+<li>First-year PhD committee, October 2025.</li>
+</ul>
+</section>
+<section id="short-cv" class="level1 unnumbered">
+<h1 class="unnumbered">Short CV</h1>
+<ul>
+<li><strong>Since Sept.&nbsp;2024:</strong> Data Scientist at Insee’s AI &amp; Data Science Innovation Lab (MLOps, agentic workflows, NLP, ML/DL for econometrics, satellite imagery); PhD candidate in computer science (part-time) at CREST, supervised by G. Lecué (CREST) and G. Varoquaux (Inria).</li>
+<li><strong>Education:</strong> HEC Paris (2019–2024), École polytechnique (X2020), ENSAE and MVA master’s (2024); administrateur de l’Insee (2024).</li>
+<li><strong>Research internships:</strong> MIT Operations Research Center, 2023 (microtransit system design and optimisation); Inria HeKA, 2024 (generative models for longitudinal images).</li>
+</ul>
+</section>
+<section id="references" class="level1 unnumbered">
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-bulatov2022rmt" class="csl-entry" role="listitem">
+Bulatov, Aydar, Yury Kuratov, and Mikhail S. Burtsev. 2022. <span>‘Recurrent Memory Transformer’</span>. <em>Advances in Neural Information Processing Systems (NeurIPS)</em>. <a href="https://arxiv.org/abs/2207.06881">https://arxiv.org/abs/2207.06881</a>.
+</div>
+<div id="ref-chernozhukov2018double" class="csl-entry" role="listitem">
+Chernozhukov, Victor, Denis Chetverikov, Mert Demirer, et al. 2018. <em>Double/Debiased Machine Learning for Treatment and Structural Parameters</em>. Oxford University Press Oxford, UK.
+</div>
+<div id="ref-gottesman2019guidelines" class="csl-entry" role="listitem">
+Gottesman, Omer, Fredrik Johansson, Matthieu Komorowski, et al. 2019. <span>‘Guidelines for Reinforcement Learning in Healthcare’</span>. <em>Nature Medicine</em> 25 (1): 16–18.
+</div>
+<div id="ref-he2025zipf" class="csl-entry" role="listitem">
+<span class="nocase">He, Yanjin et al.</span> 2025. <span>‘Pre-Trained Models Perform the Best When Token Distributions Follow Zipf’s Law’</span>. <em>arXiv Preprint</em>.
+</div>
+<div id="ref-chinchilla" class="csl-entry" role="listitem">
+Hoffmann, Jordan, Sebastian Borgeaud, Arthur Mensch, et al. 2022. <em>Training Compute-Optimal Large Language Models</em>. <a href="https://arxiv.org/abs/2203.15556">https://arxiv.org/abs/2203.15556</a>.
+</div>
+<div id="ref-johnson2023mimiciv" class="csl-entry" role="listitem">
+Johnson, Alistair E. W., Lucas Bulgarelli, Lu Shen, et al. 2023. <span>‘MIMIC-IV, a Freely Accessible Electronic Health Record Dataset’</span>. <em>Scientific Data</em> 10 (1): 1.
+</div>
+<div id="ref-kallus2020double" class="csl-entry" role="listitem">
+Kallus, Nathan, and Masatoshi Uehara. 2020. <span>‘Double Reinforcement Learning for Efficient Off-Policy Evaluation in Markov Decision Processes’</span>. <em>Journal of Machine Learning Research</em> 21 (167): 1–63.
+</div>
+<div id="ref-karpukhinHTTransformerEventSequences2025" class="csl-entry" role="listitem">
+Karpukhin, Ivan, and Andrey Savchenko. 2025. <span>‘HT-Transformer: History Tokens for Event Sequences’</span>. <em>arXiv Preprint</em>.
+</div>
+<div id="ref-lee2018deephit" class="csl-entry" role="listitem">
+Lee, Changhee, William R. Zame, Jinsung Yoon, and Mihaela van der Schaar. 2018. <span>‘<span>DeepHit</span>: A Deep Learning Approach to Survival Analysis with Competing Risks’</span>. <em>AAAI</em>.
+</div>
+<div id="ref-resende2026gatekeeping" class="csl-entry" role="listitem">
+Resende, Lucas, Meilame Tayebjee, Guillaume Lecué, and Philippe Choné. 2026. <span>‘Evaluating Primary Care Gatekeeping Policy via Foundation Models’</span>. Unpublished manuscript.
+</div>
+<div id="ref-shi2020testing" class="csl-entry" role="listitem">
+Shi, Chengchun, Runzhe Wan, Rui Song, Wenbin Lu, and Ling Leng. 2020. <span>‘Does the <span>Markov</span> Decision Process Fit the Data: Testing for the <span>Markov</span> Property in Sequential Decision Making’</span>. <em>Proceedings of the 37th International Conference on Machine Learning (ICML)</em>, PMLR, vol. 119.
+</div>
+<div id="ref-Shmatko2025" class="csl-entry" role="listitem">
+Shmatko, Artem, Alexander Wolfgang Jung, Kumar Gaurav, et al. 2025. <span>‘Learning the Natural History of Human Disease with Generative Transformers’</span>. <em>Nature</em>, ahead of print, September 17. <a href="https://doi.org/10.1038/s41586-025-09529-3">https://doi.org/10.1038/s41586-025-09529-3</a>.
+</div>
+<div id="ref-tutz2016" class="csl-entry" role="listitem">
+Tutz, Gerhard, and Matthias Schmid. 2016. <em>Modeling Discrete Time-to-Event Data</em>. Springer.
+</div>
+<div id="ref-coMET" class="csl-entry" role="listitem">
+Waxler, Shane, Paul Blazek, Davis White, et al. 2025. <em>Generative <span>Medical Event Models Improve</span> with <span>Scale</span></em>. arXiv:2508.12104. arXiv. <a href="https://doi.org/10.48550/arXiv.2508.12104">https://doi.org/10.48550/arXiv.2508.12104</a>.
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/meilame-tayebjee\.github\.io\/G4H-Report\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/meilame-tayebjee/G4H-Report/blob/main/mydocs/csi_2/index.qmd" class="toc-action"><i class="bi bi-github"></i>View source</a></li><li><a href="https://github.com/meilame-tayebjee/G4H-Report/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li><li><a href="https://github.com/meilame-tayebjee/G4H-Report/edit/main/mydocs/csi_2/index.qmd" class="toc-action"><i class="bi empty"></i>Edit this page</a></li></ul></div></div></div></footer></body></html>

@@ -1,52 +1,101 @@
 [
   {
-    "objectID": "mydocs/technical_report/index.html",
-    "href": "mydocs/technical_report/index.html",
-    "title": "G4H - From embeddings to causal inference",
+    "objectID": "mydocs/soda_meeting/index.html#about-me",
+    "href": "mydocs/soda_meeting/index.html#about-me",
+    "title": "SODA Seminar",
+    "section": "About me",
+    "text": "About me\n\nGraduated from HEC (19-24), X (X20), ENSAE and MVA (administrateur de l’Insee, 2024)\nInternships:\n\n2023: MIT (Operations Research Center), Microtransit system design and optimization\n2024: Inria HeKA, Generative models for longitudinal images\n\nCurrently, since sept. 2024:\n\nData Scientist at Insee’s AI & Data Science Innovation Lab (MLOps, agentic workflows and deep learning use cases: NLP, ML/DL for econometrics, satellite imagery)\nPhD in CS Candidate (part-time) - supervised by G. Lecué (Crest) and G. Varoquaux (Inria)"
+  },
+  {
+    "objectID": "mydocs/soda_meeting/index.html#broader-view-of-the-graph4health-anr",
+    "href": "mydocs/soda_meeting/index.html#broader-view-of-the-graph4health-anr",
+    "title": "SODA Seminar",
+    "section": "Broader view of the Graph4Health ANR",
+    "text": "Broader view of the Graph4Health ANR\n\nThe general objective is to\n\ninfer the impact of the healthcare supply (and its geographic distribution) on health outcomes\n\nusing classic econometric tools\nusing deep learning methods\n\nstudy policies that contribute to the efficiency of the French healthcare system\n\n11 years of exhaustive SNDS\n\n70M patients\nconsultations, procedures, hospitalizations, medications, deaths etc."
+  },
+  {
+    "objectID": "mydocs/soda_meeting/index.html#setting",
+    "href": "mydocs/soda_meeting/index.html#setting",
+    "title": "SODA Seminar",
+    "section": "Setting",
+    "text": "Setting\nDataset of medical pathways:  For i = 1, \\dots, n, X_i \\coloneqq (e_i, t_i, f_i), where:\n\ne_i \\in \\mathbb{R}^{cs} are the tokenized events, containing integers between 0 and the vocabulary size \\lvert \\mathcal{V} \\rvert\nt_i \\in \\mathbb{R}^{cs} is the temporal vector, containing the dates\nf_i \\in \\mathbb{R}^{2} corresponds to the patient general features, for now age and gender"
+  },
+  {
+    "objectID": "mydocs/soda_meeting/index.html#objectives",
+    "href": "mydocs/soda_meeting/index.html#objectives",
+    "title": "SODA Seminar",
+    "section": "Objectives",
+    "text": "Objectives\n\nHaving a time-aware Transformers (\\neq NLP) with a lot of simultaneous events\n\nNeed to design an adapted loss function\n\nKeeping in mind policy evaluation\n\nWe want to be able to efficiently compute the embedding of the pathway at any time (the trajectory of the patient)\nFocus on decoder-only Transformers (GPT-like)"
+  },
+  {
+    "objectID": "mydocs/soda_meeting/index.html#model",
+    "href": "mydocs/soda_meeting/index.html#model",
+    "title": "SODA Seminar",
+    "section": "Model",
+    "text": "Model\n\nEmbedding matrices of size \\mathbb{R}^{\\lvert \\mathcal{V} \\rvert, d_{embed}} (vocab), \\mathbb{R}^{2, d_{embed}} (gender) and \\mathbb{R}^{8, d_{embed}} (age class)\n\nWe use t_i to have a time-aware positional encoding using a sinusoidal encoding\nA symbolic [START] token, composed of the summed embeddings of age and gender.\n\nCausal self-attention layers so that the Transformer-based model outputs causally contextualized embeddings:  GPT_{\\theta}(X_i) \\in \\mathbb{R}^{cs, d_{embed}}"
+  },
+  {
+    "objectID": "mydocs/soda_meeting/index.html#pre-training",
+    "href": "mydocs/soda_meeting/index.html#pre-training",
+    "title": "SODA Seminar",
+    "section": "Pre-training",
+    "text": "Pre-training\n\nWe use weight tying to output the logits \\in \\mathbb{R}^{cs, \\lvert \\mathcal{V} \\rvert}\n\n\\text{logits}_{i, c, v} = (W \\cdot GPT_{\\theta}(X))_{i, c, v}\n\nNext-Token Prediction: instead of softmax as in Shmatko et al. (2025), we use a multi-label classification loss to better handle co-occurent events:\n\n \\text{BCE}_{i, c} \\coloneqq  - \\sum_v y_{i, c, v} \\log \\frac{\\lambda_{i, c, v}}{1 + \\lambda_{i, c, v}} + (1-y_{i, c, v}) \\log \\frac{1}{1 + \\lambda_{i, c, v}}"
+  },
+  {
+    "objectID": "mydocs/soda_meeting/index.html#validating-the-model",
+    "href": "mydocs/soda_meeting/index.html#validating-the-model",
+    "title": "SODA Seminar",
+    "section": "Validating the model",
+    "text": "Validating the model\nScaling law\n\nWe are matching the ~2,000 optimal ratio \\frac{\\text{\\# training tokens}}{\\text{\\# parameters}} found in Waxler et al. (2025)."
+  },
+  {
+    "objectID": "mydocs/soda_meeting/index.html#markov-decision-processes-and-off-policy-evaluation",
+    "href": "mydocs/soda_meeting/index.html#markov-decision-processes-and-off-policy-evaluation",
+    "title": "SODA Seminar",
+    "section": "Markov Decision Processes and Off-Policy Evaluation",
+    "text": "Markov Decision Processes and Off-Policy Evaluation\n\nA Markov Decision Process (MDP) is a tuple (\\mathcal{S}, \\mathcal{A}, P, P_0, R, \\gamma) where:\n\n\\mathcal{S} is the state space\n\\mathcal{A} is the action space\nP: \\mathcal{S} \\times \\mathcal{A} \\to \\Delta(\\mathcal{S}) is the transition probability function\nP_0 \\in \\Delta(\\mathcal{S}) is the initial state distribution\nR: \\mathcal{S} \\times \\mathcal{A} \\to \\mathbb{R} is the reward function\n\\gamma \\in [0,1] is the discount factor"
+  },
+  {
+    "objectID": "mydocs/soda_meeting/index.html#in-our-case",
+    "href": "mydocs/soda_meeting/index.html#in-our-case",
+    "title": "SODA Seminar",
+    "section": "In our case",
+    "text": "In our case"
+  },
+  {
+    "objectID": "mydocs/soda_meeting/index.html#estimation-of-the-behavioral-policy",
+    "href": "mydocs/soda_meeting/index.html#estimation-of-the-behavioral-policy",
+    "title": "SODA Seminar",
+    "section": "Estimation of the behavioral policy",
+    "text": "Estimation of the behavioral policy\nFirst step of the OPE pipeline: regress a_{i,t} (PCP affiliation) on s_{i,t} (embeddings) to estimate \\hat{\\pi}_b(a|s), the behavioral policy."
+  },
+  {
+    "objectID": "mydocs/soda_meeting/index.html#vpi_b-and-pi_e",
+    "href": "mydocs/soda_meeting/index.html#vpi_b-and-pi_e",
+    "title": "SODA Seminar",
+    "section": "V^{\\pi_b} and \\pi_e",
+    "text": "V^{\\pi_b} and \\pi_e\n\nThe value of the behavioral policy can be estimated using the trajectories in the dataset \\mathcal{D}:\nV^{\\pi_b} \\approx V^{\\hat{\\pi}_b} \\coloneqq \\frac{1}{N} \\sum_{i=1}^N \\sum_{t=0}^{T-1} \\gamma^t r_t^i\nThe policies we want to study: \\pi_e^\\eta(1|s) = \\max(\\eta, \\hat{\\pi}_b(1|s)) for \\eta = 0 \\dots 0.99"
+  },
+  {
+    "objectID": "mydocs/soda_meeting/index.html#results",
+    "href": "mydocs/soda_meeting/index.html#results",
+    "title": "SODA Seminar",
+    "section": "Results",
+    "text": "Results\nGeneral population"
+  },
+  {
+    "objectID": "mydocs/soda_meeting/index.html#future-work",
+    "href": "mydocs/soda_meeting/index.html#future-work",
+    "title": "SODA Seminar",
+    "section": "Future work",
+    "text": "Future work\n\nOther actions\n\nHAS recommendations\n\nOther rewards\n\nTotal expenditures…\n\nApply the method to specific subpopulations\n\nDiabetes\nHeart failure\n\nEnriching the embedding\n\nSmarter training losses\nAction as token"
+  },
+  {
+    "objectID": "mydocs/soda_meeting/index.html#section",
+    "href": "mydocs/soda_meeting/index.html#section",
+    "title": "SODA Seminar",
     "section": "",
-    "text": "We consider a dataset (X_i)_{i = 1..n} of medical pathways. For each patient i, X_i \\coloneqq (e_i, t_i, f_i), where:\n\ne_i \\in \\mathbb{R}^{cs} denotes the vector of tokenized events. It is a tensor1 which size is common for all patients2 (an hyperparameter called the context size, cs), that contains integers between 0 and the vocabulary size \\lvert \\mathcal{V} \\rvert.\nt_i \\in \\mathbb{R}^{cs} is the temporal vector, containing the dates3 for each event in e_i. For now we only consider consultation and medication type of events.\nf_i \\in \\mathbb{R}^{2} corresponds to the patient general features, for now age and gender.\n\nAt this stage, the pathways only contain consultations and pharmaceuticals events. We plan to add way more types of event, including deaths, hospitalizations, medical procedures etc.\n\n\n\n\n\n\nAn embedding matrix of size \\mathbb{R}^{\\lvert \\mathcal{V} \\rvert, d_{embed}} projects each token of the sequence to an embedding vector. Adapting from the classical Transformer, we use t_i to have a time-aware positional encoding using a sinusoidal encoding. At the beginning of the sequence, we add a symbolic [START] token, composed of the summed embeddings of age and gender.\nThese embeddings are then passed to causal4 self-attention layers, so that the Transformer-based model outputs causally contextualized embeddings for each token:  GPT_{\\theta}(X_i) \\in \\mathbb{R}^{cs, d_{embed}} where \\theta parametrizes the neural network.\n\n\n\n\nAt a given position in the pathway, we consider the pre-training task of predicting, for each token, if it will appear within the next t days. We consider, simulatenously, several t \\in \\mathcal{T}, \\mathcal{T} being the sorted set of short term horizons, typically 14, 30, 60, 90, 180 days.\nLet, for this task:\n\ng_{\\phi} \\colon \\mathbb{R}^{cs, d_{embed}} \\to [0, 1]^{cs, \\lvert \\mathcal{V} \\rvert, \\lvert \\mathcal{T} \\rvert } the neural prediction head for this task (parametrized by \\phi), on top of the Transformer layers\nfor a patient i, Y_{i, \\cdot, \\cdot, \\cdot} \\in \\{ 0, 1 \\}^{cs, \\lvert \\mathcal{V} \\rvert, \\lvert \\mathcal{T} \\rvert} the ground truth5\n\nThe pre-training solves:\n\\begin{align*}\n\\theta^{*}, \\phi^{*} \\in \\arg\\!\\min \\; & \\sum_{i=1}^{n} \\sum_{\\text{pos}=1}^{cs} \\sum_{w \\in \\mathcal{V}} \\sum_{t \\in \\mathcal{T}}\n\\text{BCE}\\left(\n    g_{\\phi} \\circ GPT_{\\theta}(X_i)_{\\text{pos}, w, t},\n    Y_{i, \\text{pos}, w, t}\n\\right) \\\\\n& + \\lambda \\, \\text{Mon}\\left( g_{\\phi} \\circ GPT_{\\theta}(X_i) \\right)\n\\end{align*}\nwhere:\n\n\\text{BCE}(x,y) = y \\log(x) + (1-y) \\log(1-x)\nfor all i, \\text{Mon}\\left( g_{\\phi} \\circ GPT_{\\theta}(X_i) \\right) \\coloneqq \\sum_{t, t' | t' &gt; t} \\max \\left(0, g_{\\phi} \\circ GPT_{\\theta}(X_i)_{\\cdot, \\cdot, t} - GPT_{\\theta}(X_i)_{\\cdot, \\cdot, t'} \\right)\n\n\n\n\nWe trained a “large” model (40M parameters) and a “small” one (5M parameters). It seems that the big model improves the result, leading us to think there is a signal to capture and that the task is “learnable”.\n\n\n\nROC curve of the pre-training task for a given specialty on a test set of 10,000 patients.\n\n\nStill, the models converge quickly, and even small models achieve good convergence. This raises the (open) question of complexifying the task at some point."
-  },
-  {
-    "objectID": "mydocs/technical_report/index.html#data",
-    "href": "mydocs/technical_report/index.html#data",
-    "title": "G4H - From embeddings to causal inference",
-    "section": "",
-    "text": "We consider a dataset (X_i)_{i = 1..n} of medical pathways. For each patient i, X_i \\coloneqq (e_i, t_i, f_i), where:\n\ne_i \\in \\mathbb{R}^{cs} denotes the vector of tokenized events. It is a tensor1 which size is common for all patients2 (an hyperparameter called the context size, cs), that contains integers between 0 and the vocabulary size \\lvert \\mathcal{V} \\rvert.\nt_i \\in \\mathbb{R}^{cs} is the temporal vector, containing the dates3 for each event in e_i. For now we only consider consultation and medication type of events.\nf_i \\in \\mathbb{R}^{2} corresponds to the patient general features, for now age and gender.\n\nAt this stage, the pathways only contain consultations and pharmaceuticals events. We plan to add way more types of event, including deaths, hospitalizations, medical procedures etc."
-  },
-  {
-    "objectID": "mydocs/technical_report/index.html#transformer-based-models",
-    "href": "mydocs/technical_report/index.html#transformer-based-models",
-    "title": "G4H - From embeddings to causal inference",
-    "section": "",
-    "text": "An embedding matrix of size \\mathbb{R}^{\\lvert \\mathcal{V} \\rvert, d_{embed}} projects each token of the sequence to an embedding vector. Adapting from the classical Transformer, we use t_i to have a time-aware positional encoding using a sinusoidal encoding. At the beginning of the sequence, we add a symbolic [START] token, composed of the summed embeddings of age and gender.\nThese embeddings are then passed to causal4 self-attention layers, so that the Transformer-based model outputs causally contextualized embeddings for each token:  GPT_{\\theta}(X_i) \\in \\mathbb{R}^{cs, d_{embed}} where \\theta parametrizes the neural network.\n\n\n\n\nAt a given position in the pathway, we consider the pre-training task of predicting, for each token, if it will appear within the next t days. We consider, simulatenously, several t \\in \\mathcal{T}, \\mathcal{T} being the sorted set of short term horizons, typically 14, 30, 60, 90, 180 days.\nLet, for this task:\n\ng_{\\phi} \\colon \\mathbb{R}^{cs, d_{embed}} \\to [0, 1]^{cs, \\lvert \\mathcal{V} \\rvert, \\lvert \\mathcal{T} \\rvert } the neural prediction head for this task (parametrized by \\phi), on top of the Transformer layers\nfor a patient i, Y_{i, \\cdot, \\cdot, \\cdot} \\in \\{ 0, 1 \\}^{cs, \\lvert \\mathcal{V} \\rvert, \\lvert \\mathcal{T} \\rvert} the ground truth5\n\nThe pre-training solves:\n\\begin{align*}\n\\theta^{*}, \\phi^{*} \\in \\arg\\!\\min \\; & \\sum_{i=1}^{n} \\sum_{\\text{pos}=1}^{cs} \\sum_{w \\in \\mathcal{V}} \\sum_{t \\in \\mathcal{T}}\n\\text{BCE}\\left(\n    g_{\\phi} \\circ GPT_{\\theta}(X_i)_{\\text{pos}, w, t},\n    Y_{i, \\text{pos}, w, t}\n\\right) \\\\\n& + \\lambda \\, \\text{Mon}\\left( g_{\\phi} \\circ GPT_{\\theta}(X_i) \\right)\n\\end{align*}\nwhere:\n\n\\text{BCE}(x,y) = y \\log(x) + (1-y) \\log(1-x)\nfor all i, \\text{Mon}\\left( g_{\\phi} \\circ GPT_{\\theta}(X_i) \\right) \\coloneqq \\sum_{t, t' | t' &gt; t} \\max \\left(0, g_{\\phi} \\circ GPT_{\\theta}(X_i)_{\\cdot, \\cdot, t} - GPT_{\\theta}(X_i)_{\\cdot, \\cdot, t'} \\right)\n\n\n\n\nWe trained a “large” model (40M parameters) and a “small” one (5M parameters). It seems that the big model improves the result, leading us to think there is a signal to capture and that the task is “learnable”.\n\n\n\nROC curve of the pre-training task for a given specialty on a test set of 10,000 patients.\n\n\nStill, the models converge quickly, and even small models achieve good convergence. This raises the (open) question of complexifying the task at some point."
-  },
-  {
-    "objectID": "mydocs/technical_report/index.html#framework",
-    "href": "mydocs/technical_report/index.html#framework",
-    "title": "G4H - From embeddings to causal inference",
-    "section": "2.1 Framework",
-    "text": "2.1 Framework\nUp to a given time t, we have:\n\nThe covariate X_{&lt;t} \\coloneqq (e_{&lt;t}, t_{&lt;t}, f_{&lt;t}), the medical history of the patient\nW_t is the treatment at time t and can either be:\n\nthe proportion of days the patient has spent without a PCP during the period [t- \\delta_{PCP}, t], \\delta_{PCP} being a hyperparameter controlling the length of the window\nthe maximum number of consecutive days without having a PCP, anytime in the past\n\nY_t (W_t), the binary outcome, indicating whether death has occured within a given time window [t, t+ \\delta_d](which length \\delta_d is again chosen)"
-  },
-  {
-    "objectID": "mydocs/technical_report/index.html#estimating-the-cate",
-    "href": "mydocs/technical_report/index.html#estimating-the-cate",
-    "title": "G4H - From embeddings to causal inference",
-    "section": "2.2 Estimating the CATE",
-    "text": "2.2 Estimating the CATE\nWe want to estimate the Conditional Average Treatment Effect (CATE):\n \\tau(x, w) \\coloneqq \\mathbb{E}[Y_t \\mid X_{&lt;t} = x, W_t = w] \n\n2.2.1 Assumptions\n\nSUTVA : Y_t(w) = Y_t \\quad \\textit{ if } W_t = w\n\nThe others not having a PCP for a given amount of time does not influence my probability to die\nOnly one version of treatment ?\n\nConditional ignorability\n\n \\forall w \\in \\mathbb{R}_{+}, Y_t(w) \\perp W_t \\mid X_{&lt;t}\n\nOverlap\n\n 0 &lt; \\mathbb{P}(W_t = w | X_{&lt;t} = x) &lt; 1, \\forall (w,x) \\in (\\mathbb{R}_{+}, \\mathbb{R}^{d_{embed}})\n\n\n2.2.2 Estimators\nFor a given time t, we define {pos}_t as being the last position in the patient’s pathway before t, and we define the embedding of the pathway:\n GPT^{\\text{path}}(X_{&lt;t}) \\coloneqq GPT_{\\theta^{*}}(X_{&lt;t})_{{pos}_t} \\in \\mathbb{R}^{d_{embed}} \n\nS-learner & T-learner\nThe S-learner is based on “outcome models” that try to capture the link between the outcome and the features (Abécassis et al. (2025)).\nMore precisely, we train on the validation set a head g_{\\phi}: \\mathbb{R}^{d_{embed}} \\times \\mathbb{R}_{+}  \\to [0,1] minimizing the binary cross-entropy loss on death prediction - to obtain \\phi^{*}6. At the end of the day:\n \\hat{\\tau}_{\\text{SLearner}}(x, w) \\coloneqq g_{\\phi^{*}} (GPT^{\\text{path}}(x), w) - g_{\\phi^{*}} (GPT^{\\text{path}}(x), 0)\nwhere the baseline is “not having lost your PCP / having a PCP during all the period”.\n🔴 There is no T-learner for continuous treatment, a priori\n\n\nR-learner\nAnother approach consists in trying to model the propensity score, the probability of being treated given X.\nA first head g_{\\phi_{m}}: \\mathbb{R}^{d_{embed}} \\to [0,1] is trained on the death prediction task, so that for a given pathway x, g_{\\phi_{m}^{*}}(GPT^{\\text{path}}(x)) is close to the conditional mean outcome m(x) = \\mathbb{E}[Y_t | x].\nAnother head g_{\\phi_{e}}: \\mathbb{R}^{d_{embed}} \\to \\mathbb{R}_+ is trained to predict the treatment W_t of a given individual (minimizing a Mean Squared Error).\nFinally, we train the CATE estimator training a head g_{\\phi_{\\tau}}: \\mathbb{R}^{d_{embed}} \\to [0,1] by minimizing the R-loss:\n\\begin{align*}\n\\phi_{\\tau}^{*} \\in \\arg\\!\\min_{\\phi_{\\tau}} \\; &\nY_t - g_{\\phi_{m}^{*}}\\left( GPT^{\\text{path}}(X_{&lt;t}) \\right) \\\\\n& - \\left( W_t - g_{\\phi_{e}^{*}}\\left( GPT^{\\text{path}}(X_{&lt;t}) \\right) \\cdot g_{\\phi_{\\tau}}\\left( GPT^{\\text{path}}(X_{&lt;t}) \\right) \\right)\n\\end{align*}\n🔴 There is no DR-learner for continuous treatment, a priori"
-  },
-  {
-    "objectID": "mydocs/technical_report/index.html#sec-benchmarks",
-    "href": "mydocs/technical_report/index.html#sec-benchmarks",
-    "title": "G4H - From embeddings to causal inference",
-    "section": "2.3 Benchmarks",
-    "text": "2.3 Benchmarks\nWIP\n\nReferences\n\n\nAbécassis, Judith, Élise Dumas, Julie Alberge, and Gaël Varoquaux. 2025. “From prediction to prescription: Machine learning and Causal Inference.” Annual Review of Biomedical Data Science, ahead of print, April. https://doi.org/10.1146/annurev-biodatasci-103123-095750."
-  },
-  {
-    "objectID": "mydocs/technical_report/index.html#footnotes",
-    "href": "mydocs/technical_report/index.html#footnotes",
-    "title": "G4H - From embeddings to causal inference",
-    "section": "Footnotes",
-    "text": "Footnotes\n\n\nActually, we consider several tensors (and several vocabulary sizes) - one for each type of tokens, but we do not get into the details here.↩︎\nShorter sequences are padded, longer are cropped.↩︎\nTo describe a date, we actually use the number of days since 01/01/2016, the start of the available dataset↩︎\nThe rationale for having a causal mask is that we want to be able to exploit any embedding at any time (with only one inference pass through the model) without them having “seen” the future. Typically, the pre-training task (see Section 1.2.2) is such a task. However, we still plan to train a BERT - pre-training task is still in discussion (see Section 2.3).↩︎\nFor each short term horizon t, we crop the pathways t before the end date of our dataset so that we can always compute a ground truth↩︎\nIn this formulation, we assume that the embeddings are frozen (we only train \\phi at \\theta^{*} constant). Another alternative is to fine-tune the Transformer model, training both \\phi and \\theta here, with the same task, same loss, same dataset. This is true for all the remaining of this document.↩︎"
+    "text": "Farajtabar, Mehrdad, Yinlam Chow, and Mohammad Ghavamzadeh. 2018. ‘More Robust Doubly Robust Off-Policy Evaluation’. In Proceedings of the 35th International Conference on Machine Learning, edited by Jennifer Dy and Andreas Krause, vol. 80. Proceedings of Machine Learning Research. PMLR. https://proceedings.mlr.press/v80/farajtabar18a.html.\n\n\nShmatko, Artem, Alexander Wolfgang Jung, Kumar Gaurav, et al. 2025. ‘Learning the Natural History of Human Disease with Generative Transformers’. Nature, ahead of print, September 17. https://doi.org/10.1038/s41586-025-09529-3.\n\n\nWaxler, Shane, Paul Blazek, Davis White, et al. 2025. Generative Medical Event Models Improve with Scale. arXiv:2508.12104. arXiv. https://doi.org/10.48550/arXiv.2508.12104."
   },
   {
     "objectID": "mydocs/csi_slides/index.html#about-me",
@@ -161,6 +210,118 @@
     "text": "Abécassis, Judith, Élise Dumas, Julie Alberge, and Gaël Varoquaux. 2025. ‘From prediction to prescription: Machine learning and Causal Inference’. Annual Review of Biomedical Data Science, ahead of print, April. https://doi.org/10.1146/annurev-biodatasci-103123-095750.\n\n\nCurth, Alicia, and Mihaela van der Schaar. 2021. Nonparametric Estimation of Heterogeneous Treatment Effects: From Theory to Learning Algorithms. https://arxiv.org/abs/2101.10943.\n\n\nDoutreligne, Matthieu, and Gaël Varoquaux. 2025. ‘How to Select Predictive Models for Decision-Making or Causal Inference’. GigaScience 14 (January): giaf016. https://doi.org/10.1093/gigascience/giaf016.\n\n\nHoffmann, Jordan, Sebastian Borgeaud, Arthur Mensch, et al. 2022. Training Compute-Optimal Large Language Models. https://arxiv.org/abs/2203.15556.\n\n\nLi, Yikuan, Shishir Rao, José Roberto Ayala Solares, et al. 2020. ‘BEHRT: Transformer for Electronic Health Records’. Scientific Reports 10 (1): 7155. https://doi.org/10.1038/s41598-020-62922-y.\n\n\nSavcisens, Germans, Tina Eliassi-Rad, Lars Kai Hansen, et al. 2023. ‘Using Sequences of Life-Events to Predict Human Lives’. Nature Computational Science 4 (1): 43–56. https://doi.org/10.1038/s43588-023-00573-5.\n\n\nShmatko, Artem, Alexander Wolfgang Jung, Kumar Gaurav, et al. 2025. ‘Learning the Natural History of Human Disease with Generative Transformers’. Nature, ahead of print, September 17. https://doi.org/10.1038/s41586-025-09529-3.\n\n\nSteinberg, Ethan, Jason Alan Fries, Yizhe Xu, and Nigam Shah. 2024. ‘MOTOR: A Time-to-Event Foundation Model for Structured Medical Records’. The Twelfth International Conference on Learning Representations. https://openreview.net/forum?id=NialiwI2V6.\n\n\nWager, Stefan. 2024. Causal Inference: A Statistical Learning Approach.\n\n\nYang, Zhichao, Avijit Mitra, Weisong Liu, Dan Berlowitz, and Hong Yu. 2023. ‘TransformEHR: Transformer-Based Encoder-Decoder Generative Model to Enhance Prediction of Disease Outcomes Using Electronic Health Records’. Nature Communications 14 (1): 7857. https://doi.org/10.1038/s41467-023-43715-z."
   },
   {
+    "objectID": "mydocs/crest_insee/index.html#about-me",
+    "href": "mydocs/crest_insee/index.html#about-me",
+    "title": "TFC - Presentation",
+    "section": "About me",
+    "text": "About me\n\nGraduated from HEC (19-24), X (X20), ENSAE and MVA (administrateur de l’Insee, 2024)\nCurrently, since sept. 2024:\n\nData Scientist at Insee’s AI & Data Science Innovation Lab (MLOps, agentic workflows and deep learning use cases: NLP, ML/DL for econometrics, satellite imagery)\nPhD in CS Candidate (part-time) - supervised by G. Lecué (Crest) and G. Varoquaux (Inria)"
+  },
+  {
+    "objectID": "mydocs/crest_insee/index.html#broader-view-of-the-graph4health-anr",
+    "href": "mydocs/crest_insee/index.html#broader-view-of-the-graph4health-anr",
+    "title": "TFC - Presentation",
+    "section": "Broader view of the Graph4Health ANR",
+    "text": "Broader view of the Graph4Health ANR\n\nThe general objective is to\n\ninfer the impact of the healthcare supply (and its geographic distribution) on health outcomes\n\nusing classic econometric tools\nusing deep learning methods\n\nstudy policies that contribute to the efficiency of the French healthcare system\n\n11 years of exhaustive SNDS\n\n70M patients\nconsultations, procedures, hospitalizations, medications, deaths etc."
+  },
+  {
+    "objectID": "mydocs/crest_insee/index.html#setting",
+    "href": "mydocs/crest_insee/index.html#setting",
+    "title": "TFC - Presentation",
+    "section": "Setting",
+    "text": "Setting\nDataset of medical pathways:  For i = 1, \\dots, n, X_i \\coloneqq (e_i, t_i, f_i), where:\n\ne_i \\in \\mathbb{R}^{cs} are the tokenized events, containing integers between 0 and the vocabulary size \\lvert \\mathcal{V} \\rvert\nt_i \\in \\mathbb{R}^{cs} is the temporal vector, containing the dates\nf_i \\in \\mathbb{R}^{2} corresponds to the patient general features, (e.g. age and gender)"
+  },
+  {
+    "objectID": "mydocs/crest_insee/index.html#objectives",
+    "href": "mydocs/crest_insee/index.html#objectives",
+    "title": "TFC - Presentation",
+    "section": "Objectives",
+    "text": "Objectives\n\nHaving a time-aware Transformers (\\neq NLP) with a lot of simultaneous events\n\nNeed to design an adapted loss function\n\nKeeping in mind policy evaluation\n\nWe want to be able to efficiently compute the embedding of the pathway at any time (the trajectory of the patient)\nFocus on decoder-only Transformers (GPT-like)"
+  },
+  {
+    "objectID": "mydocs/crest_insee/index.html#model",
+    "href": "mydocs/crest_insee/index.html#model",
+    "title": "TFC - Presentation",
+    "section": "Model",
+    "text": "Model\n\nEmbedding matrices of size \\mathbb{R}^{\\lvert \\mathcal{V} \\rvert, d_{embed}} (vocab), \\mathbb{R}^{2, d_{embed}} (gender) and \\mathbb{R}^{8, d_{embed}} (age class)\n\nWe use t_i to have a time-aware positional encoding using a sinusoidal encoding\nA symbolic [START] token, composed of the summed embeddings of age and gender.\n\nCausal self-attention layers so that the Transformer-based model outputs causally contextualized embeddings:  GPT_{\\theta}(X_i) \\in \\mathbb{R}^{cs, d_{embed}}"
+  },
+  {
+    "objectID": "mydocs/crest_insee/index.html#pre-training",
+    "href": "mydocs/crest_insee/index.html#pre-training",
+    "title": "TFC - Presentation",
+    "section": "Pre-training",
+    "text": "Pre-training\n\nWe use weight tying to output the logits \\in \\mathbb{R}^{cs, \\lvert \\mathcal{V} \\rvert}\n\n\\text{logits}_{i, c, v} = (W \\cdot GPT_{\\theta}(X))_{i, c, v}\n\nNext-Token Prediction: instead of softmax as in Shmatko et al. (2025), we use a multi-label classification loss to better handle co-occurent events:\n\n \\text{BCE}_{i, c} \\coloneqq  - \\sum_v y_{i, c, v} \\log \\frac{\\lambda_{i, c, v}}{1 + \\lambda_{i, c, v}} + (1-y_{i, c, v}) \\log \\frac{1}{1 + \\lambda_{i, c, v}}"
+  },
+  {
+    "objectID": "mydocs/crest_insee/index.html#overview",
+    "href": "mydocs/crest_insee/index.html#overview",
+    "title": "TFC - Presentation",
+    "section": "Overview",
+    "text": "Overview"
+  },
+  {
+    "objectID": "mydocs/crest_insee/index.html#validating-the-model",
+    "href": "mydocs/crest_insee/index.html#validating-the-model",
+    "title": "TFC - Presentation",
+    "section": "Validating the model",
+    "text": "Validating the model\nScaling law\n\nScaling laws showing the power-law decay (dashed) of validation loss as a function of model parameters and data volume.We are matching the ~2,000 optimal ratio \\frac{\\text{\\# training tokens}}{\\text{\\# parameters}} found in Waxler et al. (2025)."
+  },
+  {
+    "objectID": "mydocs/crest_insee/index.html#markov-decision-processes-and-off-policy-evaluation",
+    "href": "mydocs/crest_insee/index.html#markov-decision-processes-and-off-policy-evaluation",
+    "title": "TFC - Presentation",
+    "section": "Markov Decision Processes and Off-Policy Evaluation",
+    "text": "Markov Decision Processes and Off-Policy Evaluation\n\nA Markov Decision Process (MDP) is a tuple (\\mathcal{S}, \\mathcal{A}, P, P_0, R, \\gamma) where:\n\n\\mathcal{S} is the state space\n\\mathcal{A} is the action space\nP: \\mathcal{S} \\times \\mathcal{A} \\to \\Delta(\\mathcal{S}) is the transition probability function\nP_0 \\in \\Delta(\\mathcal{S}) is the initial state distribution\nR: \\mathcal{S} \\times \\mathcal{A} \\to \\mathbb{R} is the reward function\n\\gamma \\in [0,1] is the discount factor"
+  },
+  {
+    "objectID": "mydocs/crest_insee/index.html#in-our-case",
+    "href": "mydocs/crest_insee/index.html#in-our-case",
+    "title": "TFC - Presentation",
+    "section": "In our case",
+    "text": "In our case\n\n\nDataset: 2 years, discretized into 8 quarters; we define t=0 as the first day of 2017 and T=7 as October 1st, 2018.\n\\pi_e(1 | s_t) ≔ 0.99: assign a PCP to a cohort of patients"
+  },
+  {
+    "objectID": "mydocs/crest_insee/index.html#doubly-robust-evaluation",
+    "href": "mydocs/crest_insee/index.html#doubly-robust-evaluation",
+    "title": "TFC - Presentation",
+    "section": "Doubly robust evaluation",
+    "text": "Doubly robust evaluation\n\nGoal: estimate the value V^{\\pi_e} from data collected under \\pi_b, without running \\pi_e.\nTwo classical estimators, each with a flaw:\n\nDirect Method (DM): fit q_t(s,a), plug in. Biased if q_t is misspecified.\nImportance Sampling (IS): reweight trajectories by \\pi_e / \\pi_b. High variance.\n\nDoubly Robust (DR) (Kallus and Uehara 2020): combines both. Consistent if either nuisance is well-estimated."
+  },
+  {
+    "objectID": "mydocs/crest_insee/index.html#future-work",
+    "href": "mydocs/crest_insee/index.html#future-work",
+    "title": "TFC - Presentation",
+    "section": "Future work",
+    "text": "Future work\n\nOther OPE use cases\n\nHAS recommendations\nOther rewards: total expenditures…\n\nOther GPT for medical pathways use cases:\n\ncausal inference\ngeneration of synthetic trajectories\n\nImprove the foundation model:\n\nBenchmarks - Make the embeddings really Markovian…"
+  },
+  {
+    "objectID": "mydocs/crest_insee/index.html#marble-making-the-state-really-markovian",
+    "href": "mydocs/crest_insee/index.html#marble-making-the-state-really-markovian",
+    "title": "TFC - Presentation",
+    "section": "MarBLE: making the state really Markovian",
+    "text": "MarBLE: making the state really Markovian\nThe problem (why).\n\nThe whole OPE pipeline rests on one assumption: the state s_t (built from the GPT history embedding \\phi_t) is Markov, i.e. a sufficient statistic of the trajectory so far.\nBut an unconstrained causal Transformer has no bounded Markov state. Its representation at position t is a function of the entire past, diffused across a growing residual stream.\n\\phi_t is just a lossy read of that stream: nothing forces “the future is conditionally independent of the past given \\phi_t”.\nWe want a fixed-size running summary h_t that is a genuine sufficient statistic, exactly what an OPE estimator (or any RL value function) needs."
+  },
+  {
+    "objectID": "mydocs/crest_insee/index.html#marble-a-markovian-transformer",
+    "href": "mydocs/crest_insee/index.html#marble-a-markovian-transformer",
+    "title": "TFC - Presentation",
+    "section": "MarBLE: a Markovian Transformer",
+    "text": "MarBLE: a Markovian Transformer\nThe method (what).\nMarBLE wraps our decoder-only GPT with a bounded history token h_t, refreshed at chosen boundaries (a quarter, a hospital admission).\n\nBlock-recurrent structure: events feed into a per-block summary h_t, and h_{t-1} is the only path from the past into block t."
+  },
+  {
+    "objectID": "mydocs/crest_insee/index.html#how-it-works",
+    "href": "mydocs/crest_insee/index.html#how-it-works",
+    "title": "TFC - Presentation",
+    "section": "How it works",
+    "text": "How it works\n\nInsert learned history tokens at boundaries: block t is B_t = (h_{t-1}, e_{t,1}, \\dots, e_{t,k_t}), with recurrence h_t = \\mathrm{LayerNorm}(W z_{t,k_t} + b).\nBlock-diagonal causal mask: no event in block t may attend before h_{t-1}. So h_{t-1} is the sole gateway from the past, making h_0 \\to h_1 \\to \\cdots strictly Markov (distribution-free, no change to the attention operator).\nForward loss: the same TPP likelihood as our GPT (multi-label BCE + time-to-event). Under realizability, its minimizer makes h_t predictively sufficient."
+  },
+  {
+    "objectID": "mydocs/crest_insee/index.html#section",
+    "href": "mydocs/crest_insee/index.html#section",
+    "title": "TFC - Presentation",
+    "section": "",
+    "text": "Chernozhukov, Victor, Denis Chetverikov, Mert Demirer, et al. 2018. Double/Debiased Machine Learning for Treatment and Structural Parameters. Oxford University Press Oxford, UK.\n\n\nKallus, Nathan, and Masatoshi Uehara. 2020. ‘Double Reinforcement Learning for Efficient Off-Policy Evaluation in Markov Decision Processes’. Journal of Machine Learning Research 21 (167): 1–63.\n\n\nShmatko, Artem, Alexander Wolfgang Jung, Kumar Gaurav, et al. 2025. ‘Learning the Natural History of Human Disease with Generative Transformers’. Nature, ahead of print, September 17. https://doi.org/10.1038/s41586-025-09529-3.\n\n\nWaxler, Shane, Paul Blazek, Davis White, et al. 2025. Generative Medical Event Models Improve with Scale. arXiv:2508.12104. arXiv. https://doi.org/10.48550/arXiv.2508.12104."
+  },
+  {
     "objectID": "mydocs/G4H_half_day/index.html#representing-words",
     "href": "mydocs/G4H_half_day/index.html#representing-words",
     "title": "G4H Half-Day",
@@ -273,192 +434,213 @@
     "text": "Hoffmann, Jordan, Sebastian Borgeaud, Arthur Mensch, et al. 2022. Training Compute-Optimal Large Language Models. https://arxiv.org/abs/2203.15556.\n\n\nShmatko, Artem, Alexander Wolfgang Jung, Kumar Gaurav, et al. 2025. ‘Learning the Natural History of Human Disease with Generative Transformers’. Nature, ahead of print, September 17. https://doi.org/10.1038/s41586-025-09529-3.\n\n\nSteinberg, Ethan, Jason Alan Fries, Yizhe Xu, and Nigam Shah. 2024. ‘MOTOR: A Time-to-Event Foundation Model for Structured Medical Records’. The Twelfth International Conference on Learning Representations. https://openreview.net/forum?id=NialiwI2V6."
   },
   {
-    "objectID": "mydocs/crest_insee/index.html#about-me",
-    "href": "mydocs/crest_insee/index.html#about-me",
-    "title": "Journées I2E",
+    "objectID": "mydocs/csi_2/index.html",
+    "href": "mydocs/csi_2/index.html",
+    "title": "Policy evaluation using Transformer-based medical pathway embeddings",
+    "section": "",
+    "text": "The slides presented at the committee are available here."
+  },
+  {
+    "objectID": "mydocs/csi_2/index.html#context",
+    "href": "mydocs/csi_2/index.html#context",
+    "title": "Policy evaluation using Transformer-based medical pathway embeddings",
+    "section": "1.1 Context",
+    "text": "1.1 Context\nThis PhD in computer science started in September 2024. I work on it part-time alongside my position as a data scientist at Insee’s AI & Data Science Innovation Lab. It is part of the Graph4Health ANR project, which studies how the supply of healthcare, and its geographic distribution, affects health outcomes, and which policies could make the French healthcare system more efficient. The project uses classical econometric tools and deep learning methods on 11 years of the exhaustive SNDS: about 70 million patients, with their consultations, procedures, hospital stays, medications and deaths.\nMy part of the project is methodological. Downstream causal estimators need each patient’s history as a fixed-size vector, together with a treatment and an outcome. Medical pathways are hard to turn into such vectors. They are unstructured, like text (sequences of codes from several administrative classifications), but irregular in time, unlike text (gaps range from zero to several years), and many events share a timestamp (a pharmacy delivery or a hospital stay emits several codes at once).\nThe thesis therefore builds a foundation model of medical pathways whose representations summarise a patient’s history at any date, plugs them into causal and policy estimators, and studies what the estimators need from them. Our running application is the médecin traitant (declared primary care provider, PCP). Every year about 1,000 French GPs retire or die, and each is the PCP of about 1,000 patients."
+  },
+  {
+    "objectID": "mydocs/csi_2/index.html#sec-evolution",
+    "href": "mydocs/csi_2/index.html#sec-evolution",
+    "title": "Policy evaluation using Transformer-based medical pathway embeddings",
+    "section": "1.2 How the project evolved",
+    "text": "1.2 How the project evolved\nTable 1 compares the state of the project at the first committee (October 2025) with its state today. It also lists what comes next (Section 4). The thesis title changed from Embedding medical pathways for causal inference on healthcare supply shocks and patient outcomes to Policy evaluation using Transformer-based medical pathway embeddings. The change reflects the main shift of the year: from a one-shot treatment effect to the evaluation of a sequential policy.\n\n\n\nTable 1: The project at the first committee, today, and next.\n\n\n\n\n\n\n\n\n\n\n\n\nEnd of year 1 (Oct. 2025)\nEnd of year 2 (now)\nNext (Section 4)\n\n\n\n\nData\nConsultations and medications\nAdds procedures, hospital stays (ICD-10 and DRG codes), emergencies, deaths and long-term conditions: about 7,200 tokens\nData-driven vocabulary (ZipfTok)\n\n\nPre-training\nDoes each token appear within 14, 30, 90 or 180 days? (binary cross-entropy with a monotonicity penalty)\nGenerative: multi-label next event and time to next event\nDiscrete-time competing risks (DCR)\n\n\nValidation\nROC curves on the pre-training task; 5M- and 40M-parameter models\nScaling law, time calibration, zero-shot and probed prediction, embedding space\nControlled benchmarks (synthetic data, MIMIC-IV)\n\n\nCausal use\nPlanned: CATE of PCP loss with S- and R-learners\nDone: doubly robust off-policy evaluation on about 50M patients\nA state that is Markov by construction (MarBLE)\n\n\n\n\n\n\nTwo lessons from the first year shaped the second. The pre-training task (does a code appear within fixed horizons?) converged quickly even at small size, suggesting it was too easy, and it gave no generative model; we replaced it with a next-event task that handles simultaneous events (Section 2). The causal question is sequential: patients lose a PCP, go without one, then declare a new one, so a static conditional average treatment effect (CATE) with a single treatment date misses the point. With Lucas Resende (CREST), we recast “what if every patient had a PCP?” as off-policy evaluation (OPE) in a Markov decision process (Section 3)."
+  },
+  {
+    "objectID": "mydocs/csi_2/index.html#data-and-model",
+    "href": "mydocs/csi_2/index.html#data-and-model",
+    "title": "Policy evaluation using Transformer-based medical pathway embeddings",
+    "section": "2.1 Data and model",
+    "text": "2.1 Data and model\nWe observe patients i = 1, \\dots, n, each described by X_i \\coloneqq (e_i, t_i, f_i): the sequence of tokenised events e_i, their dates t_i, and static features f_i (age class, sex). The vocabulary has 83 consultation specialties, 936 CCAM procedure codes, 704 ATC medication codes, 3,275 ICD-10 hospital-entry codes, 1,110 DRG hospital-exit codes, one emergency token, one death token, and 1,111 long-term condition (ALD) tokens.\nThe model is a decoder-only (GPT-like) Transformer. Tokens, age and sex have their own embedding matrices. A special [START] token is the sum of the age and sex embeddings. The dates t_i enter through a sinusoidal positional encoding, which makes the model time-aware. With causal self-attention, the output \\mathrm{GPT}_\\theta(X_i) is a sequence of contextualised embeddings in which each position depends only on the past. One forward pass therefore gives the patient’s representation at every date, which is what longitudinal estimators need."
+  },
+  {
+    "objectID": "mydocs/csi_2/index.html#pre-training-objective",
+    "href": "mydocs/csi_2/index.html#pre-training-objective",
+    "title": "Policy evaluation using Transformer-based medical pathway embeddings",
+    "section": "2.2 Pre-training objective",
+    "text": "2.2 Pre-training objective\nWith weight tying, the output at position c gives an intensity \\lambda_{i,c,v} &gt; 0 for each token v. Delphi (Shmatko et al. 2025) uses a softmax over tokens. Instead, we use a multi-label loss, so that events sharing a timestamp do not compete for probability mass: \n\\mathrm{BCE}_{i,c} \\coloneqq -\\sum_{v} \\Big[ y_{i,c,v} \\log \\frac{\\lambda_{i,c,v}}{1+\\lambda_{i,c,v}} + (1-y_{i,c,v}) \\log \\frac{1}{1+\\lambda_{i,c,v}} \\Big].\n We combine it with Delphi’s exponential time-to-next-event loss, \\mathrm{TTE}_{i,c} \\coloneqq -\\log \\sum_v \\lambda_{i,c,v} + t^\\star \\sum_v \\lambda_{i,c,v}, where t^\\star is the observed waiting time. The resulting model is generative: we can sample the next event and its date, and repeat."
+  },
+  {
+    "objectID": "mydocs/csi_2/index.html#validation",
+    "href": "mydocs/csi_2/index.html#validation",
+    "title": "Policy evaluation using Transformer-based medical pathway embeddings",
+    "section": "2.3 Validation",
+    "text": "2.3 Validation\nOur validation has four parts.\n\nScaling law. Validation loss decreases as a power law in model size and in data volume (Figure 1). The best ratio of training tokens to parameters is about 2,000, close to what Waxler et al. (2025) report on US medical event data, and far from the ratio of 20 found for language models (Hoffmann et al. 2022).\nEmbedding space. A UMAP projection of the token embeddings forms interpretable clinical clusters. The model learned them from co-occurrence patterns alone, without any clinical labels.\nTime calibration. The expected time to the next event closely matches the observed time.\nPrediction. We sampled each held-out patient’s embedding at a random date and predicted seven clinical events at 30 and 365 days (Figure 2, 100,000 held-out patients). The zero-shot model is far above an age-and-sex baseline. Linear probes on the frozen embeddings improve on it further, for example from about 0 to 0.8 average precision for chemotherapy at 30 days.\n\n\n\n\n\n\n\nFigure 1: Validation loss against model size, for 0.7B, 1.4B and 2.8B training tokens; dashed lines are power-law fits.\n\n\n\n\n\n\n\n\n\nFigure 2: Average precision for seven events at 30 and 365 days on 100,000 held-out patients. Grey: logistic regression on age and sex; orange: GPT zero-shot; blue: logistic probe on the frozen embeddings, trained on a separate cohort of 100,000 patients."
+  },
+  {
+    "objectID": "mydocs/csi_2/index.html#framework",
+    "href": "mydocs/csi_2/index.html#framework",
+    "title": "Policy evaluation using Transformer-based medical pathway embeddings",
+    "section": "3.1 Framework",
+    "text": "3.1 Framework\nWe model each patient’s care as a finite-horizon Markov decision process. The period covers two years (2017–2018), cut into T+1 = 8 quarters. At quarter t, the state is \ns_t = \\big[\\phi_t^\\top,\\ \\mathbf{m}_t^\\top,\\ \\mathbf{d}_t^\\top,\\ \\mathbf{o}^\\top\\big]^\\top,\n where \\phi_t is the GPT embedding of the patient’s history up to t, \\mathbf{m}_t \\in \\{0,1\\}^4 records PCP affiliation over the last four quarters, \\mathbf{d}_t measures local healthcare supply (density of active physicians in the municipality or within a 10-minute drive), and \\mathbf{o} is the patient’s cohort (one-hot).\nThe action a_t is whether the patient has a PCP at the start of the next quarter. The reward r_t is the number of emergency visits (or hospital admissions, or death) in that quarter. The data come from an unknown behaviour policy \\pi_b. We estimate the value of a target policy that assigns a PCP with probability 0.99, \\pi_e(1 \\mid s_t) \\coloneqq 0.99 (Figure 3).\n\n\n\n\n\n\nFigure 3: (A) A patient’s pathway cut into quarters, with PCP status shaded. (B) The GPT maps the history to a vector state. (C) The observed trajectory under \\pi_b and a counterfactual one under \\pi_e."
+  },
+  {
+    "objectID": "mydocs/csi_2/index.html#doubly-robust-estimation",
+    "href": "mydocs/csi_2/index.html#doubly-robust-estimation",
+    "title": "Policy evaluation using Transformer-based medical pathway embeddings",
+    "section": "3.2 Doubly robust estimation",
+    "text": "3.2 Doubly robust estimation\nWe use the doubly robust (DR) estimator of Kallus and Uehara (2020). It remains consistent if either of its two nuisance functions is well estimated: the state–action value q_t(s,a), the expected future return under \\pi_e, or the marginalised density ratio \\mu_t(s,a), the expected product of the ratios \\pi_e/\\pi_b up to time t. We estimate them as follows.\n\nBehaviour policy. We estimate \\hat\\pi_b with a binary classifier on s_t.\nDensity ratio. We fit a single \\hat\\mu by regressing the cumulative importance weights on (t, s_t, a_t), rather than one model per quarter.\nValue function. We fit \\hat q_t backwards from t = T. At each step, we regress the pseudo-outcome r_t + \\sum_a \\pi_e(a \\mid s_{t+1})\\,\\hat q_{t+1}(s_{t+1}, a) on (s_t, a_t). We use a Poisson loss for counts and binary cross-entropy for death.\nCross-fitting. We split about 50M individuals into K = 100 folds and fit one pair (\\hat q^k, \\hat\\mu^k) per fold. Each individual’s nuisances are the median over the models fitted on the other folds (Chernozhukov et al. 2018). The GPT embeddings follow the same split.\n\nFor each individual, this gives an influence-function value \\psi_i. The policy value is estimated by \\hat\\rho_{\\pi_e} = \\frac1N \\sum_i \\psi_i, with standard error \\hat\\sigma_\\psi/\\sqrt N, so no bootstrap is needed."
+  },
+  {
+    "objectID": "mydocs/csi_2/index.html#results",
+    "href": "mydocs/csi_2/index.html#results",
+    "title": "Policy evaluation using Transformer-based medical pathway embeddings",
+    "section": "3.3 Results",
+    "text": "3.3 Results\n\n\n\n\n\n\nFigure 4: Doubly robust estimates of the PCP-assignment policy by subgroup and outcome, with 95% confidence intervals. Green: reduction; red: increase.\n\n\n\nThe out-of-fold diagnostics are satisfactory: \\hat\\pi_b is well calibrated, observed deaths concentrate in the top deciles of \\hat q_7, and, after biological sex, the GPT history embeddings are the most important predictors. The policy estimates (Figure 4) vary across subgroups. Hospital admissions decrease in almost every subgroup. Emergency visits decrease most for patients with chronic conditions (kidney disease, atherosclerosis, diabetes, hypertension) and increase for others (over-80s, myocardial infarction, breast cancer, asthma). The effect on death is heterogeneous. These results are part of a joint working paper on primary care gatekeeping (Resende et al. 2026).\nWhat this application taught us. The whole pipeline relies on an assumption we cannot check: that s_t is Markov, i.e. that given s_t, the future is independent of the past. The DR estimator, the backward recursion and the sequential ignorability condition all require it (Shi et al. 2020; Gottesman et al. 2019). A causal Transformer gives no such guarantee: its representation at t depends on the entire past, and \\phi_t is only a lossy read of it. The application also exposed two issues in the foundation model itself. The treatment of simultaneous events was ad hoc. The vocabulary was inherited from administrative classifications, with arbitrary truncations. These three issues define the work for the rest of the PhD."
+  },
+  {
+    "objectID": "mydocs/csi_2/index.html#marble-a-markovian-state-for-event-sequences",
+    "href": "mydocs/csi_2/index.html#marble-a-markovian-state-for-event-sequences",
+    "title": "Policy evaluation using Transformer-based medical pathway embeddings",
+    "section": "4.1 MarBLE: a Markovian state for event sequences",
+    "text": "4.1 MarBLE: a Markovian state for event sequences\nGoal. MarBLE (Markovian Bottlenecks with backward Likelihood reconstruction for temporal Event sequences) wraps any decoder-only backbone so that its state is Markov by construction. It is joint work with Lucas Resende. We split the timeline into blocks at chosen boundaries (a quarter, a hospital admission). Each block t starts with a learned history token: B_t' = (h_{t-1}, e_{t,1}, \\dots, e_{t,k_t}) (Figure 5). After the block, a gated update produces the next summary h_t from h_{t-1} and the block’s last contextualised position.\n\n\n\n\n\n\nFigure 5: MarBLE: past blocks can reach block t+1 only through h_t.\n\n\n\nMethod. MarBLE has two components.\n\nBlock-diagonal mask. No event in block t may attend to anything before h_{t-1}. As a result, h_{t-1} is the only path from the past, and h_t is a deterministic function of (h_{t-1}, B_t). For any data distribution, h_0 \\to h_1 \\to \\cdots is therefore a Markov chain (predictive sufficiency). The forward loss is the same point-process likelihood as our GPT.\nDiscounted backward reconstruction (DBR). A forward loss alone lets h_t discard any past that does not help predict the future. DBR adds a decoder that reconstructs each block’s recency-discounted count for each token v, \\tilde c_v = \\sum_{j: y_j = v} e^{-\\beta u_j}, where u_j is the backward age of event j. Its loss is an exact closed-form marked-Poisson likelihood, computed in O(V) with zero variance (retrospective sufficiency). Unlike memory-token architectures (Bulatov et al. 2022; Karpukhin and Savchenko 2025), the chain is strictly Markov and the summary is trained to be readable.\n\nFirst results. On synthetic streams with known Bayes-optimal quantities, an unconstrained GPT recovers the latent state from its block-end token at 0.670 accuracy (ceiling 0.686), but drops to 0.591 when restricted at inference to MarBLE’s information \\{h_{t-1}, B_t\\}, barely above the single-block level of 0.565: its block-end token is not a state. The same backbone trained under the mask reaches 0.669 through its bounded summary, at no forward-loss cost. DBR makes the summary keep the past when prediction does not reward it: on an i.i.d. control stream, recall of the previous block goes from chance (0.147) to 0.581.\nOn MIMIC-IV (Johnson et al. 2023), with one block per admission and a shared 14.6M-parameter backbone, the mask improves forward likelihood over Delphi. Frozen linear probes at admission boundaries (Table 2) show that MarBLE’s summary is much better at reconstructing the admission it just closed and at forecasting the next one. It is worse at recovering static attributes such as sex, which the chain has no reason to carry. This is the expected cost of a Markov bottleneck.\n\n\n\nTable 2: Frozen probes on MIMIC-IV (2,687 admissions shared by all models). Excerpt from the MarBLE paper draft.\n\n\n\n\n\nFrozen probe at an admission boundary\nDelphi\nMarBLE (mask)\n\n\n\n\nLength of stay of the closed admission (R^2)\n0.50\n0.82\n\n\nGap to the next admission (R^2)\n0.02\n0.12\n\n\n30-day readmission (AUROC)\n0.57\n0.65\n\n\nSex (AUROC)\n0.83\n0.72\n\n\n\n\n\n\nNext steps. We will write the section on plugging h_t into the OPE estimator, then submit the paper. We then plan to train MarBLE on the SNDS with quarterly blocks, so that h_t replaces \\phi_t in the state of Section 3. The Markov assumption behind the policy estimates would then hold by construction."
+  },
+  {
+    "objectID": "mydocs/csi_2/index.html#a-pre-training-objective-for-simultaneous-events",
+    "href": "mydocs/csi_2/index.html#a-pre-training-objective-for-simultaneous-events",
+    "title": "Policy evaluation using Transformer-based medical pathway embeddings",
+    "section": "4.2 A pre-training objective for simultaneous events",
+    "text": "4.2 A pre-training objective for simultaneous events\nMotivation. Most event-stream foundation models (Delphi, ETHOS, MOTOR) train on a point-process likelihood: a continuous waiting-time density, plus a categorical distribution over the next token. Records are dated to the day, and many codes share a date, so practitioners serialise each day in an arbitrary order with zero gaps. In a draft with Lucas Resende and Guillaume Lecué, Events do not queue, we show that this step is not harmless:\n\nThe time likelihood is ill-posed. With ties, the continuous waiting-time likelihood has population infimum -\\infty. The exponential head used in practice inflates the fitted rate by exactly (1-\\rho)^{-1}, where \\rho is the tie fraction.\nThe next-token head is not a hazard. Under a fixed code order, its optimum is the true hazard multiplied by a factor that decays exponentially with the code’s arbitrary rank.\nThe Poisson approximation misplaces mass. It puts mass \\tfrac12 \\sum_v h_v^2 on days where a code repeats, which is not small under Zipfian vocabularies.\n\nProposed objective. We propose to treat a record as a sequence of sets indexed by day, and to train on the discrete-time competing risks likelihood: \n\\ell_{\\mathrm{DCR}} = -\\sum_{d} \\Big[ \\sum_{v \\in \\mathcal{E}_d} \\log h_{v,d} + \\sum_{v \\notin \\mathcal{E}_d} \\log (1 - h_{v,d}) \\Big],\n where \\mathcal{E}_d is the set of codes recorded on day d and h_{v,d} is the modelled hazard of code v that day (Tutz and Schmid 2016; Lee et al. 2018). Event-free stretches collapse in closed form, so the network is called only on event days. The point-process loss is exactly the first-order expansion of this objective in the hazards. The only cost of the multi-label form is the conditional total correlation of a day, which a mixture-of-products head removes; and the objective is invariant to the order of the vocabulary.\nOur multi-label loss (Section 2) was a first step in this direction. The theory is written; the pre-registered experiments (MIMIC-IV, synthetic generator) remain to be run."
+  },
+  {
+    "objectID": "mydocs/csi_2/index.html#a-zipfian-tokenizer-for-event-logs",
+    "href": "mydocs/csi_2/index.html#a-zipfian-tokenizer-for-event-logs",
+    "title": "Policy evaluation using Transformer-based medical pathway embeddings",
+    "section": "4.3 A Zipfian tokenizer for event logs",
+    "text": "4.3 A Zipfian tokenizer for event logs\nMotivation. Event-log models inherit their vocabulary from administrative classifications (ICD-10, CCAM, ATC). These hierarchies have tens of thousands of codes, and code frequencies span six orders of magnitude. The usual fixes (raw codes, top-V plus an unknown token, rolling up to a fixed hierarchy level) are unchecked statistical choices, several of which our current vocabulary makes.\nApproach. In a single-author draft, we treat a tokenizer as a partition of the code alphabet. We split its excess risk into a distortion term (a frequency-weighted Jensen–Shannon divergence, bounded by the entropy the partition destroys) and an estimation term that saturates: a token seen too rarely is simply not learned.\nAt the optimum, each merged group of codes carries the same frequency mass. Because single codes cannot be split, the head of the distribution keeps its power law while the tail is pooled into a flat shelf at an estimability threshold \\pi^\\star = \\Theta(k/N). This profile looks Zipfian, which explains why pre-trained models work best with Zipfian token frequencies (He et al. 2025); the analysis also gives an optimal vocabulary size V^\\star \\le 2\\kappa N/k, linear in corpus size. The resulting algorithm, ZipfTok, prunes the code hierarchy exactly (Lagrangian tree pruning, giving the whole vocabulary-size path at once), then merges the tail agglomeratively. Experiments are designed but not yet run.\nApplications and roadmap to the defence. Further applications include other policies (e.g. HAS recommendations) and rewards (total expenditure), subpopulations (diabetes, heart failure), and synthetic counterfactual rollouts from MarBLE’s state. Provisional roadmap: autumn 2026 – winter 2027, submit MarBLE, run the DCR experiments and complete the gatekeeping paper; spring – summer 2027, ZipfTok experiments, then retrain the SNDS model with the new objective, tokenizer and quarterly MarBLE blocks; final year, OPE with the Markovian state, further applications, thesis writing and defence."
+  },
+  {
+    "objectID": "mydocs/csi_slides_2/index.html#about-me",
+    "href": "mydocs/csi_slides_2/index.html#about-me",
+    "title": "TFC - Presentation",
     "section": "About me",
     "text": "About me\n\nGraduated from HEC (19-24), X (X20), ENSAE and MVA (administrateur de l’Insee, 2024)\nCurrently, since sept. 2024:\n\nData Scientist at Insee’s AI & Data Science Innovation Lab (MLOps, agentic workflows and deep learning use cases: NLP, ML/DL for econometrics, satellite imagery)\nPhD in CS Candidate (part-time) - supervised by G. Lecué (Crest) and G. Varoquaux (Inria)"
   },
   {
-    "objectID": "mydocs/crest_insee/index.html#broader-view-of-the-graph4health-anr",
-    "href": "mydocs/crest_insee/index.html#broader-view-of-the-graph4health-anr",
-    "title": "Journées I2E",
+    "objectID": "mydocs/csi_slides_2/index.html#broader-view-of-the-graph4health-anr",
+    "href": "mydocs/csi_slides_2/index.html#broader-view-of-the-graph4health-anr",
+    "title": "TFC - Presentation",
     "section": "Broader view of the Graph4Health ANR",
     "text": "Broader view of the Graph4Health ANR\n\nThe general objective is to\n\ninfer the impact of the healthcare supply (and its geographic distribution) on health outcomes\n\nusing classic econometric tools\nusing deep learning methods\n\nstudy policies that contribute to the efficiency of the French healthcare system\n\n11 years of exhaustive SNDS\n\n70M patients\nconsultations, procedures, hospitalizations, medications, deaths etc."
   },
   {
-    "objectID": "mydocs/crest_insee/index.html#setting",
-    "href": "mydocs/crest_insee/index.html#setting",
-    "title": "Journées I2E",
+    "objectID": "mydocs/csi_slides_2/index.html#setting",
+    "href": "mydocs/csi_slides_2/index.html#setting",
+    "title": "TFC - Presentation",
     "section": "Setting",
     "text": "Setting\nDataset of medical pathways:  For i = 1, \\dots, n, X_i \\coloneqq (e_i, t_i, f_i), where:\n\ne_i \\in \\mathbb{R}^{cs} are the tokenized events, containing integers between 0 and the vocabulary size \\lvert \\mathcal{V} \\rvert\nt_i \\in \\mathbb{R}^{cs} is the temporal vector, containing the dates\nf_i \\in \\mathbb{R}^{2} corresponds to the patient general features, (e.g. age and gender)"
   },
   {
-    "objectID": "mydocs/crest_insee/index.html#objectives",
-    "href": "mydocs/crest_insee/index.html#objectives",
-    "title": "Journées I2E",
+    "objectID": "mydocs/csi_slides_2/index.html#objectives",
+    "href": "mydocs/csi_slides_2/index.html#objectives",
+    "title": "TFC - Presentation",
     "section": "Objectives",
     "text": "Objectives\n\nHaving a time-aware Transformers (\\neq NLP) with a lot of simultaneous events\n\nNeed to design an adapted loss function\n\nKeeping in mind policy evaluation\n\nWe want to be able to efficiently compute the embedding of the pathway at any time (the trajectory of the patient)\nFocus on decoder-only Transformers (GPT-like)"
   },
   {
-    "objectID": "mydocs/crest_insee/index.html#model",
-    "href": "mydocs/crest_insee/index.html#model",
-    "title": "Journées I2E",
+    "objectID": "mydocs/csi_slides_2/index.html#model",
+    "href": "mydocs/csi_slides_2/index.html#model",
+    "title": "TFC - Presentation",
     "section": "Model",
     "text": "Model\n\nEmbedding matrices of size \\mathbb{R}^{\\lvert \\mathcal{V} \\rvert, d_{embed}} (vocab), \\mathbb{R}^{2, d_{embed}} (gender) and \\mathbb{R}^{8, d_{embed}} (age class)\n\nWe use t_i to have a time-aware positional encoding using a sinusoidal encoding\nA symbolic [START] token, composed of the summed embeddings of age and gender.\n\nCausal self-attention layers so that the Transformer-based model outputs causally contextualized embeddings:  GPT_{\\theta}(X_i) \\in \\mathbb{R}^{cs, d_{embed}}"
   },
   {
-    "objectID": "mydocs/crest_insee/index.html#pre-training",
-    "href": "mydocs/crest_insee/index.html#pre-training",
-    "title": "Journées I2E",
+    "objectID": "mydocs/csi_slides_2/index.html#pre-training",
+    "href": "mydocs/csi_slides_2/index.html#pre-training",
+    "title": "TFC - Presentation",
     "section": "Pre-training",
     "text": "Pre-training\n\nWe use weight tying to output the logits \\in \\mathbb{R}^{cs, \\lvert \\mathcal{V} \\rvert}\n\n\\text{logits}_{i, c, v} = (W \\cdot GPT_{\\theta}(X))_{i, c, v}\n\nNext-Token Prediction: instead of softmax as in Shmatko et al. (2025), we use a multi-label classification loss to better handle co-occurent events:\n\n \\text{BCE}_{i, c} \\coloneqq  - \\sum_v y_{i, c, v} \\log \\frac{\\lambda_{i, c, v}}{1 + \\lambda_{i, c, v}} + (1-y_{i, c, v}) \\log \\frac{1}{1 + \\lambda_{i, c, v}}"
   },
   {
-    "objectID": "mydocs/crest_insee/index.html#overview",
-    "href": "mydocs/crest_insee/index.html#overview",
-    "title": "Journées I2E",
+    "objectID": "mydocs/csi_slides_2/index.html#overview",
+    "href": "mydocs/csi_slides_2/index.html#overview",
+    "title": "TFC - Presentation",
     "section": "Overview",
     "text": "Overview"
   },
   {
-    "objectID": "mydocs/crest_insee/index.html#validating-the-model",
-    "href": "mydocs/crest_insee/index.html#validating-the-model",
-    "title": "Journées I2E",
+    "objectID": "mydocs/csi_slides_2/index.html#validating-the-model",
+    "href": "mydocs/csi_slides_2/index.html#validating-the-model",
+    "title": "TFC - Presentation",
     "section": "Validating the model",
     "text": "Validating the model\nScaling law\n\nScaling laws showing the power-law decay (dashed) of validation loss as a function of model parameters and data volume.We are matching the ~2,000 optimal ratio \\frac{\\text{\\# training tokens}}{\\text{\\# parameters}} found in Waxler et al. (2025)."
   },
   {
-    "objectID": "mydocs/crest_insee/index.html#markov-decision-processes-and-off-policy-evaluation",
-    "href": "mydocs/crest_insee/index.html#markov-decision-processes-and-off-policy-evaluation",
-    "title": "Journées I2E",
+    "objectID": "mydocs/csi_slides_2/index.html#markov-decision-processes-and-off-policy-evaluation",
+    "href": "mydocs/csi_slides_2/index.html#markov-decision-processes-and-off-policy-evaluation",
+    "title": "TFC - Presentation",
     "section": "Markov Decision Processes and Off-Policy Evaluation",
     "text": "Markov Decision Processes and Off-Policy Evaluation\n\nA Markov Decision Process (MDP) is a tuple (\\mathcal{S}, \\mathcal{A}, P, P_0, R, \\gamma) where:\n\n\\mathcal{S} is the state space\n\\mathcal{A} is the action space\nP: \\mathcal{S} \\times \\mathcal{A} \\to \\Delta(\\mathcal{S}) is the transition probability function\nP_0 \\in \\Delta(\\mathcal{S}) is the initial state distribution\nR: \\mathcal{S} \\times \\mathcal{A} \\to \\mathbb{R} is the reward function\n\\gamma \\in [0,1] is the discount factor"
   },
   {
-    "objectID": "mydocs/crest_insee/index.html#in-our-case",
-    "href": "mydocs/crest_insee/index.html#in-our-case",
-    "title": "Journées I2E",
+    "objectID": "mydocs/csi_slides_2/index.html#in-our-case",
+    "href": "mydocs/csi_slides_2/index.html#in-our-case",
+    "title": "TFC - Presentation",
     "section": "In our case",
     "text": "In our case\n\n\nDataset: 2 years, discretized into 8 quarters; we define t=0 as the first day of 2017 and T=7 as October 1st, 2018.\n\\pi_e(1 | s_t) ≔ 0.99: assign a PCP to a cohort of patients"
   },
   {
-    "objectID": "mydocs/crest_insee/index.html#doubly-robust-evaluation",
-    "href": "mydocs/crest_insee/index.html#doubly-robust-evaluation",
-    "title": "Journées I2E",
+    "objectID": "mydocs/csi_slides_2/index.html#doubly-robust-evaluation",
+    "href": "mydocs/csi_slides_2/index.html#doubly-robust-evaluation",
+    "title": "TFC - Presentation",
     "section": "Doubly robust evaluation",
     "text": "Doubly robust evaluation\n\nGoal: estimate the value V^{\\pi_e} from data collected under \\pi_b, without running \\pi_e.\nTwo classical estimators, each with a flaw:\n\nDirect Method (DM): fit q_t(s,a), plug in. Biased if q_t is misspecified.\nImportance Sampling (IS): reweight trajectories by \\pi_e / \\pi_b. High variance.\n\nDoubly Robust (DR) (Kallus and Uehara 2020): combines both. Consistent if either nuisance is well-estimated."
   },
   {
-    "objectID": "mydocs/crest_insee/index.html#future-work",
-    "href": "mydocs/crest_insee/index.html#future-work",
-    "title": "Journées I2E",
+    "objectID": "mydocs/csi_slides_2/index.html#future-work",
+    "href": "mydocs/csi_slides_2/index.html#future-work",
+    "title": "TFC - Presentation",
     "section": "Future work",
-    "text": "Future work\n\nOther OPE use cases\n\nHAS recommendations\nOther rewards: total expenditures…\n\nOther GPT for medical pathways use cases:\n\ncausal inference\ngeneration of synthetic trajectories\n\nImprove the foundation model:\n\nBenchmarks\nMake the embeddings really Markovian…"
+    "text": "Future work\n\nOther OPE use cases\n\nHAS recommendations\nOther rewards: total expenditures…\n\nOther GPT for medical pathways use cases:\n\ncausal inference\ngeneration of synthetic trajectories\n\nImprove the foundation model:\n\nBenchmarks\nMake the embeddings really Markovian (MarBLE)\nA loss that respects co-occurring events (DCR)\nA vocabulary chosen from the data (ZipfTok)"
   },
   {
-    "objectID": "mydocs/crest_insee/index.html#section",
-    "href": "mydocs/crest_insee/index.html#section",
-    "title": "Journées I2E",
+    "objectID": "mydocs/csi_slides_2/index.html#marble-making-the-state-really-markovian",
+    "href": "mydocs/csi_slides_2/index.html#marble-making-the-state-really-markovian",
+    "title": "TFC - Presentation",
+    "section": "MarBLE: making the state really Markovian",
+    "text": "MarBLE: making the state really Markovian\nThe problem (why).\n\nThe whole OPE pipeline rests on one assumption: the state s_t (built from the GPT history embedding \\phi_t) is Markov, i.e. a sufficient statistic of the trajectory so far.\nBut an unconstrained causal Transformer has no bounded Markov state. Its representation at position t is a function of the entire past, diffused across a growing residual stream.\n\\phi_t is just a lossy read of that stream: nothing forces “the future is conditionally independent of the past given \\phi_t”.\nWe want a fixed-size running summary h_t that is a genuine sufficient statistic, exactly what an OPE estimator (or any RL value function) needs."
+  },
+  {
+    "objectID": "mydocs/csi_slides_2/index.html#marble-a-markovian-transformer",
+    "href": "mydocs/csi_slides_2/index.html#marble-a-markovian-transformer",
+    "title": "TFC - Presentation",
+    "section": "MarBLE: a Markovian Transformer",
+    "text": "MarBLE: a Markovian Transformer\nThe method (what).\nMarBLE wraps our decoder-only GPT with a bounded history token h_t, refreshed at chosen boundaries (a quarter, a hospital admission).\n\nBlock-recurrent structure: events feed into a per-block summary h_t, and h_{t-1} is the only path from the past into block t."
+  },
+  {
+    "objectID": "mydocs/csi_slides_2/index.html#how-it-works",
+    "href": "mydocs/csi_slides_2/index.html#how-it-works",
+    "title": "TFC - Presentation",
+    "section": "How it works",
+    "text": "How it works\n\nInsert learned history tokens at boundaries: block t is B_t = (h_{t-1}, e_{t,1}, \\dots, e_{t,k_t}), with recurrence h_t = \\mathrm{LayerNorm}(W z_{t,k_t} + b).\nBlock-diagonal causal mask: no event in block t may attend before h_{t-1}. So h_{t-1} is the sole gateway from the past, making h_0 \\to h_1 \\to \\cdots strictly Markov (distribution-free, no change to the attention operator).\nForward loss: the same TPP likelihood as our GPT (multi-label BCE + time-to-event). Under realizability, its minimizer makes h_t predictively sufficient."
+  },
+  {
+    "objectID": "mydocs/csi_slides_2/index.html#events-do-not-queue-a-loss-for-co-occurring-events",
+    "href": "mydocs/csi_slides_2/index.html#events-do-not-queue-a-loss-for-co-occurring-events",
+    "title": "TFC - Presentation",
+    "section": "Events do not queue: a loss for co-occurring events",
+    "text": "Events do not queue: a loss for co-occurring events\nThe problem (why).\n\nRecords are dated to the day, and many codes share a date (a hospital stay, a pharmacy delivery…).\nStandard TPP pre-training (Delphi, ETHOS, MOTOR) serialises each day in an arbitrary order, with zero gaps between tied events. This is not harmless:\n\nill-posed time likelihood: with ties, the continuous waiting-time NLL has infimum -\\infty; the exponential head inflates the fitted rate by exactly (1-\\rho)^{-1}, \\rho = tie fraction;\nthe next-token head is not a hazard: under a fixed code order, its optimum is the true hazard times a factor decaying exponentially with the code’s arbitrary rank;\nPoisson leakage: mass \\tfrac12 \\sum_v h_v^2 on days where a code repeats, which is not small under Zipfian vocabularies."
+  },
+  {
+    "objectID": "mydocs/csi_slides_2/index.html#zipftok-choosing-the-vocabulary",
+    "href": "mydocs/csi_slides_2/index.html#zipftok-choosing-the-vocabulary",
+    "title": "TFC - Presentation",
+    "section": "ZipfTok: choosing the vocabulary",
+    "text": "ZipfTok: choosing the vocabulary\nThe problem (why).\n\nEvent-log models inherit their vocabulary: ICD-10, CCAM, ATC hierarchies, with frequencies spanning six orders of magnitude.\nUsual reflexes (raw codes, top-V + UNK, fixed-level rollup) are unchecked statistical choices.\nPre-trained models do best when token frequencies follow a Zipf law (He et al. 2025)… but why?"
+  },
+  {
+    "objectID": "mydocs/csi_slides_2/index.html#section",
+    "href": "mydocs/csi_slides_2/index.html#section",
+    "title": "TFC - Presentation",
     "section": "",
-    "text": "Chernozhukov, Victor, Denis Chetverikov, Mert Demirer, et al. 2018. Double/Debiased Machine Learning for Treatment and Structural Parameters. Oxford University Press Oxford, UK.\n\n\nKallus, Nathan, and Masatoshi Uehara. 2020. ‘Double Reinforcement Learning for Efficient Off-Policy Evaluation in Markov Decision Processes’. Journal of Machine Learning Research 21 (167): 1–63.\n\n\nShmatko, Artem, Alexander Wolfgang Jung, Kumar Gaurav, et al. 2025. ‘Learning the Natural History of Human Disease with Generative Transformers’. Nature, ahead of print, September 17. https://doi.org/10.1038/s41586-025-09529-3.\n\n\nWaxler, Shane, Paul Blazek, Davis White, et al. 2025. Generative Medical Event Models Improve with Scale. arXiv:2508.12104. arXiv. https://doi.org/10.48550/arXiv.2508.12104."
-  },
-  {
-    "objectID": "mydocs/soda_meeting/index.html#about-me",
-    "href": "mydocs/soda_meeting/index.html#about-me",
-    "title": "SODA Seminar",
-    "section": "About me",
-    "text": "About me\n\nGraduated from HEC (19-24), X (X20), ENSAE and MVA (administrateur de l’Insee, 2024)\nInternships:\n\n2023: MIT (Operations Research Center), Microtransit system design and optimization\n2024: Inria HeKA, Generative models for longitudinal images\n\nCurrently, since sept. 2024:\n\nData Scientist at Insee’s AI & Data Science Innovation Lab (MLOps, agentic workflows and deep learning use cases: NLP, ML/DL for econometrics, satellite imagery)\nPhD in CS Candidate (part-time) - supervised by G. Lecué (Crest) and G. Varoquaux (Inria)"
-  },
-  {
-    "objectID": "mydocs/soda_meeting/index.html#broader-view-of-the-graph4health-anr",
-    "href": "mydocs/soda_meeting/index.html#broader-view-of-the-graph4health-anr",
-    "title": "SODA Seminar",
-    "section": "Broader view of the Graph4Health ANR",
-    "text": "Broader view of the Graph4Health ANR\n\nThe general objective is to\n\ninfer the impact of the healthcare supply (and its geographic distribution) on health outcomes\n\nusing classic econometric tools\nusing deep learning methods\n\nstudy policies that contribute to the efficiency of the French healthcare system\n\n11 years of exhaustive SNDS\n\n70M patients\nconsultations, procedures, hospitalizations, medications, deaths etc."
-  },
-  {
-    "objectID": "mydocs/soda_meeting/index.html#setting",
-    "href": "mydocs/soda_meeting/index.html#setting",
-    "title": "SODA Seminar",
-    "section": "Setting",
-    "text": "Setting\nDataset of medical pathways:  For i = 1, \\dots, n, X_i \\coloneqq (e_i, t_i, f_i), where:\n\ne_i \\in \\mathbb{R}^{cs} are the tokenized events, containing integers between 0 and the vocabulary size \\lvert \\mathcal{V} \\rvert\nt_i \\in \\mathbb{R}^{cs} is the temporal vector, containing the dates\nf_i \\in \\mathbb{R}^{2} corresponds to the patient general features, for now age and gender"
-  },
-  {
-    "objectID": "mydocs/soda_meeting/index.html#objectives",
-    "href": "mydocs/soda_meeting/index.html#objectives",
-    "title": "SODA Seminar",
-    "section": "Objectives",
-    "text": "Objectives\n\nHaving a time-aware Transformers (\\neq NLP) with a lot of simultaneous events\n\nNeed to design an adapted loss function\n\nKeeping in mind policy evaluation\n\nWe want to be able to efficiently compute the embedding of the pathway at any time (the trajectory of the patient)\nFocus on decoder-only Transformers (GPT-like)"
-  },
-  {
-    "objectID": "mydocs/soda_meeting/index.html#model",
-    "href": "mydocs/soda_meeting/index.html#model",
-    "title": "SODA Seminar",
-    "section": "Model",
-    "text": "Model\n\nEmbedding matrices of size \\mathbb{R}^{\\lvert \\mathcal{V} \\rvert, d_{embed}} (vocab), \\mathbb{R}^{2, d_{embed}} (gender) and \\mathbb{R}^{8, d_{embed}} (age class)\n\nWe use t_i to have a time-aware positional encoding using a sinusoidal encoding\nA symbolic [START] token, composed of the summed embeddings of age and gender.\n\nCausal self-attention layers so that the Transformer-based model outputs causally contextualized embeddings:  GPT_{\\theta}(X_i) \\in \\mathbb{R}^{cs, d_{embed}}"
-  },
-  {
-    "objectID": "mydocs/soda_meeting/index.html#pre-training",
-    "href": "mydocs/soda_meeting/index.html#pre-training",
-    "title": "SODA Seminar",
-    "section": "Pre-training",
-    "text": "Pre-training\n\nWe use weight tying to output the logits \\in \\mathbb{R}^{cs, \\lvert \\mathcal{V} \\rvert}\n\n\\text{logits}_{i, c, v} = (W \\cdot GPT_{\\theta}(X))_{i, c, v}\n\nNext-Token Prediction: instead of softmax as in Shmatko et al. (2025), we use a multi-label classification loss to better handle co-occurent events:\n\n \\text{BCE}_{i, c} \\coloneqq  - \\sum_v y_{i, c, v} \\log \\frac{\\lambda_{i, c, v}}{1 + \\lambda_{i, c, v}} + (1-y_{i, c, v}) \\log \\frac{1}{1 + \\lambda_{i, c, v}}"
-  },
-  {
-    "objectID": "mydocs/soda_meeting/index.html#validating-the-model",
-    "href": "mydocs/soda_meeting/index.html#validating-the-model",
-    "title": "SODA Seminar",
-    "section": "Validating the model",
-    "text": "Validating the model\nScaling law\n\nWe are matching the ~2,000 optimal ratio \\frac{\\text{\\# training tokens}}{\\text{\\# parameters}} found in Waxler et al. (2025)."
-  },
-  {
-    "objectID": "mydocs/soda_meeting/index.html#markov-decision-processes-and-off-policy-evaluation",
-    "href": "mydocs/soda_meeting/index.html#markov-decision-processes-and-off-policy-evaluation",
-    "title": "SODA Seminar",
-    "section": "Markov Decision Processes and Off-Policy Evaluation",
-    "text": "Markov Decision Processes and Off-Policy Evaluation\n\nA Markov Decision Process (MDP) is a tuple (\\mathcal{S}, \\mathcal{A}, P, P_0, R, \\gamma) where:\n\n\\mathcal{S} is the state space\n\\mathcal{A} is the action space\nP: \\mathcal{S} \\times \\mathcal{A} \\to \\Delta(\\mathcal{S}) is the transition probability function\nP_0 \\in \\Delta(\\mathcal{S}) is the initial state distribution\nR: \\mathcal{S} \\times \\mathcal{A} \\to \\mathbb{R} is the reward function\n\\gamma \\in [0,1] is the discount factor"
-  },
-  {
-    "objectID": "mydocs/soda_meeting/index.html#in-our-case",
-    "href": "mydocs/soda_meeting/index.html#in-our-case",
-    "title": "SODA Seminar",
-    "section": "In our case",
-    "text": "In our case"
-  },
-  {
-    "objectID": "mydocs/soda_meeting/index.html#estimation-of-the-behavioral-policy",
-    "href": "mydocs/soda_meeting/index.html#estimation-of-the-behavioral-policy",
-    "title": "SODA Seminar",
-    "section": "Estimation of the behavioral policy",
-    "text": "Estimation of the behavioral policy\nFirst step of the OPE pipeline: regress a_{i,t} (PCP affiliation) on s_{i,t} (embeddings) to estimate \\hat{\\pi}_b(a|s), the behavioral policy."
-  },
-  {
-    "objectID": "mydocs/soda_meeting/index.html#vpi_b-and-pi_e",
-    "href": "mydocs/soda_meeting/index.html#vpi_b-and-pi_e",
-    "title": "SODA Seminar",
-    "section": "V^{\\pi_b} and \\pi_e",
-    "text": "V^{\\pi_b} and \\pi_e\n\nThe value of the behavioral policy can be estimated using the trajectories in the dataset \\mathcal{D}:\nV^{\\pi_b} \\approx V^{\\hat{\\pi}_b} \\coloneqq \\frac{1}{N} \\sum_{i=1}^N \\sum_{t=0}^{T-1} \\gamma^t r_t^i\nThe policies we want to study: \\pi_e^\\eta(1|s) = \\max(\\eta, \\hat{\\pi}_b(1|s)) for \\eta = 0 \\dots 0.99"
-  },
-  {
-    "objectID": "mydocs/soda_meeting/index.html#results",
-    "href": "mydocs/soda_meeting/index.html#results",
-    "title": "SODA Seminar",
-    "section": "Results",
-    "text": "Results\nGeneral population"
-  },
-  {
-    "objectID": "mydocs/soda_meeting/index.html#future-work",
-    "href": "mydocs/soda_meeting/index.html#future-work",
-    "title": "SODA Seminar",
-    "section": "Future work",
-    "text": "Future work\n\nOther actions\n\nHAS recommendations\n\nOther rewards\n\nTotal expenditures…\n\nApply the method to specific subpopulations\n\nDiabetes\nHeart failure\n\nEnriching the embedding\n\nSmarter training losses\nAction as token"
-  },
-  {
-    "objectID": "mydocs/soda_meeting/index.html#section",
-    "href": "mydocs/soda_meeting/index.html#section",
-    "title": "SODA Seminar",
-    "section": "",
-    "text": "Farajtabar, Mehrdad, Yinlam Chow, and Mohammad Ghavamzadeh. 2018. ‘More Robust Doubly Robust Off-Policy Evaluation’. In Proceedings of the 35th International Conference on Machine Learning, edited by Jennifer Dy and Andreas Krause, vol. 80. Proceedings of Machine Learning Research. PMLR. https://proceedings.mlr.press/v80/farajtabar18a.html.\n\n\nShmatko, Artem, Alexander Wolfgang Jung, Kumar Gaurav, et al. 2025. ‘Learning the Natural History of Human Disease with Generative Transformers’. Nature, ahead of print, September 17. https://doi.org/10.1038/s41586-025-09529-3.\n\n\nWaxler, Shane, Paul Blazek, Davis White, et al. 2025. Generative Medical Event Models Improve with Scale. arXiv:2508.12104. arXiv. https://doi.org/10.48550/arXiv.2508.12104."
+    "text": "Chernozhukov, Victor, Denis Chetverikov, Mert Demirer, et al. 2018. Double/Debiased Machine Learning for Treatment and Structural Parameters. Oxford University Press Oxford, UK.\n\n\nHe, Yanjin et al. 2025. ‘Pre-Trained Models Perform the Best When Token Distributions Follow Zipf’s Law’. arXiv Preprint.\n\n\nKallus, Nathan, and Masatoshi Uehara. 2020. ‘Double Reinforcement Learning for Efficient Off-Policy Evaluation in Markov Decision Processes’. Journal of Machine Learning Research 21 (167): 1–63.\n\n\nShmatko, Artem, Alexander Wolfgang Jung, Kumar Gaurav, et al. 2025. ‘Learning the Natural History of Human Disease with Generative Transformers’. Nature, ahead of print, September 17. https://doi.org/10.1038/s41586-025-09529-3.\n\n\nWaxler, Shane, Paul Blazek, Davis White, et al. 2025. Generative Medical Event Models Improve with Scale. arXiv:2508.12104. arXiv. https://doi.org/10.48550/arXiv.2508.12104."
   }
 ]

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 350" font-family="Georgia, 'Times New Roman', serif">
+  <defs>
+    <marker id="arrRed" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#c0403b"/>
+    </marker>
+    <marker id="arrGrey" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#666"/>
+    </marker>
+  </defs>
+
+  <!-- block backgrounds -->
+  <rect x="30"  y="120" width="215" height="70" rx="8" fill="#000000" opacity="0.045"/>
+  <rect x="300" y="120" width="160" height="70" rx="8" fill="#000000" opacity="0.045"/>
+  <text x="137" y="210" text-anchor="middle" font-size="14" fill="#555" font-style="italic">block t</text>
+  <text x="380" y="210" text-anchor="middle" font-size="14" fill="#555" font-style="italic">block t+1</text>
+
+  <!-- boundary walls -->
+  <line x1="272" y1="95" x2="272" y2="230" stroke="#999" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <line x1="487" y1="95" x2="487" y2="230" stroke="#999" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <text x="272" y="248" text-anchor="middle" font-size="13" fill="#777">T_t</text>
+  <text x="487" y="248" text-anchor="middle" font-size="13" fill="#777">T_(t+1)</text>
+
+  <!-- Markov chain arrows over the top -->
+  <path d="M70,105 C120,55 265,55 315,105" fill="none" stroke="#c0403b" stroke-width="2.5" marker-end="url(#arrRed)"/>
+  <path d="M340,105 C390,60 480,60 530,105" fill="none" stroke="#c0403b" stroke-width="2.5" marker-end="url(#arrRed)"/>
+  <text x="330" y="40" text-anchor="middle" font-size="15" fill="#c0403b" font-style="italic">strictly Markov chain of summaries</text>
+
+  <!-- history tokens -->
+  <g>
+    <rect x="52" y="137" width="38" height="38" rx="7" fill="#ea6b66"/>
+    <text x="71" y="161" text-anchor="middle" font-size="15" fill="#fff">h(t-1)</text>
+  </g>
+  <g>
+    <rect x="303" y="137" width="34" height="38" rx="7" fill="#ea6b66"/>
+    <text x="320" y="161" text-anchor="middle" font-size="15" fill="#fff">h(t)</text>
+  </g>
+  <g>
+    <rect x="512" y="137" width="38" height="38" rx="7" fill="#ea6b66"/>
+    <text x="531" y="161" text-anchor="middle" font-size="15" fill="#fff">h(t+1)</text>
+  </g>
+
+  <!-- events block t -->
+  <circle cx="130" cy="156" r="13" fill="#b1ddf0" stroke="#4a90b0" stroke-width="1.5"/>
+  <circle cx="175" cy="156" r="13" fill="#b1ddf0" stroke="#4a90b0" stroke-width="1.5"/>
+  <circle cx="220" cy="156" r="13" fill="#b1ddf0" stroke="#4a90b0" stroke-width="1.5"/>
+  <!-- events block t+1 -->
+  <circle cx="380" cy="156" r="13" fill="#b1ddf0" stroke="#4a90b0" stroke-width="1.5"/>
+  <circle cx="425" cy="156" r="13" fill="#b1ddf0" stroke="#4a90b0" stroke-width="1.5"/>
+
+  <!-- recurrence arrow: block t last position produces h_t -->
+  <path d="M232,178 C260,205 292,200 316,178" fill="none" stroke="#666" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#arrGrey)"/>
+
+  <!-- legend -->
+  <circle cx="470" cy="300" r="10" fill="#b1ddf0" stroke="#4a90b0" stroke-width="1.5"/>
+  <text x="486" y="304" font-size="13" fill="#333">events (time, mark)</text>
+  <rect x="30" y="290" width="24" height="24" rx="5" fill="#ea6b66"/>
+  <text x="62" y="304" font-size="13" fill="#333">learned history token = bounded state</text>
+</svg>
