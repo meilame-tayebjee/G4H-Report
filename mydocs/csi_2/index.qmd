@@ -1,6 +1,6 @@
 ---
 title: "Policy evaluation using Transformer-based medical pathway embeddings"
-subtitle: "Second-year PhD committee — progress manuscript"
+subtitle: "Second-year PhD committee: progress manuscript"
 author:
   - name: Meilame Tayebjee
     affiliations:
@@ -12,6 +12,9 @@ lang: en-GB
 abstract: |
   This PhD (Graph4Health ANR project, supervised by Guillaume Lecué, CREST, and Gaël Varoquaux, Inria) studies how Transformer-based representations of medical pathways can support policy evaluation on the French national health data system (SNDS). In the second year we moved from a first time-aware GPT and a static treatment-effect plan to a validated, full-vocabulary generative model whose embeddings serve as the state of a Markov decision process, in which we estimated the value of giving every patient a primary care provider with a doubly robust off-policy estimator on about 50 million individuals. This application exposed three weaknesses, each now the subject of a paper in preparation: a state that is not Markov (MarBLE), a pre-training loss unsuited to simultaneous events (discrete-time competing risks), and an inherited vocabulary (ZipfTok).
 bibliography: references.bib
+resources:
+  - recap_formations.pdf
+  - CV.pdf
 number-sections: true
 format:
   html:
@@ -25,6 +28,12 @@ format:
       - text: Committee slides
         icon: easel
         href: ../csi_slides_2/index.html
+      - text: Training record
+        icon: mortarboard
+        href: recap_formations.pdf
+      - text: CV
+        icon: person-vcard
+        href: CV.pdf
   pdf:
     documentclass: scrartcl
     fontsize: 11pt
