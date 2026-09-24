@@ -1,11 +1,11 @@
 ---
-title: TFC - Presentation
+title: 2nd-year PhD Committee
 subtitle: "**Policy evaluation using Transformer-based medical pathway embeddings**"
 authors:
   - name: Meilame Tayebjee
     roles: writing
     corresponding: true
-date: "2026-07-27"
+date: "2026-09-24"
 date-format: "D MMMM YYYY"
 lang: en-GB
 bibliography: references.bib
@@ -44,9 +44,3 @@ css: custom.css
 
 ::: {#refs}
 :::
-
---- 
-
-**Pres. link**
-
-![](images/QRcode.svg){fig-align="center" width="200px"}

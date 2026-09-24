@@ -41,7 +41,12 @@ format:
 ---
 
 ::: {.callout-note appearance="simple"}
+::: {.content-visible when-format="html"}
+The slides presented at the committee are available [here](../csi_slides_2/index.html).
+:::
+::: {.content-visible unless-format="html"}
 The slides presented at the committee are available [here](https://meilame-tayebjee.github.io/G4H-Report/mydocs/csi_slides_2/).
+:::
 :::
 
 # Introduction {#sec-intro}
