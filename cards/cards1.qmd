@@ -1,10 +1,10 @@
 ---
-title: Technical report
-date: "2025-07-31"
+title: Second year PhD Committee
+date: "2026-09-24"
 description: |
-  From embeddings to causal inference
+  Progress manuscript: evolution of the project, current results and roadmap
 slides:
-  text: Doc
-  url: /mydocs/technical_report/index.html
+  text: Report
+  url: /mydocs/csi_2/index.html
 order: 1
 ---
