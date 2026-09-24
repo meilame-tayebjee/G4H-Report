@@ -11,7 +11,9 @@
 
 - **Improve the foundation model:**
   - Benchmarks
-  **- Make the embeddings *really* Markovian...**
+  - **Make the embeddings *really* Markovian** (MarBLE)
+  - **A loss that respects co-occurring events** (DCR)
+  - **A vocabulary chosen from the data** (ZipfTok)
 :::
 
 
@@ -67,4 +69,54 @@ where $u_j$ is the backward age of event $j$ and $\beta$ sets the memory horizon
 - **Training**: parallel within blocks, a short recurrent scan across them. **Inference** is streaming: constant memory and per-event compute in the history length.
 
 - Backbone-agnostic: the mask and DBR attach to *any* decoder-only model.
+:::
+
+
+## Events do not queue: a loss for co-occurring events {.unnumbered}
+
+**The problem (why).**
+
+::: {.incremental}
+- Records are dated **to the day**, and many codes share a date (a hospital stay, a pharmacy delivery...).
+- Standard TPP pre-training (Delphi, ETHOS, MOTOR) **serialises** each day in an arbitrary order, with zero gaps between tied events. This is not harmless:
+  - **ill-posed time likelihood**: with ties, the continuous waiting-time NLL has infimum $-\infty$; the exponential head inflates the fitted rate by exactly $(1-\rho)^{-1}$, $\rho$ = tie fraction;
+  - **the next-token head is not a hazard**: under a fixed code order, its optimum is the true hazard times a factor decaying exponentially with the code's *arbitrary* rank;
+  - **Poisson leakage**: mass $\tfrac12 \sum_v h_v^2$ on days where a code repeats, which is not small under Zipfian vocabularies.
+:::
+
+---
+
+**The fix (what): discrete-time competing risks (DCR).**
+
+A record is a day-indexed sequence of **sets** $\mathcal{E}_d$; we score each day with Bernoulli hazards $h_{v,d}$:
+$$
+\ell_{\mathrm{DCR}} = -\sum_{d} \Big[ \sum_{v \in \mathcal{E}_d} \log h_{v,d} + \sum_{v \notin \mathcal{E}_d} \log (1 - h_{v,d}) \Big]
+$$
+
+::: {.incremental}
+- Event-free stretches **collapse in closed form**: one network call per event day.
+- The TPP loss is exactly its **first-order expansion** in the hazards.
+- Permutation-invariant in the vocabulary; a mixture-of-products head closes the remaining gap (within-day correlation).
+- Our multi-label BCE was a first step. Theory written; experiments (MIMIC-IV, synthetic) to be run.
+:::
+
+## ZipfTok: choosing the vocabulary {.unnumbered}
+
+**The problem (why).**
+
+::: {.incremental}
+- Event-log models **inherit** their vocabulary: ICD-10, CCAM, ATC hierarchies, with frequencies spanning six orders of magnitude.
+- Usual reflexes (raw codes, top-$V$ + `UNK`, fixed-level rollup) are unchecked statistical choices.
+- Pre-trained models do best when token frequencies follow a **Zipf law** [@he2025zipf]... but why?
+:::
+
+---
+
+**The answer (what).**
+
+::: {.incremental}
+- A tokenizer = a **partition** of the codes. Excess risk = **distortion** (a weighted Jensen–Shannon divergence) + **estimation** that *saturates* (a token seen too rarely is not learned at all).
+- Optimum: power-law head (codes can't be split) + **flat shelf** at an estimability threshold $\pi^\star = \Theta(k/N)$ — *what a Zipf plot looks like*. Zipf is a **symptom**, not a cause.
+- Optimal vocabulary size $V^\star \le 2\kappa N/k$, linear in corpus size.
+- **ZipfTok**: exact Lagrangian pruning of the code hierarchy (whole $V$-path at once) + agglomerative merging of the tail. Experiments to be run.
 :::
