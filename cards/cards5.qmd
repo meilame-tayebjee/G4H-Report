@@ -1,0 +1,10 @@
+---
+title: Journées CREST-INSEE
+date: "2026-06-10"
+description: |
+  Presentation of the GPT project for the CREST-INSEE Seminar at ENSAI campus
+slides:
+  text: Slides
+  url: /mydocs/crest_insee/index.html
+order: 5
+---

@@ -4,7 +4,7 @@ date: "2026-09-24"
 description: |
   Progress manuscript: evolution of the project, current results and roadmap
 slides:
-  text: Report
+  text: Doc
   url: /mydocs/csi_2/index.html
-order: 1
+order: 6
 ---

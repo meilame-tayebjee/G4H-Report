@@ -1,0 +1,10 @@
+---
+title: G4H Half-Day
+date: "2025-10-17"
+description: |
+  Non technical presentation of the project during the G4H Half-Day
+slides:
+  text: Slides
+  url: /mydocs/G4H_half_day/index.html
+order: 1
+---

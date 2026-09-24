@@ -1,11 +1,11 @@
 ---
-title: TFC - Presentation
+title: Journées I2E
 subtitle: "**Policy evaluation using Transformer-based medical pathway embeddings**"
 authors:
   - name: Meilame Tayebjee
     roles: writing
     corresponding: true
-date: "2026-07-27"
+date: "2026-06-10"
 date-format: "D MMMM YYYY"
 lang: en-GB
 bibliography: references.bib
@@ -15,7 +15,7 @@ format:
   revealjs: 
     theme: serif
     toc: true
-    toc-depth: 1   # show up to ## headings
+    toc-depth: 2   # show up to ## headings
     html-math-method: katex
     scrollable: true
     

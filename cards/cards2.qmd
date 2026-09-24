@@ -1,0 +1,10 @@
+---
+title: First year PhD Committee
+date: "2025-10-08"
+description: |
+  Presentation of the first results and avenues of work
+slides:
+  text: Slides
+  url: /mydocs/csi_slides/index.html
+order: 1
+---
