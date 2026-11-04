@@ -36,9 +36,9 @@
 
 - **Markov property**: 
 
-$$\Pr\{s_{t+1}=s', r_{t+1}=r \mid s_t, a_t\} = \Pr\{s_{t+1}=s', r_{t+1}=r \mid s_t, a_t, r_t, s_{t-1}, a_{t-1}, \ldots, r_1, s_0, a_0\}$$
+  $$\Pr\{s_{t+1}=s', r_{t+1}=r \mid s_t, a_t\} = \Pr\{s_{t+1}=s', r_{t+1}=r \mid s_t, a_t, r_t, s_{t-1}, a_{t-1}, \ldots, r_1, s_0, a_0\}$$
 
-The future is conditionally independent of the past given the present state.
+  The future is conditionally independent of the past given the present state.
 :::
 
 ## In our case {.unnumbered}
@@ -90,11 +90,11 @@ next reward given the current state and action.
 ::: {.incremental}
 - **State-action value function** $q_t$: expected cumulative future return under $\pi_e$
 
-$$q_t(s,a) = \mathbb{E}_{\pi_e}\!\left[ \sum_{t'=t}^T r_{t'} \,\middle|\, s_t = s,\, a_t = a \right]$$
+  $$q_t(s,a) = \mathbb{E}_{\pi_e}\!\left[ \sum_{t'=t}^T r_{t'} \,\middle|\, s_t = s,\, a_t = a \right]$$
 
 - **Marginalized density ratio** $\mu_t$: cumulative importance weight up to time $t$
 
-$$\mu_t(s,a) = \mathbb{E}_{\pi_e}\!\left[ \prod_{t'=0}^t \frac{\pi_e(a_{t'}|s_{t'})}{\pi_b(a_{t'}|s_{t'})} \,\middle|\, s_t = s,\, a_t = a \right]$$
+  $$\mu_t(s,a) = \mathbb{E}_{\pi_e}\!\left[ \prod_{t'=0}^t \frac{\pi_e(a_{t'}|s_{t'})}{\pi_b(a_{t'}|s_{t'})} \,\middle|\, s_t = s,\, a_t = a \right]$$
 :::
 
 ---
