@@ -1,0 +1,10 @@
+---
+title: CREST-TSE Health Economics Workshop
+date: "2026-11-04"
+description: |
+  Policy evaluation using Transformer-based medical pathway embeddings
+slides:
+  text: Slides
+  url: /mydocs/crest-tse/index.html
+order: 7
+---

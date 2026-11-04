@@ -1,0 +1,99 @@
+## Future work {.unnumbered}
+
+:::{.incremental}
+- **Other OPE use cases**
+  - HAS recommendations
+  - Other rewards: total expenditures...
+
+- **Other GPT for medical pathways use cases:**
+  - causal inference
+  - **generation of synthetic trajectories**
+
+- **Improve the foundation model:**
+  - Benchmarks
+  - **Make the embeddings *really* Markovian** (MarBLE)
+  - **A loss that respects co-occurring events** (DCR)
+  - **A vocabulary chosen from the data** (ZipfTok)
+:::
+
+
+## MarBLE: making the state *really* Markovian {.unnumbered}
+
+**The problem (why).**
+
+::: {.incremental}
+- The whole OPE pipeline rests on **one assumption**: the state $s_t$ (built from the GPT history embedding $\phi_t$) is **Markov**, i.e. a sufficient statistic of the trajectory so far.
+
+- But an unconstrained causal Transformer has **no bounded Markov state**. Its representation at position $t$ is a function of the *entire* past, diffused across a growing residual stream.
+
+- $\phi_t$ is just a lossy read of that stream: nothing forces "the future is conditionally independent of the past given $\phi_t$".
+
+- We want a **fixed-size running summary** $h_t$ that is a genuine sufficient statistic, exactly what an OPE estimator (or any RL value function) needs.
+:::
+
+## MarBLE: a Markovian Transformer {.unnumbered}
+
+**The method (what).**
+
+MarBLE wraps our decoder-only GPT with a bounded **history token** $h_t$, refreshed at chosen boundaries (a quarter, a hospital admission).
+
+![Block-recurrent structure: events feed into a per-block summary $h_t$, and $h_{t-1}$ is the only path from the past into block $t$.](images/marble_arch.svg){fig-align="center" width="85%"}
+
+## How it works {.unnumbered}
+
+::: {.incremental}
+- Insert learned history tokens at boundaries: block $t$ is $B_t = (h_{t-1}, e_{t,1}, \dots, e_{t,k_t})$, with recurrence $h_t = \mathrm{LayerNorm}(W z_{t,k_t} + b)$.
+
+- **Block-diagonal causal mask**: no event in block $t$ may attend before $h_{t-1}$. So $h_{t-1}$ is the *sole gateway* from the past, making $h_0 \to h_1 \to \cdots$ strictly Markov (distribution-free, no change to the attention operator).
+
+- **Forward loss**: the same TPP likelihood as our GPT (multi-label BCE + time-to-event). Under realizability, its minimizer makes $h_t$ predictively sufficient.
+:::
+
+## Events do not queue: a loss for co-occurring events {.unnumbered}
+
+**The problem (why).**
+
+::: {.incremental}
+- Records are dated **to the day**, and many codes share a date (a hospital stay, a pharmacy delivery...).
+- Standard TPP pre-training (Delphi, ETHOS, MOTOR) **serialises** each day in an arbitrary order, with zero gaps between tied events. This is not harmless:
+  - **ill-posed time likelihood**: with ties, the continuous waiting-time NLL has infimum $-\infty$; the exponential head inflates the fitted rate by exactly $(1-\rho)^{-1}$, $\rho$ = tie fraction;
+  - **the next-token head is not a hazard**: under a fixed code order, its optimum is the true hazard times a factor decaying exponentially with the code's *arbitrary* rank;
+  - **Poisson leakage**: mass $\tfrac12 \sum_v h_v^2$ on days where a code repeats, which is not small under Zipfian vocabularies.
+:::
+
+---
+
+**The fix (what): discrete-time competing risks (DCR).**
+
+A record is a day-indexed sequence of **sets** $\mathcal{E}_d$; we score each day with Bernoulli hazards $h_{v,d}$:
+$$
+\ell_{\mathrm{DCR}} = -\sum_{d} \Big[ \sum_{v \in \mathcal{E}_d} \log h_{v,d} + \sum_{v \notin \mathcal{E}_d} \log (1 - h_{v,d}) \Big]
+$$
+
+::: {.incremental}
+- Event-free stretches **collapse in closed form**: one network call per event day.
+- The TPP loss is exactly its **first-order expansion** in the hazards.
+- Permutation-invariant in the vocabulary; a mixture-of-products head closes the remaining gap (within-day correlation).
+- Our multi-label BCE was a first step. Theory written; experiments (MIMIC-IV, synthetic) to be run.
+:::
+
+## ZipfTok: choosing the vocabulary {.unnumbered}
+
+**The problem (why).**
+
+::: {.incremental}
+- Event-log models **inherit** their vocabulary: ICD-10, CCAM, ATC hierarchies, with frequencies spanning six orders of magnitude.
+- Usual reflexes (raw codes, top-$V$ + `UNK`, fixed-level rollup) are unchecked statistical choices.
+- Pre-trained models do best when token frequencies follow a **Zipf law** [@he2025zipf]... but why?
+:::
+
+---
+
+**The answer (what).**
+
+::: {.incremental}
+- A tokenizer = a **partition** of the codes. Excess risk = **distortion** (a weighted Jensen–Shannon divergence) + **estimation** that *saturates* (a token seen too rarely is not learned at all).
+- Optimum: power-law head (codes can't be split) + **flat shelf** at an estimability threshold $\pi^\star = \Theta(k/N)$ — *what a Zipf plot looks like*. Zipf is a **symptom**, not a cause.
+- Optimal vocabulary size $V^\star \le 2\kappa N/k$, linear in corpus size.
+- **ZipfTok**: exact Lagrangian pruning of the code hierarchy (whole $V$-path at once) + agglomerative merging of the tail. Experiments to be run.
+:::
