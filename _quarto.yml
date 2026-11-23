@@ -4,6 +4,8 @@ project:
     - mydocs/*/*.qmd
     - index.qmd
     - cards/*.qmd
+  resources:
+    - DAG.html
 
 website:
   page-navigation: true
