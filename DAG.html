@@ -120,12 +120,21 @@ footer { color:var(--muted); font-size:13px; padding-bottom:32px; }
 .graph .ed.on polygon { fill-opacity:1; stroke-opacity:1; }
 .graph .ed:focus-visible path:not(.hit) { stroke-width:3.4; stroke-opacity:1; }
 @media (prefers-reduced-motion: reduce) { .graph .ed, .graph .nd { transition:none; } }
+
+.picker { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:18px 0 0; }
+.picker label { font-weight:600; font-size:14px; }
+.picker select { font:inherit; font-size:15px; color:var(--ink); background:var(--card); border:1px solid var(--rule); border-radius:8px; padding:7px 34px 7px 12px; appearance:none;
+  background-image:linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position:calc(100% - 18px) 55%, calc(100% - 12px) 55%; background-size:6px 6px; background-repeat:no-repeat; cursor:pointer; }
+.picker select:focus-visible { outline:2px solid var(--adj); outline-offset:2px; }
+[hidden] { display:none !important; }
 </style>
 </head>
 <body>
 <header class="wrap">
   <h1>DAG causal : trajectoires de soins SNDS et effet de T sur Y</h1>
-  <p class="lede">Survolez un arc pour lire ses justifications, ou un nœud pour sa définition. Cliquez pour figer l’affichage, Échap pour le libérer. Le bilan du confounding latent est sous le graphe.</p>
+  <p class="lede">Choisissez le traitement étudié. Survolez un arc pour ses justifications, ou un nœud pour sa définition. Cliquez pour figer l’affichage, Échap pour le libérer.</p>
+  <div class="picker"><label for="scen">Traitement T</label><select id="scen"><option value="sp">Consultation spécialisée, médicament</option><option value="mt">Affiliation à un médecin traitant</option></select></div>
   <ul class="legend">
     <li><span class="sw lat"></span>Latent, non observé dans le SNDS</li>
     <li><span class="sw adj"></span>Observé, dans l’ensemble d’ajustement (EMB)</li>
@@ -135,420 +144,831 @@ footer { color:var(--muted); font-size:13px; padding-bottom:32px; }
 </header>
 
 <div class="wrap stage">
-  <div class="graph" id="graph"><svg viewBox="0.00 0.00 1286.69 555.80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(14.4 541.4)">
+  <div class="graph" id="graph"><div class="scen" data-scen="sp"><svg viewBox="0.00 0.00 1248.85 555.80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="sp-graph0" class="graph" transform="scale(1 1) rotate(0) translate(14.4 541.4)">
 
 <!-- socio -->
-<g id="n__socio" class="node nd lat">
+<g id="sp-n__socio" class="node nd lat">
 
 <path fill="none" stroke="black" d="M628,-527C628,-527 550,-527 550,-527 544,-527 538,-521 538,-515 538,-515 538,-503 538,-503 538,-497 544,-491 550,-491 550,-491 628,-491 628,-491 634,-491 640,-497 640,-503 640,-503 640,-515 640,-515 640,-521 634,-527 628,-527"/>
-<text text-anchor="middle" x="589" y="-505.2" font-family="IBM Plex Sans" font-size="16.00">socio&#45;eco</text>
+<text text-anchor="middle" x="589" y="-505.2" font-family="IBM Plex Sans" font-size="16.00">socio-eco</text>
 </g>
 <!-- life -->
-<g id="n__life" class="node nd lat">
+<g id="sp-n__life" class="node nd lat">
 
-<path fill="none" stroke="black" d="M178,-442C178,-442 118,-442 118,-442 112,-442 106,-436 106,-430 106,-430 106,-418 106,-418 106,-412 112,-406 118,-406 118,-406 178,-406 178,-406 184,-406 190,-412 190,-418 190,-418 190,-430 190,-430 190,-436 184,-442 178,-442"/>
-<text text-anchor="middle" x="148" y="-420.2" font-family="IBM Plex Sans" font-size="16.00">lifestyle</text>
+<path fill="none" stroke="black" d="M140,-442C140,-442 80,-442 80,-442 74,-442 68,-436 68,-430 68,-430 68,-418 68,-418 68,-412 74,-406 80,-406 80,-406 140,-406 140,-406 146,-406 152,-412 152,-418 152,-418 152,-430 152,-430 152,-436 146,-442 140,-442"/>
+<text text-anchor="middle" x="110" y="-420.2" font-family="IBM Plex Sans" font-size="16.00">lifestyle</text>
 </g>
-<!-- socio&#45;&gt;life -->
-<g id="e__socio__life" class="edge ed lat">
+<!-- socio-&gt;life -->
+<g id="sp-e__socio__life" class="edge ed lat">
 
-<path fill="none" stroke="black" d="M537.86,-504.57C462.41,-498.51 317.39,-483.09 199,-448 196.6,-447.29 194.16,-446.48 191.72,-445.62"/>
-<polygon fill="black" stroke="black" points="192.95,-442.34 182.36,-442 190.43,-448.87 192.95,-442.34"/>
+<path fill="none" stroke="black" d="M537.91,-501.8C463.13,-492.35 319.61,-472.8 199,-448 187.03,-445.54 174.26,-442.49 162.24,-439.43"/>
+<polygon fill="black" stroke="black" points="162.91,-435.99 152.35,-436.87 161.15,-442.77 162.91,-435.99"/>
 </g>
 <!-- HSB -->
-<g id="n__HSB" class="node nd lat">
+<g id="sp-n__HSB" class="node nd lat">
 
 <path fill="none" stroke="black" d="M336,-448C336,-448 220,-448 220,-448 214,-448 208,-442 208,-436 208,-436 208,-412 208,-412 208,-406 214,-400 220,-400 220,-400 336,-400 336,-400 342,-400 348,-406 348,-412 348,-412 348,-436 348,-436 348,-442 342,-448 336,-448"/>
-<text text-anchor="middle" x="278" y="-429.2" font-family="IBM Plex Sans" font-size="16.00">health&#45;seeking</text>
+<text text-anchor="middle" x="278" y="-429.2" font-family="IBM Plex Sans" font-size="16.00">health-seeking</text>
 <text text-anchor="middle" x="278" y="-411.2" font-family="IBM Plex Sans" font-size="16.00">behaviour</text>
 </g>
-<!-- socio&#45;&gt;HSB -->
-<g id="e__socio__HSB" class="edge ed lat">
+<!-- socio-&gt;HSB -->
+<g id="sp-e__socio__HSB" class="edge ed lat">
 
 <path fill="none" stroke="black" d="M537.99,-494.39C489.22,-481.37 414.93,-461.54 358.23,-446.41"/>
 <polygon fill="black" stroke="black" points="358.79,-442.94 348.22,-443.74 356.98,-449.7 358.79,-442.94"/>
 </g>
 <!-- NH -->
-<g id="n__NH" class="node nd lat">
+<g id="sp-n__NH" class="node nd lat">
 
 <path fill="none" stroke="black" d="M642.5,-442C642.5,-442 535.5,-442 535.5,-442 529.5,-442 523.5,-436 523.5,-430 523.5,-430 523.5,-418 523.5,-418 523.5,-412 529.5,-406 535.5,-406 535.5,-406 642.5,-406 642.5,-406 648.5,-406 654.5,-412 654.5,-418 654.5,-418 654.5,-430 654.5,-430 654.5,-436 648.5,-442 642.5,-442"/>
 <text text-anchor="middle" x="589" y="-420.2" font-family="IBM Plex Sans" font-size="16.00">natural health</text>
 </g>
-<!-- socio&#45;&gt;NH -->
-<g id="e__socio__NH" class="edge ed lat">
+<!-- socio-&gt;NH -->
+<g id="sp-e__socio__NH" class="edge ed lat">
 
 <path fill="none" stroke="black" d="M589,-490.8C589,-479.67 589,-464.94 589,-452.24"/>
 <polygon fill="black" stroke="black" points="592.5,-452.18 589,-442.18 585.5,-452.18 592.5,-452.18"/>
 </g>
 <!-- CMU -->
-<g id="n__CMU" class="node nd adj">
+<g id="sp-n__CMU" class="node nd adj">
 
 <path fill="none" stroke="black" d="M780,-351C780,-351 692,-351 692,-351 686,-351 680,-345 680,-339 680,-339 680,-327 680,-327 680,-321 686,-315 692,-315 692,-315 780,-315 780,-315 786,-315 792,-321 792,-327 792,-327 792,-339 792,-339 792,-345 786,-351 780,-351"/>
 <text text-anchor="middle" x="736" y="-329.2" font-family="IBM Plex Sans" font-size="16.00">CMU / C2S</text>
 </g>
-<!-- socio&#45;&gt;CMU -->
-<g id="e__socio__CMU" class="edge ed lat">
+<!-- socio-&gt;CMU -->
+<g id="sp-e__socio__CMU" class="edge ed lat">
 
 <path fill="none" stroke="black" d="M614.41,-490.95C629.85,-479.85 649.33,-464.41 664,-448 688.38,-420.74 709.83,-384.28 722.83,-360.01"/>
 <polygon fill="black" stroke="black" points="725.99,-361.52 727.55,-351.05 719.8,-358.26 725.99,-361.52"/>
 </g>
 <!-- infra -->
-<g id="n__infra" class="node nd lat">
+<g id="sp-n__infra" class="node nd lat">
 
-<path fill="none" stroke="black" d="M1117.5,-448C1117.5,-448 1012.5,-448 1012.5,-448 1006.5,-448 1000.5,-442 1000.5,-436 1000.5,-436 1000.5,-412 1000.5,-412 1000.5,-406 1006.5,-400 1012.5,-400 1012.5,-400 1117.5,-400 1117.5,-400 1123.5,-400 1129.5,-406 1129.5,-412 1129.5,-412 1129.5,-436 1129.5,-436 1129.5,-442 1123.5,-448 1117.5,-448"/>
-<text text-anchor="middle" x="1065" y="-429.2" font-family="IBM Plex Sans" font-size="16.00">local health</text>
-<text text-anchor="middle" x="1065" y="-411.2" font-family="IBM Plex Sans" font-size="16.00">infrastructure</text>
+<path fill="none" stroke="black" d="M1043.5,-448C1043.5,-448 938.5,-448 938.5,-448 932.5,-448 926.5,-442 926.5,-436 926.5,-436 926.5,-412 926.5,-412 926.5,-406 932.5,-400 938.5,-400 938.5,-400 1043.5,-400 1043.5,-400 1049.5,-400 1055.5,-406 1055.5,-412 1055.5,-412 1055.5,-436 1055.5,-436 1055.5,-442 1049.5,-448 1043.5,-448"/>
+<text text-anchor="middle" x="991" y="-429.2" font-family="IBM Plex Sans" font-size="16.00">local health</text>
+<text text-anchor="middle" x="991" y="-411.2" font-family="IBM Plex Sans" font-size="16.00">infrastructure</text>
 </g>
-<!-- socio&#45;&gt;infra -->
-<g id="e__socio__infra" class="edge ed lat">
+<!-- socio-&gt;infra -->
+<g id="sp-e__socio__infra" class="edge ed lat">
 
-<path fill="none" stroke="black" d="M640.16,-502.48C716.16,-493.78 863.12,-475.05 986,-448 987.44,-447.68 988.89,-447.35 990.35,-447.02"/>
-<polygon fill="black" stroke="black" points="991.19,-450.41 1000.08,-444.65 989.54,-443.61 991.19,-450.41"/>
+<path fill="none" stroke="black" d="M640.32,-497.4C710.25,-482.97 835.94,-457.01 916.32,-440.42"/>
+<polygon fill="black" stroke="black" points="917.29,-443.79 926.37,-438.34 915.87,-436.94 917.29,-443.79"/>
 </g>
 <!-- dist -->
-<g id="n__dist" class="node nd adj">
+<g id="sp-n__dist" class="node nd adj">
 
-<path fill="none" stroke="black" d="M893.5,-266C893.5,-266 812.5,-266 812.5,-266 806.5,-266 800.5,-260 800.5,-254 800.5,-254 800.5,-230 800.5,-230 800.5,-224 806.5,-218 812.5,-218 812.5,-218 893.5,-218 893.5,-218 899.5,-218 905.5,-224 905.5,-230 905.5,-230 905.5,-254 905.5,-254 905.5,-260 899.5,-266 893.5,-266"/>
-<text text-anchor="middle" x="853" y="-247.2" font-family="IBM Plex Sans" font-size="16.00">distance</text>
-<text text-anchor="middle" x="853" y="-229.2" font-family="IBM Plex Sans" font-size="16.00">parcourue</text>
+<path fill="none" stroke="black" d="M993.5,-266C993.5,-266 912.5,-266 912.5,-266 906.5,-266 900.5,-260 900.5,-254 900.5,-254 900.5,-230 900.5,-230 900.5,-224 906.5,-218 912.5,-218 912.5,-218 993.5,-218 993.5,-218 999.5,-218 1005.5,-224 1005.5,-230 1005.5,-230 1005.5,-254 1005.5,-254 1005.5,-260 999.5,-266 993.5,-266"/>
+<text text-anchor="middle" x="953" y="-247.2" font-family="IBM Plex Sans" font-size="16.00">distance</text>
+<text text-anchor="middle" x="953" y="-229.2" font-family="IBM Plex Sans" font-size="16.00">parcourue</text>
 </g>
-<!-- socio&#45;&gt;dist -->
-<g id="e__socio__dist" class="edge ed lat">
+<!-- socio-&gt;dist -->
+<g id="sp-e__socio__dist" class="edge ed lat">
 
-<path fill="none" stroke="black" d="M640.15,-499.33C710.87,-484.3 835.99,-446.01 891,-357 906.82,-331.4 892.74,-298.44 877.44,-274.55"/>
-<polygon fill="black" stroke="black" points="880.29,-272.53 871.79,-266.19 874.49,-276.44 880.29,-272.53"/>
+<path fill="none" stroke="black" d="M640.32,-508.65C729.4,-508.23 917.25,-500.49 1065,-448 1137.05,-422.4 1173.89,-423.85 1211,-357 1254.31,-278.98 1105.23,-254.27 1015.72,-246.51"/>
+<polygon fill="black" stroke="black" points="1015.9,-243.01 1005.65,-245.68 1015.33,-249.99 1015.9,-243.01"/>
 </g>
 <!-- HC -->
-<g id="n__HC" class="node nd adj">
+<g id="sp-n__HC" class="node nd adj">
 
 <path fill="none" stroke="black" d="M481.5,-266C481.5,-266 352.5,-266 352.5,-266 346.5,-266 340.5,-260 340.5,-254 340.5,-254 340.5,-230 340.5,-230 340.5,-224 346.5,-218 352.5,-218 352.5,-218 481.5,-218 481.5,-218 487.5,-218 493.5,-224 493.5,-230 493.5,-230 493.5,-254 493.5,-254 493.5,-260 487.5,-266 481.5,-266"/>
 <text text-anchor="middle" x="417" y="-247.2" font-family="IBM Plex Sans" font-size="16.00">healthcare cons.</text>
 <text text-anchor="middle" x="417" y="-229.2" font-family="IBM Plex Sans" font-size="16.00">(avant T)</text>
 </g>
-<!-- socio&#45;&gt;HC -->
-<g id="e__socio__HC" class="edge ed lat">
+<!-- socio-&gt;HC -->
+<g id="sp-e__socio__HC" class="edge ed lat">
 
 <path fill="none" stroke="black" d="M563.78,-490.97C529.2,-466.07 468.17,-416.19 440,-357 427.89,-331.55 422.14,-299.95 419.43,-276.48"/>
 <polygon fill="black" stroke="black" points="422.89,-275.91 418.38,-266.32 415.92,-276.63 422.89,-275.91"/>
 </g>
-<!-- life&#45;&gt;HSB -->
-<g id="e__life__HSB" class="edge ed lat bi">
+<!-- life-&gt;HSB -->
+<g id="sp-e__life__HSB" class="edge ed lat bi">
 
-<path fill="none" stroke="black" d="M200.19,-424C200.35,-424 200.51,-424 200.67,-424"/>
-<polygon fill="black" stroke="black" points="200.15,-420.5 190.15,-424 200.15,-427.5 200.15,-420.5"/>
-<polygon fill="black" stroke="black" points="197.99,-427.5 207.99,-424 197.99,-420.5 197.99,-427.5"/>
+<path fill="none" stroke="black" d="M162.43,-424C174.08,-424 185.73,-424 197.38,-424"/>
+<polygon fill="black" stroke="black" points="162,-420.5 152,-424 162,-427.5 162,-420.5"/>
+<polygon fill="black" stroke="black" points="197.62,-427.5 207.62,-424 197.62,-420.5 197.62,-427.5"/>
 </g>
-<!-- life&#45;&gt;NH -->
-<g id="e__life__NH" class="edge ed lat">
+<!-- life-&gt;NH -->
+<g id="sp-e__life__NH" class="edge ed lat">
 
-<path fill="none" stroke="black" d="M165.34,-442.05C176.44,-452.25 191.77,-464.04 208,-469.5 319.19,-506.89 457.68,-471.31 533.31,-445.46"/>
-<polygon fill="black" stroke="black" points="534.82,-448.64 543.11,-442.04 532.51,-442.03 534.82,-448.64"/>
+<path fill="none" stroke="black" d="M140.11,-442.16C158.91,-452.41 184,-464.2 208,-469.5 317.41,-493.66 447.52,-466.43 523.9,-444.91"/>
+<polygon fill="black" stroke="black" points="525.21,-448.18 533.86,-442.05 523.28,-441.45 525.21,-448.18"/>
 </g>
 <!-- T -->
-<g id="n__T" class="node nd ty">
+<g id="sp-n__T" class="node nd ty">
 
 <path fill="none" stroke="black" d="M421.5,-175C421.5,-175 322.5,-175 322.5,-175 316.5,-175 310.5,-169 310.5,-163 310.5,-163 310.5,-121 310.5,-121 310.5,-115 316.5,-109 322.5,-109 322.5,-109 421.5,-109 421.5,-109 427.5,-109 433.5,-115 433.5,-121 433.5,-121 433.5,-163 433.5,-163 433.5,-169 427.5,-175 421.5,-175"/>
 <text text-anchor="middle" x="372" y="-156.2" font-family="IBM Plex Sans" font-size="16.00">T</text>
 <text text-anchor="middle" x="372" y="-138.2" font-family="IBM Plex Sans" font-size="16.00">consult. spé,</text>
 <text text-anchor="middle" x="372" y="-120.2" font-family="IBM Plex Sans" font-size="16.00">médicament</text>
 </g>
-<!-- life&#45;&gt;T -->
-<g id="e__life__T" class="edge ed lat">
+<!-- life-&gt;T -->
+<g id="sp-e__life__T" class="edge ed lat">
 
-<path fill="none" stroke="black" d="M180.28,-405.86C200.02,-394.15 224.72,-377.12 242,-357 286.94,-304.68 273.68,-276 311,-218 318.67,-206.07 327.93,-193.85 336.88,-182.83"/>
-<polygon fill="black" stroke="black" points="339.65,-184.97 343.32,-175.03 334.25,-180.51 339.65,-184.97"/>
+<path fill="none" stroke="black" d="M117.44,-405.99C127.85,-383 148.1,-341.19 171,-309 202.91,-264.15 212.82,-253.36 255,-218 270.97,-204.61 289.48,-191.72 307,-180.52"/>
+<polygon fill="black" stroke="black" points="308.91,-183.45 315.51,-175.16 305.18,-177.53 308.91,-183.45"/>
 </g>
 <!-- Y -->
-<g id="n__Y" class="node nd ty">
+<g id="sp-n__Y" class="node nd ty">
 
 <path fill="none" stroke="black" d="M435.5,-66C435.5,-66 308.5,-66 308.5,-66 302.5,-66 296.5,-60 296.5,-54 296.5,-54 296.5,-12 296.5,-12 296.5,-6 302.5,0 308.5,0 308.5,0 435.5,0 435.5,0 441.5,0 447.5,-6 447.5,-12 447.5,-12 447.5,-54 447.5,-54 447.5,-60 441.5,-66 435.5,-66"/>
 <text text-anchor="middle" x="372" y="-47.2" font-family="IBM Plex Sans" font-size="16.00">Y</text>
 <text text-anchor="middle" x="372" y="-29.2" font-family="IBM Plex Sans" font-size="16.00">décès, urgences</text>
 <text text-anchor="middle" x="372" y="-11.2" font-family="IBM Plex Sans" font-size="16.00">évitables</text>
 </g>
-<!-- life&#45;&gt;Y -->
-<g id="e__life__Y" class="edge ed lat">
+<!-- life-&gt;Y -->
+<g id="sp-e__life__Y" class="edge ed lat">
 
-<path fill="none" stroke="black" d="M139.53,-405.85C133.59,-392.81 126.15,-374.24 123,-357 102.65,-245.85 100.52,-190.29 179,-109 207.54,-79.44 249.06,-61.33 286.28,-50.33"/>
-<polygon fill="black" stroke="black" points="287.47,-53.63 296.15,-47.55 285.57,-46.89 287.47,-53.63"/>
+<path fill="none" stroke="black" d="M110.93,-405.71C114.57,-354.19 131.96,-199.66 212,-109 231.8,-86.58 259.72,-70.35 286.72,-58.86"/>
+<polygon fill="black" stroke="black" points="288.27,-62.01 296.21,-54.99 285.63,-55.53 288.27,-62.01"/>
 </g>
-<!-- HSB&#45;&gt;dist -->
-<g id="e__HSB__dist" class="edge ed lat">
+<!-- HSB-&gt;dist -->
+<g id="sp-e__HSB__dist" class="edge ed lat">
 
-<path fill="none" stroke="black" d="M348.01,-415.99C486.34,-401.88 782.95,-370.28 801,-357 827.14,-337.77 840.48,-302.23 847.05,-275.93"/>
-<polygon fill="black" stroke="black" points="850.5,-276.53 849.33,-266 843.68,-274.97 850.5,-276.53"/>
+<path fill="none" stroke="black" d="M348.19,-416.17C481.08,-402.93 759.88,-373.64 801,-357 848.44,-337.8 894.2,-300.01 922.9,-273.21"/>
+<polygon fill="black" stroke="black" points="925.33,-275.73 930.17,-266.3 920.51,-270.65 925.33,-275.73"/>
 </g>
 <!-- MT -->
-<g id="n__MT" class="node nd adj">
+<g id="sp-n__MT" class="node nd adj">
 
-<path fill="none" stroke="black" d="M221.5,-357C221.5,-357 154.5,-357 154.5,-357 148.5,-357 142.5,-351 142.5,-345 142.5,-345 142.5,-321 142.5,-321 142.5,-315 148.5,-309 154.5,-309 154.5,-309 221.5,-309 221.5,-309 227.5,-309 233.5,-315 233.5,-321 233.5,-321 233.5,-345 233.5,-345 233.5,-351 227.5,-357 221.5,-357"/>
-<text text-anchor="middle" x="188" y="-338.2" font-family="IBM Plex Sans" font-size="16.00">médecin</text>
-<text text-anchor="middle" x="188" y="-320.2" font-family="IBM Plex Sans" font-size="16.00">traitant</text>
+<path fill="none" stroke="black" d="M259.5,-357C259.5,-357 192.5,-357 192.5,-357 186.5,-357 180.5,-351 180.5,-345 180.5,-345 180.5,-321 180.5,-321 180.5,-315 186.5,-309 192.5,-309 192.5,-309 259.5,-309 259.5,-309 265.5,-309 271.5,-315 271.5,-321 271.5,-321 271.5,-345 271.5,-345 271.5,-351 265.5,-357 259.5,-357"/>
+<text text-anchor="middle" x="226" y="-338.2" font-family="IBM Plex Sans" font-size="16.00">médecin</text>
+<text text-anchor="middle" x="226" y="-320.2" font-family="IBM Plex Sans" font-size="16.00">traitant</text>
 </g>
-<!-- HSB&#45;&gt;MT -->
-<g id="e__HSB__MT" class="edge ed lat">
+<!-- HSB-&gt;MT -->
+<g id="sp-e__HSB__MT" class="edge ed lat">
 
-<path fill="none" stroke="black" d="M254.35,-399.62C243.5,-388.89 230.49,-376.02 218.88,-364.54"/>
-<polygon fill="black" stroke="black" points="221.06,-361.77 211.49,-357.23 216.14,-366.75 221.06,-361.77"/>
+<path fill="none" stroke="black" d="M264.34,-399.62C258.37,-389.4 251.26,-377.24 244.81,-366.19"/>
+<polygon fill="black" stroke="black" points="247.64,-364.1 239.57,-357.23 241.59,-367.63 247.64,-364.1"/>
 </g>
-<!-- HSB&#45;&gt;HC -->
-<g id="e__HSB__HC" class="edge ed lat">
+<!-- HSB-&gt;HC -->
+<g id="sp-e__HSB__HC" class="edge ed lat">
 
 <path fill="none" stroke="black" d="M294.34,-399.99C310.99,-376.75 337.73,-339.96 362,-309 371.11,-297.38 381.39,-284.88 390.59,-273.92"/>
 <polygon fill="black" stroke="black" points="393.29,-276.14 397.05,-266.24 387.94,-271.63 393.29,-276.14"/>
 </g>
-<!-- HSB&#45;&gt;T -->
-<g id="e__HSB__T" class="edge ed lat">
+<!-- HSB-&gt;T -->
+<g id="sp-e__HSB__T" class="edge ed lat">
 
 <path fill="none" stroke="black" d="M282.02,-399.97C289.18,-361.42 305.78,-281.75 331,-218 335.52,-206.57 341.41,-194.69 347.3,-183.84"/>
 <polygon fill="black" stroke="black" points="350.41,-185.45 352.23,-175.01 344.3,-182.04 350.41,-185.45"/>
 </g>
-<!-- HSB&#45;&gt;Y -->
-<g id="e__HSB__Y" class="edge ed lat">
+<!-- HSB-&gt;Y -->
+<g id="sp-e__HSB__Y" class="edge ed lat">
 
-<path fill="none" stroke="black" d="M209.5,-399.96C176.59,-387.36 142.28,-371.42 133,-357 121.46,-339.06 127.89,-329.71 133,-309 157.03,-211.52 167.97,-180.93 238,-109 252.38,-94.23 270.31,-81.53 288.32,-71.01"/>
-<polygon fill="black" stroke="black" points="290.17,-73.99 297.15,-66.02 286.72,-67.89 290.17,-73.99"/>
+<path fill="none" stroke="black" d="M217.95,-399.95C199.55,-389.73 181.42,-375.68 171,-357 160.6,-338.37 166.39,-329.83 171,-309 192.17,-213.28 200.88,-184.01 264,-109 275.72,-95.07 290.62,-82.55 305.57,-71.9"/>
+<polygon fill="black" stroke="black" points="307.62,-74.74 313.87,-66.18 303.65,-68.97 307.62,-74.74"/>
 </g>
-<!-- NH&#45;&gt;dist -->
-<g id="e__NH__dist" class="edge ed lat">
+<!-- NH-&gt;dist -->
+<g id="sp-e__NH__dist" class="edge ed lat">
 
-<path fill="none" stroke="black" d="M654.66,-416.99C729.63,-408.62 845.38,-390.54 872,-357 890.17,-334.11 881.51,-300.36 870.67,-275.52"/>
-<polygon fill="black" stroke="black" points="873.7,-273.73 866.3,-266.14 867.35,-276.69 873.7,-273.73"/>
+<path fill="none" stroke="black" d="M654.76,-416.95C737.2,-408.13 872.29,-389.18 910,-357 933.62,-336.85 944.29,-302.33 949.09,-276.54"/>
+<polygon fill="black" stroke="black" points="952.59,-276.88 950.77,-266.44 945.68,-275.74 952.59,-276.88"/>
 </g>
 <!-- remb -->
-<g id="n__remb" class="node nd adj">
+<g id="sp-n__remb" class="node nd adj">
 
-<path fill="none" stroke="black" d="M678.5,-266C678.5,-266 585.5,-266 585.5,-266 579.5,-266 573.5,-260 573.5,-254 573.5,-254 573.5,-230 573.5,-230 573.5,-224 579.5,-218 585.5,-218 585.5,-218 678.5,-218 678.5,-218 684.5,-218 690.5,-224 690.5,-230 690.5,-230 690.5,-254 690.5,-254 690.5,-260 684.5,-266 678.5,-266"/>
-<text text-anchor="middle" x="632" y="-247.2" font-family="IBM Plex Sans" font-size="16.00">montants</text>
-<text text-anchor="middle" x="632" y="-229.2" font-family="IBM Plex Sans" font-size="16.00">remboursés</text>
+<path fill="none" stroke="black" d="M687.5,-266C687.5,-266 594.5,-266 594.5,-266 588.5,-266 582.5,-260 582.5,-254 582.5,-254 582.5,-230 582.5,-230 582.5,-224 588.5,-218 594.5,-218 594.5,-218 687.5,-218 687.5,-218 693.5,-218 699.5,-224 699.5,-230 699.5,-230 699.5,-254 699.5,-254 699.5,-260 693.5,-266 687.5,-266"/>
+<text text-anchor="middle" x="641" y="-247.2" font-family="IBM Plex Sans" font-size="16.00">montants</text>
+<text text-anchor="middle" x="641" y="-229.2" font-family="IBM Plex Sans" font-size="16.00">remboursés</text>
 </g>
-<!-- NH&#45;&gt;remb -->
-<g id="e__NH__remb" class="edge ed lat">
+<!-- NH-&gt;remb -->
+<g id="sp-e__NH__remb" class="edge ed lat">
 
-<path fill="none" stroke="black" d="M604.47,-405.99C614.78,-393.46 627.41,-375.45 633,-357 640.96,-330.72 640,-299.44 637.45,-276.3"/>
-<polygon fill="black" stroke="black" points="640.91,-275.77 636.19,-266.28 633.96,-276.64 640.91,-275.77"/>
+<path fill="none" stroke="black" d="M604.08,-405.87C614.2,-393.27 626.77,-375.25 633,-357 641.9,-330.95 643.5,-299.65 643.1,-276.44"/>
+<polygon fill="black" stroke="black" points="646.6,-276.29 642.8,-266.4 639.6,-276.5 646.6,-276.29"/>
 </g>
 <!-- ALD -->
-<g id="n__ALD" class="node nd adj">
+<g id="sp-n__ALD" class="node nd adj">
 
 <path fill="none" stroke="black" d="M611.5,-351C611.5,-351 530.5,-351 530.5,-351 524.5,-351 518.5,-345 518.5,-339 518.5,-339 518.5,-327 518.5,-327 518.5,-321 524.5,-315 530.5,-315 530.5,-315 611.5,-315 611.5,-315 617.5,-315 623.5,-321 623.5,-327 623.5,-327 623.5,-339 623.5,-339 623.5,-345 617.5,-351 611.5,-351"/>
 <text text-anchor="middle" x="571" y="-329.2" font-family="IBM Plex Sans" font-size="16.00">statut ALD</text>
 </g>
-<!-- NH&#45;&gt;ALD -->
-<g id="e__NH__ALD" class="edge ed lat">
+<!-- NH-&gt;ALD -->
+<g id="sp-e__NH__ALD" class="edge ed lat">
 
 <path fill="none" stroke="black" d="M585.53,-405.84C582.96,-393.16 579.42,-375.64 576.48,-361.08"/>
 <polygon fill="black" stroke="black" points="579.87,-360.22 574.46,-351.11 573.01,-361.6 579.87,-360.22"/>
 </g>
-<!-- NH&#45;&gt;HC -->
-<g id="e__NH__HC" class="edge ed lat">
+<!-- NH-&gt;HC -->
+<g id="sp-e__NH__HC" class="edge ed lat">
 
 <path fill="none" stroke="black" d="M547.8,-405.94C524.5,-394.71 496.11,-378.16 476,-357 453.87,-333.71 437.96,-300.51 428.28,-275.94"/>
 <polygon fill="black" stroke="black" points="431.45,-274.43 424.63,-266.32 424.9,-276.91 431.45,-274.43"/>
 </g>
-<!-- NH&#45;&gt;T -->
-<g id="e__NH__T" class="edge ed lat">
+<!-- NH-&gt;T -->
+<g id="sp-e__NH__T" class="edge ed lat">
 
-<path fill="none" stroke="black" d="M654.56,-422C703.6,-417.37 767.7,-402.25 801,-357 813.65,-339.82 808.14,-329.1 801,-309 783.55,-259.88 771.49,-245.16 727,-218 639.45,-164.55 519.64,-148.75 444.04,-144.33"/>
-<polygon fill="black" stroke="black" points="443.84,-140.82 433.67,-143.78 443.47,-147.81 443.84,-140.82"/>
+<path fill="none" stroke="black" d="M654.56,-422C703.6,-417.37 767.7,-402.25 801,-357 813.65,-339.82 807.66,-329.27 801,-309 785.33,-261.28 776.28,-245.11 734,-218 645.2,-161.05 521.19,-146.31 443.8,-143.06"/>
+<polygon fill="black" stroke="black" points="443.79,-139.56 433.67,-142.69 443.53,-146.55 443.79,-139.56"/>
 </g>
-<!-- NH&#45;&gt;Y -->
-<g id="e__NH__Y" class="edge ed lat">
+<!-- NH-&gt;Y -->
+<g id="sp-e__NH__Y" class="edge ed lat">
 
-<path fill="none" stroke="black" d="M654.79,-416.62C733.17,-407.69 857.72,-388.89 891,-357 936.27,-313.63 951.53,-268.95 915,-218 810.21,-71.85 582.88,-40.34 458.16,-34.46"/>
-<polygon fill="black" stroke="black" points="458.03,-30.95 447.89,-34.02 457.73,-37.94 458.03,-30.95"/>
+<path fill="none" stroke="black" d="M654.77,-412.97C715.2,-402.26 798.28,-383.2 818,-357 830.83,-339.95 822.95,-329.75 818,-309 780.15,-150.21 576.2,-78.91 457.62,-50.46"/>
+<polygon fill="black" stroke="black" points="458.37,-47.04 447.83,-48.17 456.77,-53.86 458.37,-47.04"/>
 </g>
 <!-- agesex -->
-<g id="n__agesex" class="node nd adj">
+<g id="sp-n__agesex" class="node nd adj">
 
-<path fill="none" stroke="black" d="M259.5,-527C259.5,-527 166.5,-527 166.5,-527 160.5,-527 154.5,-521 154.5,-515 154.5,-515 154.5,-503 154.5,-503 154.5,-497 160.5,-491 166.5,-491 166.5,-491 259.5,-491 259.5,-491 265.5,-491 271.5,-497 271.5,-503 271.5,-503 271.5,-515 271.5,-515 271.5,-521 265.5,-527 259.5,-527"/>
-<text text-anchor="middle" x="213" y="-505.2" font-family="IBM Plex Sans" font-size="16.00">age, gender</text>
+<path fill="none" stroke="black" d="M275.5,-527C275.5,-527 182.5,-527 182.5,-527 176.5,-527 170.5,-521 170.5,-515 170.5,-515 170.5,-503 170.5,-503 170.5,-497 176.5,-491 182.5,-491 182.5,-491 275.5,-491 275.5,-491 281.5,-491 287.5,-497 287.5,-503 287.5,-503 287.5,-515 287.5,-515 287.5,-521 281.5,-527 275.5,-527"/>
+<text text-anchor="middle" x="229" y="-505.2" font-family="IBM Plex Sans" font-size="16.00">age, gender</text>
 </g>
-<!-- agesex&#45;&gt;socio -->
-<g id="e__agesex__socio" class="edge ed obs">
+<!-- agesex-&gt;socio -->
+<g id="sp-e__agesex__socio" class="edge ed obs">
 
-<path fill="none" stroke="black" d="M271.75,-509C357.08,-509 442.41,-509 527.74,-509"/>
-<polygon fill="black" stroke="black" points="527.88,-512.5 537.88,-509 527.88,-505.5 527.88,-512.5"/>
+<path fill="none" stroke="black" d="M287.71,-509C367.66,-509 447.6,-509 527.55,-509"/>
+<polygon fill="black" stroke="black" points="527.8,-512.5 537.8,-509 527.8,-505.5 527.8,-512.5"/>
 </g>
-<!-- agesex&#45;&gt;life -->
-<g id="e__agesex__life" class="edge ed obs">
+<!-- agesex-&gt;life -->
+<g id="sp-e__agesex__life" class="edge ed obs">
 
-<path fill="none" stroke="black" d="M199.53,-490.8C190.38,-479.12 178.12,-463.46 167.86,-450.35"/>
-<polygon fill="black" stroke="black" points="170.37,-447.89 161.45,-442.18 164.86,-452.21 170.37,-447.89"/>
+<path fill="none" stroke="black" d="M204.34,-490.8C186.55,-478.39 162.34,-461.51 142.91,-447.95"/>
+<polygon fill="black" stroke="black" points="144.83,-445.03 134.63,-442.18 140.83,-450.77 144.83,-445.03"/>
 </g>
-<!-- agesex&#45;&gt;HSB -->
-<g id="e__agesex__HSB" class="edge ed obs">
+<!-- agesex-&gt;HSB -->
+<g id="sp-e__agesex__HSB" class="edge ed obs">
 
-<path fill="none" stroke="black" d="M226.47,-490.8C234.32,-480.77 244.47,-467.82 253.68,-456.06"/>
-<polygon fill="black" stroke="black" points="256.45,-458.19 259.86,-448.16 250.94,-453.87 256.45,-458.19"/>
+<path fill="none" stroke="black" d="M239.15,-490.8C244.9,-481.06 252.28,-468.56 259.06,-457.08"/>
+<polygon fill="black" stroke="black" points="262.26,-458.55 264.33,-448.16 256.23,-454.99 262.26,-458.55"/>
 </g>
-<!-- agesex&#45;&gt;NH -->
-<g id="e__agesex__NH" class="edge ed obs">
+<!-- agesex-&gt;NH -->
+<g id="sp-e__agesex__NH" class="edge ed obs">
 
-<path fill="none" stroke="black" d="M271.75,-495.03C336.95,-480.64 442.34,-457.38 513.58,-441.65"/>
-<polygon fill="black" stroke="black" points="514.39,-445.05 523.4,-439.48 512.88,-438.22 514.39,-445.05"/>
+<path fill="none" stroke="black" d="M287.64,-494.48C349.14,-480.3 446.01,-457.97 513.25,-442.46"/>
+<polygon fill="black" stroke="black" points="514.41,-445.79 523.37,-440.13 512.84,-438.97 514.41,-445.79"/>
 </g>
-<!-- agesex&#45;&gt;MT -->
-<g id="e__agesex__MT" class="edge ed obs">
+<!-- agesex-&gt;MT -->
+<g id="sp-e__agesex__MT" class="edge ed obs">
 
-<path fill="none" stroke="black" d="M154.28,-492C132.37,-482.86 109.73,-468.92 97,-448 85.91,-429.78 87.31,-419 97,-400 105.15,-384.01 119.19,-371 133.83,-360.88"/>
-<polygon fill="black" stroke="black" points="136.01,-363.64 142.48,-355.25 132.19,-357.77 136.01,-363.64"/>
+<path fill="none" stroke="black" d="M217.8,-490.97C210.88,-479.39 202.64,-463.42 199,-448 194.1,-427.24 194.88,-420.93 199,-400 201.23,-388.65 205.43,-376.8 209.86,-366.32"/>
+<polygon fill="black" stroke="black" points="213.08,-367.7 213.95,-357.14 206.68,-364.85 213.08,-367.7"/>
 </g>
-<!-- agesex&#45;&gt;HC -->
-<g id="e__agesex__HC" class="edge ed obs">
+<!-- agesex-&gt;HC -->
+<g id="sp-e__agesex__HC" class="edge ed obs">
 
-<path fill="none" stroke="black" d="M271.58,-496.23C300.94,-487.52 334.87,-472.71 357,-448 400.54,-399.38 412.57,-320.73 415.84,-276.31"/>
-<polygon fill="black" stroke="black" points="419.35,-276.26 416.48,-266.06 412.36,-275.82 419.35,-276.26"/>
+<path fill="none" stroke="black" d="M287.63,-492.34C312.14,-483.09 339.03,-468.96 357,-448 399.36,-398.58 411.84,-320.55 415.5,-276.38"/>
+<polygon fill="black" stroke="black" points="419.01,-276.41 416.24,-266.18 412.02,-275.91 419.01,-276.41"/>
 </g>
-<!-- agesex&#45;&gt;T -->
-<g id="e__agesex__T" class="edge ed obs">
+<!-- agesex-&gt;T -->
+<g id="sp-e__agesex__T" class="edge ed obs">
 
-<path fill="none" stroke="black" d="M154.18,-495.23C128.63,-486.45 101.14,-471.9 86,-448 74.58,-429.98 80.96,-420.73 86,-400 109.41,-303.66 135.56,-277.33 215,-218 240.98,-198.59 272.79,-182.27 300.96,-169.86"/>
-<polygon fill="black" stroke="black" points="302.56,-172.98 310.36,-165.81 299.79,-166.55 302.56,-172.98"/>
+<path fill="none" stroke="black" d="M170.26,-504.05C131.74,-498.05 84.04,-483.39 59,-448 46.68,-430.58 52.06,-420.17 59,-400 92.37,-302.98 120,-280.97 201,-218 230.58,-195 268.31,-177.48 300.8,-165.18"/>
+<polygon fill="black" stroke="black" points="302.09,-168.44 310.26,-161.69 299.67,-161.87 302.09,-168.44"/>
 </g>
-<!-- agesex&#45;&gt;Y -->
-<g id="e__agesex__Y" class="edge ed obs">
+<!-- agesex-&gt;Y -->
+<g id="sp-e__agesex__Y" class="edge ed obs">
 
-<path fill="none" stroke="black" d="M160.07,-490.93C96.99,-466.88 0,-416.49 0,-334 0,-334 0,-334 0,-241 0,-110.74 176.32,-61.72 286.18,-43.83"/>
+<path fill="none" stroke="black" d="M170.47,-501.28C131.52,-494.03 81.55,-479.01 48,-448 7.63,-410.68 0,-388.97 0,-334 0,-334 0,-334 0,-241 0,-110.74 176.32,-61.72 286.18,-43.83"/>
 <polygon fill="black" stroke="black" points="286.94,-47.25 296.27,-42.24 285.85,-40.34 286.94,-47.25"/>
 </g>
-<!-- CMU&#45;&gt;remb -->
-<g id="e__CMU__remb" class="edge ed obs">
+<!-- CMU-&gt;remb -->
+<g id="sp-e__CMU__remb" class="edge ed obs">
 
-<path fill="none" stroke="black" d="M715.95,-314.84C702.05,-302.95 683.18,-286.8 666.85,-272.82"/>
-<polygon fill="black" stroke="black" points="668.94,-270.01 659.07,-266.17 664.39,-275.33 668.94,-270.01"/>
+<path fill="none" stroke="black" d="M717.68,-314.84C705.1,-303.05 688.06,-287.09 673.24,-273.2"/>
+<polygon fill="black" stroke="black" points="675.42,-270.45 665.73,-266.17 670.63,-275.56 675.42,-270.45"/>
 </g>
-<!-- CMU&#45;&gt;HC -->
-<g id="e__CMU__HC" class="edge ed obs">
+<!-- CMU-&gt;HC -->
+<g id="sp-e__CMU__HC" class="edge ed obs">
 
 <path fill="none" stroke="black" d="M679.7,-316.29C630.94,-302.69 559.62,-282.79 503.59,-267.16"/>
 <polygon fill="black" stroke="black" points="504.25,-263.71 493.68,-264.39 502.37,-270.45 504.25,-263.71"/>
 </g>
-<!-- CMU&#45;&gt;T -->
-<g id="e__CMU__T" class="edge ed obs">
+<!-- CMU-&gt;T -->
+<g id="sp-e__CMU__T" class="edge ed obs">
 
-<path fill="none" stroke="black" d="M735.65,-314.94C734.18,-289.91 727.62,-243.47 700,-218 663.22,-184.09 528.82,-161.98 443.9,-151.06"/>
-<polygon fill="black" stroke="black" points="444.16,-147.57 433.8,-149.79 443.28,-154.51 444.16,-147.57"/>
+<path fill="none" stroke="black" d="M737.17,-314.62C737.82,-289.63 735.06,-243.71 709,-218 672.11,-181.61 531.32,-160.16 443.81,-150.07"/>
+<polygon fill="black" stroke="black" points="444,-146.57 433.68,-148.93 443.22,-153.53 444,-146.57"/>
 </g>
 <!-- ind -->
-<g id="n__ind" class="node nd adj">
+<g id="sp-n__ind" class="node nd adj">
 
-<path fill="none" stroke="black" d="M1228,-357C1228,-357 1088,-357 1088,-357 1082,-357 1076,-351 1076,-345 1076,-345 1076,-321 1076,-321 1076,-315 1082,-309 1088,-309 1088,-309 1228,-309 1228,-309 1234,-309 1240,-315 1240,-321 1240,-321 1240,-345 1240,-345 1240,-351 1234,-357 1228,-357"/>
-<text text-anchor="middle" x="1158" y="-338.2" font-family="IBM Plex Sans" font-size="16.00">indicateurs</text>
-<text text-anchor="middle" x="1158" y="-320.2" font-family="IBM Plex Sans" font-size="16.00">d&#39;offre (APL, BPE)</text>
+<path fill="none" stroke="black" d="M1190,-357C1190,-357 1050,-357 1050,-357 1044,-357 1038,-351 1038,-345 1038,-345 1038,-321 1038,-321 1038,-315 1044,-309 1050,-309 1050,-309 1190,-309 1190,-309 1196,-309 1202,-315 1202,-321 1202,-321 1202,-345 1202,-345 1202,-351 1196,-357 1190,-357"/>
+<text text-anchor="middle" x="1120" y="-338.2" font-family="IBM Plex Sans" font-size="16.00">indicateurs</text>
+<text text-anchor="middle" x="1120" y="-320.2" font-family="IBM Plex Sans" font-size="16.00">d&#39;offre (APL, BPE)</text>
 </g>
-<!-- infra&#45;&gt;ind -->
-<g id="e__infra__ind" class="edge ed lat">
+<!-- infra-&gt;ind -->
+<g id="sp-e__infra__ind" class="edge ed lat">
 
-<path fill="none" stroke="black" d="M1089.43,-399.62C1100.75,-388.78 1114.35,-375.78 1126.43,-364.21"/>
-<polygon fill="black" stroke="black" points="1128.92,-366.67 1133.73,-357.23 1124.08,-361.61 1128.92,-366.67"/>
+<path fill="none" stroke="black" d="M1024.56,-399.85C1040.98,-388.52 1060.91,-374.77 1078.3,-362.77"/>
+<polygon fill="black" stroke="black" points="1080.37,-365.6 1086.61,-357.04 1076.39,-359.83 1080.37,-365.6"/>
 </g>
-<!-- infra&#45;&gt;dist -->
-<g id="e__infra__dist" class="edge ed lat">
+<!-- infra-&gt;dist -->
+<g id="sp-e__infra__dist" class="edge ed lat">
 
-<path fill="none" stroke="black" d="M1053.54,-399.87C1040.19,-374.83 1016.06,-334.98 986,-309 965.25,-291.07 938.78,-276.64 914.93,-265.91"/>
-<polygon fill="black" stroke="black" points="916.15,-262.62 905.59,-261.83 913.35,-269.04 916.15,-262.62"/>
+<path fill="none" stroke="black" d="M986.11,-399.84C979.47,-368.38 967.56,-311.97 959.98,-276.06"/>
+<polygon fill="black" stroke="black" points="963.36,-275.14 957.87,-266.07 956.51,-276.58 963.36,-275.14"/>
 </g>
-<!-- infra&#45;&gt;HC -->
-<g id="e__infra__HC" class="edge ed lat">
+<!-- infra-&gt;MT -->
+<g id="sp-e__infra__MT" class="edge ed lat">
 
-<path fill="none" stroke="black" d="M1000.43,-421.62C872.52,-417.88 592.18,-404.36 510,-357 486.9,-343.68 490.72,-329.77 474,-309 464.6,-297.33 453.95,-284.82 444.42,-273.86"/>
+<path fill="none" stroke="black" d="M926.44,-415.49C779.01,-398.34 419.74,-356.54 281.49,-340.46"/>
+<polygon fill="black" stroke="black" points="281.87,-336.98 271.53,-339.3 281.06,-343.93 281.87,-336.98"/>
+</g>
+<!-- infra-&gt;HC -->
+<g id="sp-e__infra__HC" class="edge ed lat">
+
+<path fill="none" stroke="black" d="M926.24,-420.24C811.76,-414.38 579.2,-397.71 510,-357 487.02,-343.48 490.72,-329.77 474,-309 464.6,-297.33 453.95,-284.82 444.42,-273.86"/>
 <polygon fill="black" stroke="black" points="446.93,-271.41 437.71,-266.19 441.66,-276.02 446.93,-271.41"/>
 </g>
-<!-- infra&#45;&gt;T -->
-<g id="e__infra__T" class="edge ed lat">
+<!-- infra-&gt;T -->
+<g id="sp-e__infra__T" class="edge ed lat">
 
-<path fill="none" stroke="black" d="M1059.05,-399.58C1052.13,-375.35 1039.03,-337.18 1019,-309 983.43,-258.93 970.88,-243.49 915,-218 832.39,-180.31 571.21,-157.13 443.59,-147.78"/>
-<polygon fill="black" stroke="black" points="443.75,-144.28 433.52,-147.05 443.24,-151.26 443.75,-144.28"/>
+<path fill="none" stroke="black" d="M997.87,-399.92C1011.47,-352.09 1038.53,-244.43 1015,-218 977.5,-175.88 603.53,-153.7 443.76,-146.09"/>
+<polygon fill="black" stroke="black" points="443.7,-142.58 433.55,-145.61 443.37,-149.57 443.7,-142.58"/>
 </g>
-<!-- infra&#45;&gt;Y -->
-<g id="e__infra__Y" class="edge ed lat">
+<!-- infra-&gt;Y -->
+<g id="sp-e__infra__Y" class="edge ed lat">
 
-<path fill="none" stroke="black" d="M1129.51,-418.2C1171.06,-411.37 1222.15,-395.16 1249,-357 1261.28,-339.55 1260.25,-327.12 1249,-309 1143.33,-138.78 1035.9,-169.83 845,-109 713.59,-67.13 553.88,-48.03 457.73,-39.77"/>
-<polygon fill="black" stroke="black" points="458.02,-36.28 447.76,-38.94 457.43,-43.26 458.02,-36.28"/>
+<path fill="none" stroke="black" d="M1055.6,-412.34C1113.55,-401.31 1192.28,-382.15 1211,-357 1223.73,-339.88 1222.13,-327.2 1211,-309 1130.25,-177.03 655.17,-82.19 457.85,-47.99"/>
+<polygon fill="black" stroke="black" points="458.27,-44.51 447.82,-46.26 457.08,-51.4 458.27,-44.51"/>
 </g>
-<!-- ALD&#45;&gt;remb -->
-<g id="e__ALD__remb" class="edge ed obs">
+<!-- ALD-&gt;remb -->
+<g id="sp-e__ALD__remb" class="edge ed obs">
 
-<path fill="none" stroke="black" d="M582.76,-314.84C590.54,-303.49 600.98,-288.26 610.24,-274.74"/>
-<polygon fill="black" stroke="black" points="613.36,-276.39 616.12,-266.17 607.58,-272.44 613.36,-276.39"/>
+<path fill="none" stroke="black" d="M584.5,-314.84C593.51,-303.38 605.63,-287.97 616.34,-274.36"/>
+<polygon fill="black" stroke="black" points="619.35,-276.19 622.78,-266.17 613.85,-271.86 619.35,-276.19"/>
 </g>
-<!-- ALD&#45;&gt;HC -->
-<g id="e__ALD__HC" class="edge ed obs">
+<!-- ALD-&gt;HC -->
+<g id="sp-e__ALD__HC" class="edge ed obs">
 
 <path fill="none" stroke="black" d="M541.31,-314.84C519.98,-302.51 490.74,-285.62 465.98,-271.31"/>
 <polygon fill="black" stroke="black" points="467.49,-268.14 457.08,-266.17 463.99,-274.2 467.49,-268.14"/>
 </g>
-<!-- ALD&#45;&gt;T -->
-<g id="e__ALD__T" class="edge ed obs">
+<!-- ALD-&gt;T -->
+<g id="sp-e__ALD__T" class="edge ed obs">
 
 <path fill="none" stroke="black" d="M564.06,-314.71C553.71,-290.63 532.26,-246.75 503,-218 485.66,-200.97 463.69,-186.43 442.72,-174.82"/>
 <polygon fill="black" stroke="black" points="444.27,-171.68 433.81,-170.02 440.96,-177.84 444.27,-171.68"/>
 </g>
-<!-- MT&#45;&gt;ALD -->
-<g id="e__MT__ALD" class="edge ed obs">
+<!-- MT-&gt;ALD -->
+<g id="sp-e__MT__ALD" class="edge ed obs">
 
-<path fill="none" stroke="black" d="M233.63,-333C325.18,-333 416.73,-333 508.28,-333"/>
-<polygon fill="black" stroke="black" points="508.29,-336.5 518.29,-333 508.29,-329.5 508.29,-336.5"/>
+<path fill="none" stroke="black" d="M271.82,-333C350.65,-333 429.47,-333 508.3,-333"/>
+<polygon fill="black" stroke="black" points="508.41,-336.5 518.41,-333 508.41,-329.5 508.41,-336.5"/>
 </g>
-<!-- MT&#45;&gt;HC -->
-<g id="e__MT__HC" class="edge ed obs">
+<!-- MT-&gt;HC -->
+<g id="sp-e__MT__HC" class="edge ed obs">
 
-<path fill="none" stroke="black" d="M233.52,-314.31C266.2,-301.61 310.85,-284.25 347.92,-269.85"/>
-<polygon fill="black" stroke="black" points="349.61,-272.95 357.66,-266.06 347.07,-266.42 349.61,-272.95"/>
+<path fill="none" stroke="black" d="M271.75,-310.68C297.73,-298.58 330.52,-283.3 358.37,-270.32"/>
+<polygon fill="black" stroke="black" points="360.02,-273.41 367.61,-266.01 357.07,-267.07 360.02,-273.41"/>
 </g>
-<!-- MT&#45;&gt;T -->
-<g id="e__MT__T" class="edge ed obs">
+<!-- MT-&gt;T -->
+<g id="sp-e__MT__T" class="edge ed obs">
 
-<path fill="none" stroke="black" d="M196.9,-308.85C207.27,-284.14 226.31,-244.93 252,-218 266.28,-203.03 284.15,-189.79 301.71,-178.77"/>
-<polygon fill="black" stroke="black" points="303.57,-181.73 310.28,-173.54 299.93,-175.76 303.57,-181.73"/>
+<path fill="none" stroke="black" d="M236.31,-308.83C247.59,-284.8 267.14,-246.8 290,-218 300.03,-205.35 312.27,-192.96 324.19,-182.01"/>
+<polygon fill="black" stroke="black" points="326.86,-184.32 331.96,-175.03 322.18,-179.11 326.86,-184.32"/>
 </g>
-<!-- MT&#45;&gt;Y -->
-<g id="e__MT__Y" class="edge ed obs">
+<!-- MT-&gt;Y -->
+<g id="sp-e__MT__Y" class="edge ed obs">
 
-<path fill="none" stroke="black" d="M190.51,-308.73C193.74,-284.97 200.75,-247.48 215,-218 242.47,-161.17 291.81,-107.65 327.86,-73.13"/>
-<polygon fill="black" stroke="black" points="330.48,-75.48 335.34,-66.06 325.67,-70.39 330.48,-75.48"/>
+<path fill="none" stroke="black" d="M229.8,-308.8C237.58,-266.3 258.33,-174.31 301,-109 309.13,-96.56 319.43,-84.31 329.66,-73.44"/>
+<polygon fill="black" stroke="black" points="332.27,-75.77 336.69,-66.15 327.23,-70.91 332.27,-75.77"/>
 </g>
-<!-- HC&#45;&gt;dist -->
-<g id="e__HC__dist" class="edge ed obs">
+<!-- HC-&gt;dist -->
+<g id="sp-e__HC__dist" class="edge ed obs">
 
-<path fill="none" stroke="black" d="M484.48,-266.07C557.68,-288.61 677.42,-315.03 777,-287.5 789.4,-284.07 801.81,-278.03 812.9,-271.44"/>
-<polygon fill="black" stroke="black" points="814.85,-274.35 821.48,-266.08 811.15,-268.41 814.85,-274.35"/>
+<path fill="none" stroke="black" d="M488.45,-266.09C517.43,-274.67 551.46,-283.26 583,-287.5 712.5,-304.93 751.06,-322.32 877,-287.5 889.4,-284.07 901.81,-278.03 912.9,-271.44"/>
+<polygon fill="black" stroke="black" points="914.85,-274.35 921.48,-266.08 911.15,-268.41 914.85,-274.35"/>
 </g>
-<!-- HC&#45;&gt;remb -->
-<g id="e__HC__remb" class="edge ed obs">
+<!-- HC-&gt;remb -->
+<g id="sp-e__HC__remb" class="edge ed obs">
 
-<path fill="none" stroke="black" d="M493.85,-242C516.96,-242 540.07,-242 563.19,-242"/>
-<polygon fill="black" stroke="black" points="563.45,-245.5 573.45,-242 563.45,-238.5 563.45,-245.5"/>
+<path fill="none" stroke="black" d="M493.56,-242C519.78,-242 545.99,-242 572.21,-242"/>
+<polygon fill="black" stroke="black" points="572.26,-245.5 582.26,-242 572.26,-238.5 572.26,-245.5"/>
 </g>
-<!-- HC&#45;&gt;T -->
-<g id="e__HC__T" class="edge ed obs">
+<!-- HC-&gt;T -->
+<g id="sp-e__HC__T" class="edge ed obs">
 
 <path fill="none" stroke="black" d="M406.34,-217.78C401.79,-207.87 396.34,-196 391.13,-184.67"/>
 <polygon fill="black" stroke="black" points="394.2,-182.95 386.84,-175.33 387.84,-185.87 394.2,-182.95"/>
 </g>
-<!-- HC&#45;&gt;Y -->
-<g id="e__HC__Y" class="edge ed obs">
+<!-- HC-&gt;Y -->
+<g id="sp-e__HC__Y" class="edge ed obs">
 
 <path fill="none" stroke="black" d="M429.25,-217.85C441.78,-190.91 457.52,-145.46 443,-109 437.82,-96 429.2,-83.95 419.72,-73.49"/>
 <polygon fill="black" stroke="black" points="422.14,-70.96 412.7,-66.16 417.09,-75.8 422.14,-70.96"/>
 </g>
-<!-- T&#45;&gt;Y -->
-<g id="e__T__Y" class="edge ed main">
+<!-- T-&gt;Y -->
+<g id="sp-e__T__Y" class="edge ed main">
 
 <path fill="none" stroke="black" d="M372,-108.9C372,-98.63 372,-87.11 372,-76.24"/>
 <polygon fill="black" stroke="black" points="375.5,-76.08 372,-66.08 368.5,-76.08 375.5,-76.08"/>
 </g>
 </g>
-</svg></div>
+</svg></div><div class="scen" data-scen="mt" hidden><svg viewBox="0.00 0.00 1288.78 555.80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="mt-graph0" class="graph" transform="scale(1 1) rotate(0) translate(14.4 541.4)">
+
+<!-- socio -->
+<g id="mt-n__socio" class="node nd lat">
+
+<path fill="none" stroke="black" d="M720.14,-527C720.14,-527 642.14,-527 642.14,-527 636.14,-527 630.14,-521 630.14,-515 630.14,-515 630.14,-503 630.14,-503 630.14,-497 636.14,-491 642.14,-491 642.14,-491 720.14,-491 720.14,-491 726.14,-491 732.14,-497 732.14,-503 732.14,-503 732.14,-515 732.14,-515 732.14,-521 726.14,-527 720.14,-527"/>
+<text text-anchor="middle" x="681.14" y="-505.2" font-family="IBM Plex Sans" font-size="16.00">socio-eco</text>
+</g>
+<!-- life -->
+<g id="mt-n__life" class="node nd lat">
+
+<path fill="none" stroke="black" d="M295.14,-442C295.14,-442 235.14,-442 235.14,-442 229.14,-442 223.14,-436 223.14,-430 223.14,-430 223.14,-418 223.14,-418 223.14,-412 229.14,-406 235.14,-406 235.14,-406 295.14,-406 295.14,-406 301.14,-406 307.14,-412 307.14,-418 307.14,-418 307.14,-430 307.14,-430 307.14,-436 301.14,-442 295.14,-442"/>
+<text text-anchor="middle" x="265.14" y="-420.2" font-family="IBM Plex Sans" font-size="16.00">lifestyle</text>
+</g>
+<!-- socio-&gt;life -->
+<g id="mt-e__socio__life" class="edge ed lat">
+
+<path fill="none" stroke="black" d="M629.94,-499.77C565.37,-489.12 451.09,-469.39 354.14,-448 342.21,-445.37 329.45,-442.25 317.44,-439.18"/>
+<polygon fill="black" stroke="black" points="318.11,-435.74 307.55,-436.62 316.35,-442.51 318.11,-435.74"/>
+</g>
+<!-- HSB -->
+<g id="mt-n__HSB" class="node nd lat">
+
+<path fill="none" stroke="black" d="M491.14,-448C491.14,-448 375.14,-448 375.14,-448 369.14,-448 363.14,-442 363.14,-436 363.14,-436 363.14,-412 363.14,-412 363.14,-406 369.14,-400 375.14,-400 375.14,-400 491.14,-400 491.14,-400 497.14,-400 503.14,-406 503.14,-412 503.14,-412 503.14,-436 503.14,-436 503.14,-442 497.14,-448 491.14,-448"/>
+<text text-anchor="middle" x="433.14" y="-429.2" font-family="IBM Plex Sans" font-size="16.00">health-seeking</text>
+<text text-anchor="middle" x="433.14" y="-411.2" font-family="IBM Plex Sans" font-size="16.00">behaviour</text>
+</g>
+<!-- socio-&gt;HSB -->
+<g id="mt-e__socio__HSB" class="edge ed lat">
+
+<path fill="none" stroke="black" d="M630.06,-490.9C595.94,-479.48 550.4,-464.24 511.71,-451.3"/>
+<polygon fill="black" stroke="black" points="512.63,-447.91 502.03,-448.06 510.4,-454.55 512.63,-447.91"/>
+</g>
+<!-- NH -->
+<g id="mt-n__NH" class="node nd lat">
+
+<path fill="none" stroke="black" d="M640.64,-442C640.64,-442 533.64,-442 533.64,-442 527.64,-442 521.64,-436 521.64,-430 521.64,-430 521.64,-418 521.64,-418 521.64,-412 527.64,-406 533.64,-406 533.64,-406 640.64,-406 640.64,-406 646.64,-406 652.64,-412 652.64,-418 652.64,-418 652.64,-430 652.64,-430 652.64,-436 646.64,-442 640.64,-442"/>
+<text text-anchor="middle" x="587.14" y="-420.2" font-family="IBM Plex Sans" font-size="16.00">natural health</text>
+</g>
+<!-- socio-&gt;NH -->
+<g id="mt-e__socio__NH" class="edge ed lat">
+
+<path fill="none" stroke="black" d="M661.66,-490.8C647.93,-478.67 629.34,-462.26 614.17,-448.87"/>
+<polygon fill="black" stroke="black" points="616.41,-446.17 606.59,-442.18 611.77,-451.42 616.41,-446.17"/>
+</g>
+<!-- CMU -->
+<g id="mt-n__CMU" class="node nd adj">
+
+<path fill="none" stroke="black" d="M875.14,-351C875.14,-351 787.14,-351 787.14,-351 781.14,-351 775.14,-345 775.14,-339 775.14,-339 775.14,-327 775.14,-327 775.14,-321 781.14,-315 787.14,-315 787.14,-315 875.14,-315 875.14,-315 881.14,-315 887.14,-321 887.14,-327 887.14,-327 887.14,-339 887.14,-339 887.14,-345 881.14,-351 875.14,-351"/>
+<text text-anchor="middle" x="831.14" y="-329.2" font-family="IBM Plex Sans" font-size="16.00">CMU / C2S</text>
+</g>
+<!-- socio-&gt;CMU -->
+<g id="mt-e__socio__CMU" class="edge ed lat">
+
+<path fill="none" stroke="black" d="M695.8,-491C722.46,-460.07 778.98,-394.51 809.88,-358.66"/>
+<polygon fill="black" stroke="black" points="812.55,-360.93 816.43,-351.07 807.25,-356.36 812.55,-360.93"/>
+</g>
+<!-- infra -->
+<g id="mt-n__infra" class="node nd lat">
+
+<path fill="none" stroke="black" d="M1163.64,-448C1163.64,-448 1058.64,-448 1058.64,-448 1052.64,-448 1046.64,-442 1046.64,-436 1046.64,-436 1046.64,-412 1046.64,-412 1046.64,-406 1052.64,-400 1058.64,-400 1058.64,-400 1163.64,-400 1163.64,-400 1169.64,-400 1175.64,-406 1175.64,-412 1175.64,-412 1175.64,-436 1175.64,-436 1175.64,-442 1169.64,-448 1163.64,-448"/>
+<text text-anchor="middle" x="1111.14" y="-429.2" font-family="IBM Plex Sans" font-size="16.00">local health</text>
+<text text-anchor="middle" x="1111.14" y="-411.2" font-family="IBM Plex Sans" font-size="16.00">infrastructure</text>
+</g>
+<!-- socio-&gt;infra -->
+<g id="mt-e__socio__infra" class="edge ed lat">
+
+<path fill="none" stroke="black" d="M732.3,-499.02C796.24,-487.69 908.96,-467.34 1005.14,-448 1015.28,-445.96 1025.96,-443.74 1036.46,-441.5"/>
+<polygon fill="black" stroke="black" points="1037.42,-444.88 1046.46,-439.36 1035.95,-438.03 1037.42,-444.88"/>
+</g>
+<!-- dist -->
+<g id="mt-n__dist" class="node nd adj">
+
+<path fill="none" stroke="black" d="M993.64,-266C993.64,-266 912.64,-266 912.64,-266 906.64,-266 900.64,-260 900.64,-254 900.64,-254 900.64,-230 900.64,-230 900.64,-224 906.64,-218 912.64,-218 912.64,-218 993.64,-218 993.64,-218 999.64,-218 1005.64,-224 1005.64,-230 1005.64,-230 1005.64,-254 1005.64,-254 1005.64,-260 999.64,-266 993.64,-266"/>
+<text text-anchor="middle" x="953.14" y="-247.2" font-family="IBM Plex Sans" font-size="16.00">distance</text>
+<text text-anchor="middle" x="953.14" y="-229.2" font-family="IBM Plex Sans" font-size="16.00">parcourue</text>
+</g>
+<!-- socio-&gt;dist -->
+<g id="mt-e__socio__dist" class="edge ed lat">
+
+<path fill="none" stroke="black" d="M732.21,-496.51C797.04,-478.88 906.2,-438.3 954.14,-357 968.42,-332.79 966.55,-300.37 962.05,-276.29"/>
+<polygon fill="black" stroke="black" points="965.42,-275.27 959.93,-266.2 958.57,-276.71 965.42,-275.27"/>
+</g>
+<!-- HC -->
+<g id="mt-n__HC" class="node nd adj">
+
+<path fill="none" stroke="black" d="M584.64,-266C584.64,-266 455.64,-266 455.64,-266 449.64,-266 443.64,-260 443.64,-254 443.64,-254 443.64,-230 443.64,-230 443.64,-224 449.64,-218 455.64,-218 455.64,-218 584.64,-218 584.64,-218 590.64,-218 596.64,-224 596.64,-230 596.64,-230 596.64,-254 596.64,-254 596.64,-260 590.64,-266 584.64,-266"/>
+<text text-anchor="middle" x="520.14" y="-247.2" font-family="IBM Plex Sans" font-size="16.00">healthcare cons.</text>
+<text text-anchor="middle" x="520.14" y="-229.2" font-family="IBM Plex Sans" font-size="16.00">(avant T)</text>
+</g>
+<!-- socio-&gt;HC -->
+<g id="mt-e__socio__HC" class="edge ed lat">
+
+<path fill="none" stroke="black" d="M682.75,-490.71C683.96,-467.59 682.68,-426.47 662.14,-400 633.73,-363.39 599.35,-390.32 567.14,-357 545.57,-334.68 533.35,-301.06 526.82,-276.11"/>
+<polygon fill="black" stroke="black" points="530.2,-275.23 524.43,-266.35 523.4,-276.89 530.2,-275.23"/>
+</g>
+<!-- life-&gt;HSB -->
+<g id="mt-e__life__HSB" class="edge ed lat bi">
+
+<path fill="none" stroke="black" d="M317.57,-424C329.22,-424 340.87,-424 352.52,-424"/>
+<polygon fill="black" stroke="black" points="317.14,-420.5 307.14,-424 317.14,-427.5 317.14,-420.5"/>
+<polygon fill="black" stroke="black" points="352.76,-427.5 362.76,-424 352.76,-420.5 352.76,-427.5"/>
+</g>
+<!-- life-&gt;NH -->
+<g id="mt-e__life__NH" class="edge ed lat">
+
+<path fill="none" stroke="black" d="M284.19,-442.07C296.31,-452.29 312.93,-464.07 330.14,-469.5 403.47,-492.62 428.61,-488.39 503.14,-469.5 520.58,-465.08 538.33,-456.24 552.98,-447.51"/>
+<polygon fill="black" stroke="black" points="555.02,-450.37 561.68,-442.13 551.34,-444.41 555.02,-450.37"/>
+</g>
+<!-- Y -->
+<g id="mt-n__Y" class="node nd ty">
+
+<path fill="none" stroke="black" d="M481.64,-66C481.64,-66 354.64,-66 354.64,-66 348.64,-66 342.64,-60 342.64,-54 342.64,-54 342.64,-12 342.64,-12 342.64,-6 348.64,0 354.64,0 354.64,0 481.64,0 481.64,0 487.64,0 493.64,-6 493.64,-12 493.64,-12 493.64,-54 493.64,-54 493.64,-60 487.64,-66 481.64,-66"/>
+<text text-anchor="middle" x="418.14" y="-47.2" font-family="IBM Plex Sans" font-size="16.00">Y</text>
+<text text-anchor="middle" x="418.14" y="-29.2" font-family="IBM Plex Sans" font-size="16.00">décès, urgences</text>
+<text text-anchor="middle" x="418.14" y="-11.2" font-family="IBM Plex Sans" font-size="16.00">évitables</text>
+</g>
+<!-- life-&gt;Y -->
+<g id="mt-e__life__Y" class="edge ed lat">
+
+<path fill="none" stroke="black" d="M223.08,-411.82C192.19,-401.8 150.94,-384.37 123.14,-357 42.9,-277.98 0.42,-196.64 71.14,-109 103.37,-69.07 240.47,-49.35 332.39,-40.45"/>
+<polygon fill="black" stroke="black" points="332.9,-43.92 342.53,-39.49 332.24,-36.95 332.9,-43.92"/>
+</g>
+<!-- HSB-&gt;dist -->
+<g id="mt-e__HSB__dist" class="edge ed lat">
+
+<path fill="none" stroke="black" d="M503.22,-402.13C506.56,-401.36 509.88,-400.65 513.14,-400 597.15,-383.33 825.92,-406.03 896.14,-357 910.49,-346.99 928.86,-305.85 940.81,-275.86"/>
+<polygon fill="black" stroke="black" points="944.21,-276.76 944.6,-266.17 937.69,-274.21 944.21,-276.76"/>
+</g>
+<!-- MT -->
+<g id="mt-n__MT" class="node nd adj">
+
+<path fill="none" stroke="black" d="M355.64,-357C355.64,-357 230.64,-357 230.64,-357 224.64,-357 218.64,-351 218.64,-345 218.64,-345 218.64,-321 218.64,-321 218.64,-315 224.64,-309 230.64,-309 230.64,-309 355.64,-309 355.64,-309 361.64,-309 367.64,-315 367.64,-321 367.64,-321 367.64,-345 367.64,-345 367.64,-351 361.64,-357 355.64,-357"/>
+<text text-anchor="middle" x="293.14" y="-338.2" font-family="IBM Plex Sans" font-size="16.00">médecin traitant</text>
+<text text-anchor="middle" x="293.14" y="-320.2" font-family="IBM Plex Sans" font-size="16.00">passé</text>
+</g>
+<!-- HSB-&gt;MT -->
+<g id="mt-e__HSB__MT" class="edge ed lat">
+
+<path fill="none" stroke="black" d="M396.72,-399.85C378.74,-388.41 356.88,-374.52 337.88,-362.44"/>
+<polygon fill="black" stroke="black" points="339.69,-359.45 329.38,-357.04 335.94,-365.35 339.69,-359.45"/>
+</g>
+<!-- HSB-&gt;HC -->
+<g id="mt-e__HSB__HC" class="edge ed lat">
+
+<path fill="none" stroke="black" d="M444.34,-399.84C459.67,-368.11 487.28,-311 504.61,-275.14"/>
+<polygon fill="black" stroke="black" points="507.79,-276.6 508.99,-266.07 501.49,-273.55 507.79,-276.6"/>
+</g>
+<!-- T -->
+<g id="mt-n__T" class="node nd ty">
+
+<path fill="none" stroke="black" d="M480.64,-175C480.64,-175 355.64,-175 355.64,-175 349.64,-175 343.64,-169 343.64,-163 343.64,-163 343.64,-121 343.64,-121 343.64,-115 349.64,-109 355.64,-109 355.64,-109 480.64,-109 480.64,-109 486.64,-109 492.64,-115 492.64,-121 492.64,-121 492.64,-163 492.64,-163 492.64,-169 486.64,-175 480.64,-175"/>
+<text text-anchor="middle" x="418.14" y="-156.2" font-family="IBM Plex Sans" font-size="16.00">T</text>
+<text text-anchor="middle" x="418.14" y="-138.2" font-family="IBM Plex Sans" font-size="16.00">affiliation</text>
+<text text-anchor="middle" x="418.14" y="-120.2" font-family="IBM Plex Sans" font-size="16.00">médecin traitant</text>
+</g>
+<!-- HSB-&gt;T -->
+<g id="mt-e__HSB__T" class="edge ed lat">
+
+<path fill="none" stroke="black" d="M363.14,-406.72C301.35,-391.64 219.63,-369.7 210.14,-357 159.32,-288.95 258.88,-220.3 337.06,-179.72"/>
+<polygon fill="black" stroke="black" points="338.68,-182.83 346,-175.16 335.5,-176.59 338.68,-182.83"/>
+</g>
+<!-- HSB-&gt;Y -->
+<g id="mt-e__HSB__Y" class="edge ed lat">
+
+<path fill="none" stroke="black" d="M362.92,-407.85C302.95,-394.15 221.95,-373.65 193.14,-357 143.35,-328.22 123.3,-319.07 101.14,-266 74.26,-201.61 57.85,-163.73 101.14,-109 129.5,-73.14 248.48,-52.66 332.3,-42.44"/>
+<polygon fill="black" stroke="black" points="332.83,-45.9 342.34,-41.24 332,-38.95 332.83,-45.9"/>
+</g>
+<!-- NH-&gt;dist -->
+<g id="mt-e__NH__dist" class="edge ed lat">
+
+<path fill="none" stroke="black" d="M652.73,-418.83C740.84,-411.85 890.82,-394.68 929.14,-357 950.31,-336.19 955.09,-301.76 955.32,-276.18"/>
+<polygon fill="black" stroke="black" points="958.82,-276.12 955.19,-266.17 951.82,-276.21 958.82,-276.12"/>
+</g>
+<!-- remb -->
+<g id="mt-n__remb" class="node nd adj">
+
+<path fill="none" stroke="black" d="M758.64,-266C758.64,-266 665.64,-266 665.64,-266 659.64,-266 653.64,-260 653.64,-254 653.64,-254 653.64,-230 653.64,-230 653.64,-224 659.64,-218 665.64,-218 665.64,-218 758.64,-218 758.64,-218 764.64,-218 770.64,-224 770.64,-230 770.64,-230 770.64,-254 770.64,-254 770.64,-260 764.64,-266 758.64,-266"/>
+<text text-anchor="middle" x="712.14" y="-247.2" font-family="IBM Plex Sans" font-size="16.00">montants</text>
+<text text-anchor="middle" x="712.14" y="-229.2" font-family="IBM Plex Sans" font-size="16.00">remboursés</text>
+</g>
+<!-- NH-&gt;remb -->
+<g id="mt-e__NH__remb" class="edge ed lat">
+
+<path fill="none" stroke="black" d="M629.01,-405.97C650.54,-395.09 675.3,-378.89 690.14,-357 706.2,-333.31 711.22,-300.83 712.49,-276.6"/>
+<polygon fill="black" stroke="black" points="716,-276.55 712.84,-266.44 709,-276.31 716,-276.55"/>
+</g>
+<!-- ALD -->
+<g id="mt-n__ALD" class="node nd adj">
+
+<path fill="none" stroke="black" d="M668.64,-351C668.64,-351 587.64,-351 587.64,-351 581.64,-351 575.64,-345 575.64,-339 575.64,-339 575.64,-327 575.64,-327 575.64,-321 581.64,-315 587.64,-315 587.64,-315 668.64,-315 668.64,-315 674.64,-315 680.64,-321 680.64,-327 680.64,-327 680.64,-339 680.64,-339 680.64,-345 674.64,-351 668.64,-351"/>
+<text text-anchor="middle" x="628.14" y="-329.2" font-family="IBM Plex Sans" font-size="16.00">statut ALD</text>
+</g>
+<!-- NH-&gt;ALD -->
+<g id="mt-e__NH__ALD" class="edge ed lat">
+
+<path fill="none" stroke="black" d="M595.05,-405.84C601,-392.91 609.27,-374.96 616.06,-360.23"/>
+<polygon fill="black" stroke="black" points="619.26,-361.65 620.26,-351.11 612.9,-358.73 619.26,-361.65"/>
+</g>
+<!-- NH-&gt;HC -->
+<g id="mt-e__NH__HC" class="edge ed lat">
+
+<path fill="none" stroke="black" d="M568.37,-405.86C556.16,-393.53 541.09,-375.82 533.14,-357 522.32,-331.38 519.44,-299.8 519.05,-276.38"/>
+<polygon fill="black" stroke="black" points="522.55,-276.23 519.03,-266.24 515.55,-276.25 522.55,-276.23"/>
+</g>
+<!-- NH-&gt;T -->
+<g id="mt-e__NH__T" class="edge ed lat">
+
+<path fill="none" stroke="black" d="M562.23,-405.86C527.04,-380.09 463.86,-327.75 435.14,-266 423.41,-240.77 419.18,-209.72 417.88,-185.13"/>
+<polygon fill="black" stroke="black" points="421.37,-184.87 417.49,-175.02 414.38,-185.15 421.37,-184.87"/>
+</g>
+<!-- NH-&gt;Y -->
+<g id="mt-e__NH__Y" class="edge ed lat">
+
+<path fill="none" stroke="black" d="M535.38,-405.98C527.64,-403.77 519.72,-401.69 512.14,-400 445.98,-385.24 254.57,-408.2 210.14,-357 151.87,-289.84 172.16,-262.43 305.14,-109 317.31,-94.96 332.71,-82.46 348.19,-71.87"/>
+<polygon fill="black" stroke="black" points="350.37,-74.62 356.78,-66.18 346.51,-68.78 350.37,-74.62"/>
+</g>
+<!-- agesex -->
+<g id="mt-n__agesex" class="node nd adj">
+
+<path fill="none" stroke="black" d="M346.64,-527C346.64,-527 253.64,-527 253.64,-527 247.64,-527 241.64,-521 241.64,-515 241.64,-515 241.64,-503 241.64,-503 241.64,-497 247.64,-491 253.64,-491 253.64,-491 346.64,-491 346.64,-491 352.64,-491 358.64,-497 358.64,-503 358.64,-503 358.64,-515 358.64,-515 358.64,-521 352.64,-527 346.64,-527"/>
+<text text-anchor="middle" x="300.14" y="-505.2" font-family="IBM Plex Sans" font-size="16.00">age, gender</text>
+</g>
+<!-- agesex-&gt;socio -->
+<g id="mt-e__agesex__socio" class="edge ed obs">
+
+<path fill="none" stroke="black" d="M358.93,-509C445.89,-509 532.84,-509 619.8,-509"/>
+<polygon fill="black" stroke="black" points="619.85,-512.5 629.85,-509 619.85,-505.5 619.85,-512.5"/>
+</g>
+<!-- agesex-&gt;life -->
+<g id="mt-e__agesex__life" class="edge ed obs">
+
+<path fill="none" stroke="black" d="M292.89,-490.8C288.1,-479.45 281.74,-464.35 276.31,-451.48"/>
+<polygon fill="black" stroke="black" points="279.5,-450.03 272.38,-442.18 273.05,-452.75 279.5,-450.03"/>
+</g>
+<!-- agesex-&gt;HSB -->
+<g id="mt-e__agesex__HSB" class="edge ed obs">
+
+<path fill="none" stroke="black" d="M327.7,-490.8C344.93,-480.05 367.55,-465.93 387.42,-453.53"/>
+<polygon fill="black" stroke="black" points="389.4,-456.42 396.03,-448.16 385.7,-450.48 389.4,-456.42"/>
+</g>
+<!-- agesex-&gt;NH -->
+<g id="mt-e__agesex__NH" class="edge ed obs">
+
+<path fill="none" stroke="black" d="M358.73,-491.79C401.35,-479.9 460.41,-463.25 512.14,-448 515.44,-447.03 518.82,-446.02 522.23,-445"/>
+<polygon fill="black" stroke="black" points="523.32,-448.33 531.89,-442.09 521.3,-441.63 523.32,-448.33"/>
+</g>
+<!-- agesex-&gt;MT -->
+<g id="mt-e__agesex__MT" class="edge ed obs">
+
+<path fill="none" stroke="black" d="M260.33,-490.85C242.8,-481.04 223.99,-466.89 214.14,-448 204.28,-429.09 205.11,-419.32 214.14,-400 220.85,-385.66 232.37,-373.34 244.58,-363.36"/>
+<polygon fill="black" stroke="black" points="246.87,-366.01 252.66,-357.14 242.6,-360.47 246.87,-366.01"/>
+</g>
+<!-- agesex-&gt;HC -->
+<g id="mt-e__agesex__HC" class="edge ed obs">
+
+<path fill="none" stroke="black" d="M306.52,-490.87C315.27,-468.66 332.4,-429.29 354.14,-400 391.39,-349.8 445.68,-301.92 481.92,-272.51"/>
+<polygon fill="black" stroke="black" points="484.21,-275.16 489.82,-266.17 479.83,-269.7 484.21,-275.16"/>
+</g>
+<!-- agesex-&gt;T -->
+<g id="mt-e__agesex__T" class="edge ed obs">
+
+<path fill="none" stroke="black" d="M255.34,-490.97C236.11,-481.32 215.3,-467.26 203.14,-448 148.48,-361.43 147.76,-294.2 216.14,-218 246.27,-184.44 292.82,-165.85 333.64,-155.58"/>
+<polygon fill="black" stroke="black" points="334.69,-158.93 343.61,-153.21 333.07,-152.12 334.69,-158.93"/>
+</g>
+<!-- agesex-&gt;Y -->
+<g id="mt-e__agesex__Y" class="edge ed obs">
+
+<path fill="none" stroke="black" d="M241.43,-500.5C154.35,-485.71 1.14,-444.06 1.14,-334 1.14,-334 1.14,-334 1.14,-241 1.14,-180.42 -8.93,-150.56 35.14,-109 77.14,-69.4 232.92,-49.29 332.4,-40.27"/>
+<polygon fill="black" stroke="black" points="332.79,-43.74 342.44,-39.37 332.17,-36.77 332.79,-43.74"/>
+</g>
+<!-- CMU-&gt;remb -->
+<g id="mt-e__CMU__remb" class="edge ed obs">
+
+<path fill="none" stroke="black" d="M808.2,-314.84C792.08,-302.78 770.11,-286.36 751.25,-272.25"/>
+<polygon fill="black" stroke="black" points="753.22,-269.35 743.12,-266.17 749.03,-274.96 753.22,-269.35"/>
+</g>
+<!-- CMU-&gt;HC -->
+<g id="mt-e__CMU__HC" class="edge ed obs">
+
+<path fill="none" stroke="black" d="M780.39,-314.99C773.92,-312.92 767.39,-310.88 761.14,-309 710.15,-293.65 652.66,-277.85 606.61,-265.56"/>
+<polygon fill="black" stroke="black" points="607.24,-262.1 596.67,-262.91 605.43,-268.86 607.24,-262.1"/>
+</g>
+<!-- CMU-&gt;T -->
+<g id="mt-e__CMU__T" class="edge ed obs">
+
+<path fill="none" stroke="black" d="M828.45,-314.71C823.56,-289.4 810.73,-242.59 780.14,-218 738.22,-184.29 595.96,-162.57 502.76,-151.59"/>
+<polygon fill="black" stroke="black" points="503.11,-148.11 492.78,-150.43 502.31,-155.06 503.11,-148.11"/>
+</g>
+<!-- ind -->
+<g id="mt-n__ind" class="node nd adj">
+
+<path fill="none" stroke="black" d="M1209.14,-357C1209.14,-357 1069.14,-357 1069.14,-357 1063.14,-357 1057.14,-351 1057.14,-345 1057.14,-345 1057.14,-321 1057.14,-321 1057.14,-315 1063.14,-309 1069.14,-309 1069.14,-309 1209.14,-309 1209.14,-309 1215.14,-309 1221.14,-315 1221.14,-321 1221.14,-321 1221.14,-345 1221.14,-345 1221.14,-351 1215.14,-357 1209.14,-357"/>
+<text text-anchor="middle" x="1139.14" y="-338.2" font-family="IBM Plex Sans" font-size="16.00">indicateurs</text>
+<text text-anchor="middle" x="1139.14" y="-320.2" font-family="IBM Plex Sans" font-size="16.00">d&#39;offre (APL, BPE)</text>
+</g>
+<!-- infra-&gt;ind -->
+<g id="mt-e__infra__ind" class="edge ed lat">
+
+<path fill="none" stroke="black" d="M1118.5,-399.62C1121.65,-389.6 1125.38,-377.73 1128.81,-366.85"/>
+<polygon fill="black" stroke="black" points="1132.17,-367.82 1131.83,-357.23 1125.49,-365.72 1132.17,-367.82"/>
+</g>
+<!-- infra-&gt;dist -->
+<g id="mt-e__infra__dist" class="edge ed lat">
+
+<path fill="none" stroke="black" d="M1088.3,-399.84C1076.16,-387.34 1061.11,-371.54 1048.14,-357 1023.59,-329.48 996.8,-297.1 977.95,-273.9"/>
+<polygon fill="black" stroke="black" points="980.64,-271.66 971.62,-266.09 975.2,-276.07 980.64,-271.66"/>
+</g>
+<!-- infra-&gt;MT -->
+<g id="mt-e__infra__MT" class="edge ed lat">
+
+<path fill="none" stroke="black" d="M1046.61,-415.98C900.01,-400.03 541.88,-361.06 377.78,-343.21"/>
+<polygon fill="black" stroke="black" points="378.06,-339.72 367.74,-342.12 377.3,-346.68 378.06,-339.72"/>
+</g>
+<!-- infra-&gt;HC -->
+<g id="mt-e__infra__HC" class="edge ed lat">
+
+<path fill="none" stroke="black" d="M1046.51,-417.89C975.64,-410.65 859.58,-393.91 766.14,-357 728.98,-342.32 725.82,-326.98 690.14,-309 660.8,-294.21 627.32,-280.57 597.87,-269.57"/>
+<polygon fill="black" stroke="black" points="599.05,-266.28 588.46,-266.1 596.62,-272.85 599.05,-266.28"/>
+</g>
+<!-- infra-&gt;T -->
+<g id="mt-e__infra__T" class="edge ed lat">
+
+<path fill="none" stroke="black" d="M1175.87,-402.33C1196.96,-392.17 1218.03,-377.56 1230.14,-357 1240.97,-338.62 1241.93,-326.78 1230.14,-309 1150.21,-188.36 694.56,-154.82 502.99,-145.98"/>
+<polygon fill="black" stroke="black" points="503.11,-142.48 492.96,-145.53 502.79,-149.48 503.11,-142.48"/>
+</g>
+<!-- infra-&gt;Y -->
+<g id="mt-e__infra__Y" class="edge ed lat">
+
+<path fill="none" stroke="black" d="M1175.7,-408.26C1202.96,-398.5 1232.06,-382.6 1248.14,-357 1290.64,-289.35 1205.64,-253.66 1134.14,-218 921.67,-112.04 642.38,-63.13 503.79,-44.16"/>
+<polygon fill="black" stroke="black" points="504.04,-40.66 493.66,-42.79 503.1,-47.6 504.04,-40.66"/>
+</g>
+<!-- ALD-&gt;remb -->
+<g id="mt-e__ALD__remb" class="edge ed obs">
+
+<path fill="none" stroke="black" d="M644.34,-314.84C655.36,-303.16 670.25,-287.38 683.27,-273.59"/>
+<polygon fill="black" stroke="black" points="685.96,-275.84 690.28,-266.17 680.87,-271.04 685.96,-275.84"/>
+</g>
+<!-- ALD-&gt;HC -->
+<g id="mt-e__ALD__HC" class="edge ed obs">
+
+<path fill="none" stroke="black" d="M607.32,-314.84C592.89,-302.95 573.29,-286.8 556.33,-272.82"/>
+<polygon fill="black" stroke="black" points="558.2,-269.82 548.25,-266.17 553.74,-275.23 558.2,-269.82"/>
+</g>
+<!-- ALD-&gt;T -->
+<g id="mt-e__ALD__T" class="edge ed obs">
+
+<path fill="none" stroke="black" d="M629.61,-314.81C630.73,-290.46 629.13,-245.81 606.14,-218 580.34,-186.8 539.69,-168.49 502.78,-157.79"/>
+<polygon fill="black" stroke="black" points="503.56,-154.38 492.99,-155.1 501.7,-161.13 503.56,-154.38"/>
+</g>
+<!-- MT-&gt;ALD -->
+<g id="mt-e__MT__ALD" class="edge ed obs">
+
+<path fill="none" stroke="black" d="M367.73,-333C433.61,-333 499.48,-333 565.36,-333"/>
+<polygon fill="black" stroke="black" points="565.5,-336.5 575.5,-333 565.5,-329.5 565.5,-336.5"/>
+</g>
+<!-- MT-&gt;HC -->
+<g id="mt-e__MT__HC" class="edge ed obs">
+
+<path fill="none" stroke="black" d="M351.9,-308.96C382.37,-297.02 419.77,-282.35 451.57,-269.89"/>
+<polygon fill="black" stroke="black" points="453.21,-273 461.24,-266.09 450.65,-266.49 453.21,-273"/>
+</g>
+<!-- MT-&gt;T -->
+<g id="mt-e__MT__T" class="edge ed obs">
+
+<path fill="none" stroke="black" d="M308.47,-308.82C329.08,-277.67 366.04,-221.78 391.31,-183.57"/>
+<polygon fill="black" stroke="black" points="394.23,-185.49 396.83,-175.22 388.4,-181.63 394.23,-185.49"/>
+</g>
+<!-- MT-&gt;Y -->
+<g id="mt-e__MT__Y" class="edge ed obs">
+
+<path fill="none" stroke="black" d="M292.77,-308.86C293.07,-266.46 298.34,-174.63 335.14,-109 342.62,-95.66 353.35,-83.43 364.63,-72.89"/>
+<polygon fill="black" stroke="black" points="366.97,-75.49 372.09,-66.21 362.3,-70.27 366.97,-75.49"/>
+</g>
+<!-- HC-&gt;dist -->
+<g id="mt-e__HC__dist" class="edge ed obs">
+
+<path fill="none" stroke="black" d="M577.45,-266.07C600.8,-274.65 628.33,-283.24 654.14,-287.5 727.81,-299.67 748.52,-299.92 822.14,-287.5 845.1,-283.63 869.4,-276.19 890.76,-268.43"/>
+<polygon fill="black" stroke="black" points="892.2,-271.63 900.35,-264.86 889.76,-265.07 892.2,-271.63"/>
+</g>
+<!-- HC-&gt;remb -->
+<g id="mt-e__HC__remb" class="edge ed obs">
+
+<path fill="none" stroke="black" d="M597.02,-242C612.39,-242 627.76,-242 643.13,-242"/>
+<polygon fill="black" stroke="black" points="643.23,-245.5 653.23,-242 643.23,-238.5 643.23,-245.5"/>
+</g>
+<!-- HC-&gt;T -->
+<g id="mt-e__HC__T" class="edge ed obs">
+
+<path fill="none" stroke="black" d="M495.97,-217.78C484.94,-207.18 471.57,-194.33 459.04,-182.29"/>
+<polygon fill="black" stroke="black" points="461.42,-179.73 451.79,-175.33 456.57,-184.78 461.42,-179.73"/>
+</g>
+<!-- HC-&gt;Y -->
+<g id="mt-e__HC__Y" class="edge ed obs">
+
+<path fill="none" stroke="black" d="M521.68,-217.58C522.46,-189.98 520.49,-143.51 502.14,-109 495.06,-95.68 484.61,-83.57 473.47,-73.16"/>
+<polygon fill="black" stroke="black" points="475.47,-70.26 465.68,-66.22 470.82,-75.49 475.47,-70.26"/>
+</g>
+<!-- T-&gt;Y -->
+<g id="mt-e__T__Y" class="edge ed main">
+
+<path fill="none" stroke="black" d="M418.14,-108.9C418.14,-98.63 418.14,-87.11 418.14,-76.24"/>
+<polygon fill="black" stroke="black" points="421.64,-76.08 418.14,-66.08 414.64,-76.08 421.64,-76.08"/>
+</g>
+</g>
+</svg></div></div>
   <aside id="panel" aria-live="polite"></aside>
 </div>
 
 <section class="wrap block" id="bilan">
   <h2>Bilan du confounding latent</h2>
-  <p class="intro">Quatre latents confondent directement T et Y : natural health, health-seeking behaviour, lifestyle et local health infrastructure. Pour chacun, une partie est crédiblement bloquée par ses proxys, une partie demande encore du travail, et une partie restera inobservable dans le SNDS.</p>
-  <div class="cols"><div class="col ok"><h3>Crédiblement bloqué</h3><p class="col-sub">Les proxys mesurent le latent ou en laissent des traces riches.</p><ul class="items"><li><p class="it-k">Infrastructure : quantité de l’offre</p><ul class="it-v"><li><strong>APL et BPE</strong> en sont des mesures directes.</li></ul></li><li><p class="it-k">Natural health : part diagnostiquée et traitée</p><ul class="it-v"><li><strong>Statut ALD</strong> avec catégorie et ancienneté : meilleur marqueur de gravité chronique.</li><li><strong>Hospitalisations, traitements</strong> bien tracés ; <strong>montants remboursés</strong> comme signal d’intensité.</li></ul></li><li><p class="it-k">Health-seeking behaviour : part tracée</p><ul class="it-v"><li><strong>Médecin traitant, dépistages, vaccins, délivrances.</strong></li><li><strong>Distance parcourue</strong> : signal partiel de motivation, surtout l’excès de distance (communes nécessaires).</li></ul></li></ul></div><div class="col work"><h3>Partiellement bloqué, à travailler</h3><p class="col-sub">Des données ou des méthodes existent pour réduire le résiduel.</p><ul class="items"><li><p class="it-k">Qualité et pratique de l’offre de soins</p><ul class="it-v"><li><strong>Niveau territoire</strong> (infrastructure) : délais, saturation, qualité moyenne. Piste : délais et saturation construits dans le SNDS sur une période antérieure, indicateurs de qualité des établissements (HAS).</li><li><strong>Niveau médecins du patient</strong> : varie au sein d’un même territoire. Piste : embeddings de médecins.</li><li><strong>Arbitrage</strong> : ces embeddings absorbent aussi la tendance de prescription du médecin, qui pourrait servir d’instrument. Ajuster dessus ou l’utiliser comme instrument : il faut choisir.</li></ul></li><li><p class="it-k">Variation à l’intérieur du département</p><ul class="it-v"><li><strong>Communes</strong> de résidence et de prestation : APL communale, <strong>excès de distance</strong>.</li></ul></li><li><p class="it-k">Gravité clinique non tracée</p><ul class="it-v"><li><strong>Ce que voit le médecin</strong> : symptômes, examen, résultats d’analyses (actes présents dans le SNDS, résultats absents).</li><li><strong>Proxys</strong> : montants, ALD récente, intensité récente des soins.</li><li><strong>Données cliniques</strong> sur un sous-échantillon, si appariement possible.</li><li><strong>Résiduel à borner</strong> par analyse de sensibilité.</li><li><strong>Symptômes jamais consultés</strong> : invisibles du médecin aussi, donc sans effet sur T, donc sans biais.</li></ul></li></ul></div><div class="col doom"><h3>Inobservable, à borner</h3><p class="col-sub">Pas de proxy crédible dans le SNDS : on mesure la sensibilité.</p><ul class="items"><li><p class="it-k">Lifestyle : tabac, alcool, poids</p><ul class="it-v"><li><strong>Selon T</strong> : confondant seulement si la décision en dépend (statines, antihypertenseurs, cardiologie, pneumologie) ; orthogonal pour d’autres traitements.</li><li><strong>À âge et genre fixés</strong> : seul compte le lifestyle non expliqué par l’âge et le genre, déjà ajustés ; le résiduel est moins fort que lifestyle brut.</li><li><strong>Traces indirectes</strong> seulement.</li><li><strong>Constances</strong>, appariée au SNDS, pour calibrer le biais.</li></ul></li><li><p class="it-k">Health-seeking behaviour sans trace</p><ul class="it-v"><li><strong>La part sans trace</strong> de la motivation, de la littératie, de la conscienciosité.</li><li><strong>Partiellement observée</strong> : distance, dépistages et médecin traitant en captent une partie, mêlée à la gravité et à l’offre locale.</li><li><strong>À âge et genre fixés</strong> : seule compte la part non expliquée par l’âge et le genre, déjà ajustés.</li><li><strong>Contrôles négatifs</strong> de type healthy user.</li></ul></li></ul></div></div>
+  <div class="scen" data-scen="sp"><p class="intro">Quatre latents confondent directement T et Y : natural health, health-seeking behaviour, lifestyle et local health infrastructure. Pour chacun, une partie est crédiblement bloquée par ses proxys, une partie demande encore du travail, et une partie restera inobservable dans le SNDS.</p><div class="cols"><div class="col ok"><h3>Crédiblement bloqué</h3><p class="col-sub">Les proxys mesurent le latent ou en laissent des traces riches.</p><ul class="items"><li><p class="it-k">Infrastructure : quantité de l’offre</p><ul class="it-v"><li><strong>APL et BPE</strong> en sont des mesures directes.</li></ul></li><li><p class="it-k">Natural health : part diagnostiquée et traitée</p><ul class="it-v"><li><strong>Statut ALD</strong> avec catégorie et ancienneté : meilleur marqueur de gravité chronique.</li><li><strong>Hospitalisations, traitements</strong> bien tracés ; <strong>montants remboursés</strong> comme signal d’intensité.</li></ul></li><li><p class="it-k">Health-seeking behaviour : part tracée</p><ul class="it-v"><li><strong>Médecin traitant, dépistages, vaccins, délivrances.</strong></li><li><strong>Distance parcourue</strong> : signal partiel de motivation, surtout l’excès de distance (communes nécessaires).</li></ul></li></ul></div><div class="col work"><h3>Partiellement bloqué, à travailler</h3><p class="col-sub">Des données ou des méthodes existent pour réduire le résiduel.</p><ul class="items"><li><p class="it-k">Qualité et pratique de l’offre de soins</p><ul class="it-v"><li><strong>Niveau territoire</strong> (infrastructure) : délais, saturation, qualité moyenne. Piste : délais et saturation construits dans le SNDS sur une période antérieure, indicateurs de qualité des établissements (HAS).</li><li><strong>Niveau médecins du patient</strong> : varie au sein d’un même territoire. Piste : embeddings de médecins.</li><li><strong>Arbitrage</strong> : ces embeddings absorbent aussi la tendance de prescription du médecin, qui pourrait servir d’instrument. Ajuster dessus ou l’utiliser comme instrument : il faut choisir.</li></ul></li><li><p class="it-k">Variation à l’intérieur du département</p><ul class="it-v"><li><strong>Communes</strong> de résidence et de prestation : APL communale, <strong>excès de distance</strong>.</li></ul></li><li><p class="it-k">Gravité clinique non tracée</p><ul class="it-v"><li><strong>Ce que voit le médecin</strong> : symptômes, examen, résultats d’analyses (actes présents dans le SNDS, résultats absents).</li><li><strong>Proxys</strong> : montants, ALD récente, intensité récente des soins.</li><li><strong>Données cliniques</strong> sur un sous-échantillon, si appariement possible.</li><li><strong>Résiduel à borner</strong> par analyse de sensibilité.</li><li><strong>Symptômes jamais consultés</strong> : invisibles du médecin aussi, donc sans effet sur T, donc sans biais.</li></ul></li></ul></div><div class="col doom"><h3>Inobservable, à borner</h3><p class="col-sub">Pas de proxy crédible dans le SNDS : on mesure la sensibilité.</p><ul class="items"><li><p class="it-k">Lifestyle : tabac, alcool, poids</p><ul class="it-v"><li><strong>Selon T</strong> : confondant seulement si la décision en dépend (statines, antihypertenseurs, cardiologie, pneumologie) ; orthogonal pour d’autres traitements.</li><li><strong>À âge et genre fixés</strong> : seul compte le lifestyle non expliqué par l’âge et le genre, déjà ajustés ; le résiduel est moins fort que lifestyle brut.</li><li><strong>Traces indirectes</strong> seulement.</li><li><strong>Constances</strong>, appariée au SNDS, pour calibrer le biais.</li></ul></li><li><p class="it-k">Health-seeking behaviour sans trace</p><ul class="it-v"><li><strong>La part sans trace</strong> de la motivation, de la littératie, de la conscienciosité.</li><li><strong>Partiellement observée</strong> : distance, dépistages et médecin traitant en captent une partie, mêlée à la gravité et à l’offre locale.</li><li><strong>À âge et genre fixés</strong> : seule compte la part non expliquée par l’âge et le genre, déjà ajustés.</li><li><strong>Contrôles négatifs</strong> de type healthy user.</li></ul></li></ul></div></div></div><div class="scen" data-scen="mt" hidden><p class="intro">Trois latents confondent directement T et Y : natural health, health-seeking behaviour et local health infrastructure. Health-seeking behaviour domine : déclarer un médecin traitant est en soi un comportement de recours aux soins.</p><div class="cols"><div class="col ok"><h3>Crédiblement bloqué</h3><p class="col-sub">Les proxys mesurent le latent ou en laissent des traces riches.</p><ul class="items"><li><p class="it-k">Infrastructure : quantité de l’offre</p><ul class="it-v"><li><strong>APL de médecine générale</strong> : mesure directe de l’offre pertinente pour ce traitement.</li></ul></li><li><p class="it-k">Natural health : part diagnostiquée et traitée</p><ul class="it-v"><li><strong>Statut ALD</strong>, hospitalisations, traitements, montants remboursés.</li></ul></li><li><p class="it-k">Health-seeking behaviour : part tracée</p><ul class="it-v"><li><strong>Affiliations passées, dépistages, vaccins, délivrances.</strong></li></ul></li></ul></div><div class="col work"><h3>Partiellement bloqué, à travailler</h3><p class="col-sub">Des données ou des méthodes existent pour réduire le résiduel.</p><ul class="items"><li><p class="it-k">Health-seeking behaviour : le confondant dominant</p><ul class="it-v"><li><strong>Design new user</strong> : patients sans médecin traitant à une date donnée.</li><li><strong>Contrôles négatifs</strong> de type healthy user.</li></ul></li><li><p class="it-k">Saturation des généralistes</p><ul class="it-v"><li><strong>Médecins qui n’acceptent plus de patients</strong> : à construire dans le SNDS (évolution des patientèles).</li></ul></li><li><p class="it-k">Expérience naturelle</p><ul class="it-v"><li><strong>Départs de généralistes</strong> (retraite, cessation) comme instrument de la perte du médecin traitant.</li></ul></li><li><p class="it-k">Variation à l’intérieur du département</p><ul class="it-v"><li><strong>APL communale</strong> de médecine générale, si communes disponibles.</li></ul></li></ul></div><div class="col doom"><h3>Inobservable, à borner</h3><p class="col-sub">Pas de proxy crédible dans le SNDS : on mesure la sensibilité.</p><ul class="items"><li><p class="it-k">Health-seeking behaviour sans trace</p><ul class="it-v"><li><strong>Plus grave ici</strong> : c’est le cœur du choix de T.</li><li><strong>À âge et genre fixés</strong> : seule compte la part non expliquée.</li></ul></li><li><p class="it-k">Gravité perçue par le patient</p><ul class="it-v"><li><strong>Symptômes jamais consultés</strong> : ici ils influencent T, puisque le patient décide.</li></ul></li></ul></div></div></div>
   <p class="tools"><strong>Pour borner l’inobservable</strong> : E-values, bornes de biais par variable omise pour le DML (Chernozhukov et al., 2022), contrôles négatifs, émulation d’essais randomisés.</p>
 </section>
 
@@ -559,29 +979,27 @@ footer { color:var(--muted); font-size:13px; padding-bottom:32px; }
   </div>
   <div>
     <h2>Arcs absents et limites</h2>
-    <dl class="absent"><div class="ab"><dt>CMU → Y</dt><dd><ul class="dd-list"><li>Pas de mécanisme hors accès aux soins ; association <strong>portée par socio-eco</strong>.</li></ul></dd></div><div class="ab"><dt>socio-eco → T, Y</dt><dd><ul class="dd-list"><li>Effets supposés passer par <strong>des nœuds intermédiaires</strong> (latents ou ajustés).</li></ul></dd></div><div class="ab"><dt>distance, montants → T, Y</dt><dd><ul class="dd-list"><li><strong>Attributs des événements passés</strong>, pas des causes.</li></ul></dd></div><div class="ab"><dt>indicateurs d’offre → T, Y</dt><dd><ul class="dd-list"><li><strong>L’APL ne soigne personne</strong> : ces arcs donneraient l’illusion d’un blocage.</li><li>Alternative : rendre l’infrastructure observée, <strong>hypothèse plus forte</strong> cachée dans la définition.</li></ul></dd></div><div class="ab"><dt>Pratique et qualité des médecins du patient</dt><dd><ul class="dd-list"><li><strong>Limite assumée</strong>, sans nœud : varient au sein d’un territoire.</li><li><strong>Confondent</strong> si les patients se répartissent entre médecins selon HSB ou socio-eco.</li><li><strong>Partiellement captées</strong> par healthcare cons. et le médecin traitant.</li><li><strong>Instrument possible</strong> : la tendance de prescription du médecin, à condition de ne pas l’ajuster dans φ.</li></ul></dd></div><div class="ab"><dt>ALD → Y</dt><dd><ul class="dd-list"><li><strong>Pas d’effet propre</strong> : l’ALD agit via les soins (healthcare cons., T).</li></ul></dd></div><div class="ab"><dt>Observance stricte</dt><dd><ul class="dd-list"><li><strong>Intervient après T</strong> : fait partie de l’effet de T dans une analyse statique.</li></ul></dd></div></dl>
+    <div class="scen" data-scen="sp"><dl class="absent"><div class="ab"><dt>CMU → Y</dt><dd><ul class="dd-list"><li>Pas de mécanisme hors accès aux soins ; association <strong>portée par socio-eco</strong>.</li></ul></dd></div><div class="ab"><dt>socio-eco → T, Y</dt><dd><ul class="dd-list"><li>Effets supposés passer par <strong>des nœuds intermédiaires</strong> (latents ou ajustés).</li></ul></dd></div><div class="ab"><dt>distance, montants → T, Y</dt><dd><ul class="dd-list"><li><strong>Attributs des événements passés</strong>, pas des causes.</li></ul></dd></div><div class="ab"><dt>indicateurs d’offre → T, Y</dt><dd><ul class="dd-list"><li><strong>L’APL ne soigne personne</strong> : ces arcs donneraient l’illusion d’un blocage.</li><li>Alternative : rendre l’infrastructure observée, <strong>hypothèse plus forte</strong> cachée dans la définition.</li></ul></dd></div><div class="ab"><dt>Pratique et qualité des médecins du patient</dt><dd><ul class="dd-list"><li><strong>Limite assumée</strong>, sans nœud : varient au sein d’un territoire.</li><li><strong>Confondent</strong> si les patients se répartissent entre médecins selon HSB ou socio-eco.</li><li><strong>Partiellement captées</strong> par healthcare cons. et le médecin traitant.</li><li><strong>Instrument possible</strong> : la tendance de prescription du médecin, à condition de ne pas l’ajuster dans φ.</li></ul></dd></div><div class="ab"><dt>ALD → Y</dt><dd><ul class="dd-list"><li><strong>Pas d’effet propre</strong> : l’ALD agit via les soins (healthcare cons., T).</li></ul></dd></div><div class="ab"><dt>natural health → health-seeking behaviour</dt><dd><ul class="dd-list"><li><strong>Absent par définition</strong> : health-seeking behaviour est défini à besoin égal (modèle d’Andersen).</li><li><strong>Limite</strong> : une maladie peut, à long terme, rendre plus attentif à sa santé.</li></ul></dd></div><div class="ab"><dt>Observance stricte</dt><dd><ul class="dd-list"><li><strong>Intervient après T</strong> : fait partie de l’effet de T dans une analyse statique.</li></ul></dd></div></dl></div><div class="scen" data-scen="mt" hidden><dl class="absent"><div class="ab"><dt>lifestyle → T</dt><dd><ul class="dd-list"><li><strong>Faible pour ce traitement</strong> : lifestyle ne confond plus que via natural health.</li></ul></dd></div><div class="ab"><dt>CMU → Y</dt><dd><ul class="dd-list"><li>Pas de mécanisme hors accès aux soins ; association <strong>portée par socio-eco</strong>.</li></ul></dd></div><div class="ab"><dt>socio-eco → T, Y</dt><dd><ul class="dd-list"><li>Effets supposés passer par <strong>des nœuds intermédiaires</strong> (latents ou ajustés).</li></ul></dd></div><div class="ab"><dt>distance, montants → T, Y</dt><dd><ul class="dd-list"><li><strong>Attributs des événements passés</strong>, pas des causes.</li></ul></dd></div><div class="ab"><dt>indicateurs d’offre → T, Y</dt><dd><ul class="dd-list"><li><strong>L’APL ne soigne personne</strong> : ces arcs donneraient l’illusion d’un blocage.</li><li>Alternative : rendre l’infrastructure observée, <strong>hypothèse plus forte</strong> cachée dans la définition.</li></ul></dd></div><div class="ab"><dt>Pratique et qualité des médecins du patient</dt><dd><ul class="dd-list"><li><strong>Limite assumée</strong>, sans nœud : varient au sein d’un territoire.</li><li><strong>Confondent</strong> si les patients se répartissent entre médecins selon HSB ou socio-eco.</li><li><strong>Partiellement captées</strong> par healthcare cons. et le médecin traitant.</li><li><strong>Instrument possible</strong> : la tendance de prescription du médecin, à condition de ne pas l’ajuster dans φ.</li></ul></dd></div><div class="ab"><dt>ALD → Y</dt><dd><ul class="dd-list"><li><strong>Pas d’effet propre</strong> : l’ALD agit via les soins (healthcare cons., T).</li></ul></dd></div><div class="ab"><dt>natural health → health-seeking behaviour</dt><dd><ul class="dd-list"><li><strong>Absent par définition</strong> : health-seeking behaviour est défini à besoin égal (modèle d’Andersen).</li><li><strong>Limite</strong> : une maladie peut, à long terme, rendre plus attentif à sa santé.</li></ul></dd></div></dl></div>
   </div>
 </section>
 
 <footer class="wrap">Graphe causal statique. EMB = φ(variables observées), calculé strictement avant T.</footer>
 
 <script>
-const D = {"nodes": {"n__socio": {"key": "socio", "name": "socio-eco", "kind": "Latent", "desc": ["**Déterminant général** : revenus, diplôme, catégorie sociale, conditions de vie.", "**Non mesuré** dans le SNDS.", "**Proxys** : CMU/C2S, indice de défavorisation communal."]}, "n__life": {"key": "life", "name": "lifestyle", "kind": "Latent", "desc": ["**Comportements de santé** : tabac, alcool, alimentation, activité physique.", "**Confondant direct** : cause T et Y.", "**Le moins bien capté** : seulement des traces indirectes (substituts nicotiniques, diagnostics liés à l’alcool, codes d’obésité).", "Corrélé à health-seeking behaviour."]}, "n__HSB": {"key": "HSB", "name": "health-seeking behaviour", "kind": "Latent", "desc": ["**Propension à rechercher des soins** et à s’engager dans sa santé.", "**Traces** : médecin traitant déclaré, dépistages, vaccins, régularité des délivrances."]}, "n__NH": {"key": "NH", "name": "natural health", "kind": "Latent", "desc": ["**État de santé réel**, y compris non diagnostiqué ou non traité.", "La consommation de soins en est **une trace, pas une mesure**."]}, "n__infra": {"key": "infra", "name": "local health infrastructure", "kind": "Latent", "desc": ["**Offre de soins du territoire** : quantité et disponibilité des médecins par spécialité, délais, proximité des urgences et des hôpitaux, qualité moyenne de l’offre.", "**Pas un instrument** : agit sur Y hors T.", "**Bien captée** : la dimension quantitative (APL, BPE).", "**Mal captés** : délais réels, saturation, variation à l’intérieur du département, qualité de l’offre.", "La pratique des médecins **propres au patient** est une autre question : elle varie au sein d’un territoire."]}, "n__agesex": {"key": "agesex", "name": "age, gender", "kind": "Ajusté", "desc": ["**Démographie observée**, exogène."]}, "n__CMU": {"key": "CMU", "name": "CMU / C2S", "kind": "Ajusté", "desc": ["**Couverture complémentaire** sous condition de ressources.", "**Double rôle** : cause (accès financier aux soins) et proxy du socio-économique."]}, "n__ind": {"key": "ind", "name": "indicateurs d’offre", "kind": "Ajusté", "desc": ["**APL** (DREES) par spécialité et **BPE** (INSEE), à la commune de résidence.", "**Proxy de l’infrastructure** : il la mesure, il ne la cause pas, d’où l’absence d’arc sortant.", "**Ne bloque pas** T ← infrastructure → Y au sens de la d-séparation : il n’est pas sur le chemin.", "**Blocage complet** si la mesure est parfaite, **partiel** sinon.", "**Imparfait par construction** : mesure la quantité et la proximité, pas les délais ni la qualité."]}, "n__MT": {"key": "MT", "name": "médecin traitant", "kind": "Ajusté", "desc": ["**Médecin traitant déclaré.**", "**Pas un instrument** : causé par health-seeking behaviour, effet direct sur Y."]}, "n__HC": {"key": "HC", "name": "healthcare cons.", "kind": "Ajusté", "desc": ["**Consommation de soins** tracée dans le SNDS, strictement **avant T**.", "**Proxy** de natural health et de health-seeking behaviour : elle en est une trace.", "**Confondant à part entière** : les soins passés causent T et Y, d’où ses arcs sortants."]}, "n__dist": {"key": "dist", "name": "distance parcourue", "kind": "Ajusté", "desc": ["**Distance résidence → prestation**, par événement avant T.", "**Accès réalisé**, pas infrastructure : mélange offre, gravité et choix.", "**Proxy de quatre latents**, sans arc sortant.", "**Distance minimale** (professionnel le plus proche de la spécialité) → mesure l’**infrastructure**.", "**Excès de distance** (parcourue moins minimale) → mesure **gravité et choix** : proxy bien plus propre.", "**Suppose les communes** : au département, simple indicateur « hors département »."]}, "n__remb": {"key": "remb", "name": "montants remboursés", "kind": "Ajusté", "desc": ["**Montant remboursé** par l’Assurance maladie, pour chaque événement avant T.", "**Proxy de la gravité** : intensité et coût des soins.", "**Mélange aussi** la couverture (C2S, ALD à 100 %) et la tarification de l’acte.", "**Sans les dépassements** d’honoraires. Proxy pur, sans arc sortant."]}, "n__ALD": {"key": "ALD", "name": "statut ALD", "kind": "Ajusté", "desc": ["**Affection de longue durée** : entrées et sorties, avec la catégorie d’ALD.", "**Statut administratif**, pas consommation : prise en charge à 100 % et protocole de soins.", "**Meilleur proxy de la gravité** chronique dans le SNDS.", "**Confondant à part entière** : cause healthcare cons., T et les montants remboursés.", "**Collider** natural health → ALD ← médecin traitant : **dans φ uniquement**.", "**Encodage** : tokens d’entrée et de sortie, plus statut actif à chaque événement avec **catégorie** et **ancienneté**."]}, "n__T": {"key": "T", "name": "T", "kind": "Traitement", "desc": ["**Consultation spécialisée, médicament.**"]}, "n__Y": {"key": "Y", "name": "Y", "kind": "Outcome", "desc": ["**Décès, urgences évitables.**"]}}, "names": {"socio": "socio-eco", "life": "lifestyle", "HSB": "health-seeking behaviour", "NH": "natural health", "infra": "local health infrastructure", "agesex": "age, gender", "CMU": "CMU / C2S", "ind": "indicateurs d’offre", "MT": "médecin traitant", "HC": "healthcare cons.", "dist": "distance parcourue", "remb": "montants remboursés", "ALD": "statut ALD", "T": "T", "Y": "Y"}, "edges": {"e__agesex__socio": {"from": "agesex", "to": "socio", "mech": ["**Genre** : écarts de salaire et de retraite, carrières interrompues.", "**Âge** : cycle de vie, effets de cohorte (générations âgées moins diplômées)."], "role": ["Le lien inverse (les plus aisés vivent plus longtemps) est un **biais de survie**, pas un arc causal.", "**Bloqué** par l’ajustement sur âge et genre."]}, "e__agesex__life": {"from": "agesex", "to": "life", "mech": ["**Genre** : tabac et alcool plus fréquents chez les hommes.", "**Âge** : effets de cycle de vie et de génération sur le tabac, l’alcool, le poids, l’activité physique."], "role": ["**Effet favorable** : âge et genre étant ajustés, le confondant résiduel est lifestyle **à âge et genre fixés**, un peu moins fort que lifestyle brut."]}, "e__agesex__HSB": {"from": "agesex", "to": "HSB", "mech": ["**Genre** : à état de santé égal, les femmes consultent davantage et plus tôt.", "**Âge** : recours variable selon l’âge, les jeunes hommes consultant le moins."], "role": ["**Effet favorable** : âge et genre étant ajustés, le confondant résiduel est health-seeking behaviour **à âge et genre fixés**."]}, "e__agesex__NH": {"from": "agesex", "to": "NH", "mech": ["**L’âge** est le premier déterminant de la morbidité.", "**Profils de morbidité** différents selon le sexe."], "role": null}, "e__agesex__HC": {"from": "agesex", "to": "HC", "mech": ["**Recours croissant avec l’âge** : suivi chronique, dépistages.", "**Recours plus élevé des femmes** à état de santé égal (suivi gynécologique, grossesse)."], "role": null}, "e__agesex__MT": {"from": "agesex", "to": "MT", "mech": ["**Déclaration très variable avec l’âge** : faible chez les jeunes adultes, quasi systématique chez les personnes âgées.", "**Mineurs** : déclaration possible pour les moins de 16 ans depuis 2017 seulement."], "role": null}, "e__agesex__T": {"from": "agesex", "to": "T", "mech": ["**Recommandations indexées sur l’âge** : dépistages, seuils de prescription (statines), prudence et polymédication chez le sujet âgé.", "**Écarts selon le sexe** documentés, comme le sous-adressage des femmes en cardiologie à symptômes égaux."], "role": ["**Confondant direct** de T → Y : ajustement indispensable."]}, "e__agesex__Y": {"from": "agesex", "to": "Y", "mech": ["**Mortalité de base** croissante avec l’âge, plus élevée chez les hommes."], "role": ["**Confondant** : ajustement nécessaire."]}, "e__socio__CMU": {"from": "socio", "to": "CMU", "mech": ["**Éligibilité sous condition de ressources** : mesure directe de la précarité.", "**Proxy binaire** : ne distingue rien au-dessus du seuil."], "role": null}, "e__socio__life": {"from": "socio", "to": "life", "mech": ["**Gradient social** du tabac, de l’alcool, de l’alimentation, de la sédentarité."], "role": null}, "e__socio__HSB": {"from": "socio", "to": "HSB", "mech": ["**Littératie en santé**, rapport au système de soins.", "**Coût du temps** : horaires, garde d’enfants.", "**Renoncement aux soins** plus fréquent chez les plus précaires."], "role": null}, "e__socio__infra": {"from": "socio", "to": "infra", "mech": ["**Tri résidentiel** : les ressources contraignent le lieu de vie, donc l’offre accessible.", "Le sens inverse (**effets de lieu**, Chetty et al.) existe à long terme."], "role": ["**La direction ne change pas** l’ensemble d’ajustement."]}, "e__socio__dist": {"from": "socio", "to": "dist", "mech": ["**Mobilité inégale** : voiture, temps, coût du transport.", "Les plus aisés vont plus volontiers voir un **spécialiste réputé** plus loin."], "role": null}, "e__socio__NH": {"from": "socio", "to": "NH", "mech": ["**Gradient social de santé** hors comportements : expositions professionnelles, logement, stress."], "role": null}, "e__socio__HC": {"from": "socio", "to": "HC", "mech": ["**Barrières au recours** au-delà de la CMU : reste à charge, dépassements, distance culturelle."], "role": null}, "e__CMU__HC": {"from": "CMU", "to": "HC", "mech": ["**Pas de reste à charge**, pas de dépassements : la barrière financière est levée.", "Effet sur le recours **bien documenté** (IRDES)."], "role": null}, "e__CMU__T": {"from": "CMU", "to": "T", "mech": ["**Au moment de la décision**, la couverture joue sur le fait de consulter ou de délivrer le médicament.", "**Refus de soins** envers les bénéficiaires, mis en évidence par des testings : effet inverse."], "role": ["**Pas d’arc CMU → Y** : l’association avec la mortalité passe par socio-eco."]}, "e__CMU__remb": {"from": "CMU", "to": "remb", "mech": ["**À soin égal**, la C2S augmente le montant remboursé."], "role": ["Le montant **mélange gravité et couverture** : le modèle doit voir CMU et le type d’acte."]}, "e__life__NH": {"from": "life", "to": "NH", "mech": ["**Tabac, alcool, alimentation, activité** déterminent les maladies chroniques."], "role": null}, "e__life__T": {"from": "life", "to": "T", "mech": ["**Interrogatoire direct** sur tabac et alcool, pris en compte dans la décision.", "**SCORE2** : le tabagisme guide la prescription de statines et d’antihypertenseurs.", "**Tabac et poids** orientent vers examens et spécialistes."], "role": ["**Dépend de T** : arc fort pour les traitements guidés par le tabac, l’alcool ou le poids, quasi absent pour les autres.", "**Quand il existe** : confondant direct, et **le moins bien capté** (ni tabac ni IMC dans le SNDS).", "**Priorité** de l’analyse de sensibilité pour ces traitements."]}, "e__life__Y": {"from": "life", "to": "Y", "mech": ["**Décès non médiés** par un état de santé diagnosticable : accidents, intoxications, morts brutales."], "role": ["Avec lifestyle → T, ouvre **T ← lifestyle → Y**, distinct du chemin par natural health."]}, "e__life__HSB": {"from": "life", "to": "HSB", "mech": ["**Cause commune non représentée** au-delà de socio-eco : conscience de sa santé, conscienciosité.", "**Sens incertain** : l’arête bidirectionnelle (notation de Pearl) ne s’engage pas."], "role": ["**Ne change pas l’identification** : les deux latents confondent déjà T et Y.", "**Atténuation** : les proxys de health-seeking behaviour informent un peu sur lifestyle, dans une mesure non quantifiable."], "bi": true}, "e__HSB__MT": {"from": "HSB", "to": "MT", "mech": ["**Déclarer un médecin traitant** est une démarche volontaire."], "role": null}, "e__HSB__HC": {"from": "HSB", "to": "HC", "mech": ["**Consulter à symptômes égaux**, faire dépistages et vaccins."], "role": null}, "e__HSB__T": {"from": "HSB", "to": "T", "mech": ["**À état de santé égal**, plus de consultations spécialisées et de traitements prescrits et délivrés."], "role": null}, "e__HSB__Y": {"from": "HSB", "to": "Y", "mech": ["**Healthy user effect** : ceux qui se soignent ont d’autres comportements protecteurs.", "**Coronary Drug Project** : les observants du placebo mouraient nettement moins."], "role": ["**T ← HSB → Y** : bloqué seulement si EMB capture HSB (médecin traitant, dépistages, délivrances)."]}, "e__HSB__dist": {"from": "HSB", "to": "dist", "mech": ["**Chercher le centre de référence**, quitte à aller loin."], "role": null}, "e__NH__HC": {"from": "NH", "to": "HC", "mech": ["**L’état de santé génère la consommation** : d’où son rôle de proxy."], "role": ["**Proxy imparfait** : une maladie non diagnostiquée ou peu suivie laisse peu de traces."]}, "e__NH__T": {"from": "NH", "to": "T", "mech": ["**Le médecin décide sur l’état clinique** : symptômes, gravité.", "**Absent du SNDS** : actes de biologie sans résultats, sévérité rarement renseignée."], "role": null}, "e__NH__Y": {"from": "NH", "to": "Y", "mech": ["**Une maladie grave tue** indépendamment du recours aux soins."], "role": ["**Chemin central** T ← NH → Y.", "**Hypothèse** : EMB est un proxy suffisant de natural health."]}, "e__NH__dist": {"from": "NH", "to": "dist", "mech": ["**Gravité → adressage** vers des centres éloignés : CHU, centres de lutte contre le cancer."], "role": null}, "e__NH__remb": {"from": "NH", "to": "remb", "mech": ["**Soins lourds = montants élevés** : hospitalisations, chimiothérapies, biothérapies."], "role": ["**Renforce le blocage** de T ← NH → Y sur la gravité, mal renseignée par ailleurs."]}, "e__NH__ALD": {"from": "NH", "to": "ALD", "mech": ["**Maladie chronique grave diagnostiquée** → admission en ALD (liste de 30 affections).", "**La catégorie** dit quelle maladie : diabète, cancer, insuffisance cardiaque…"], "role": ["**Proxy le plus fiable** de natural health pour sa part chronique et diagnostiquée."]}, "e__MT__ALD": {"from": "MT", "to": "ALD", "mech": ["**Le médecin traitant établit le protocole de soins** et fait la demande d’ALD."], "role": ["Fait de l’ALD un **collider** : à maladie égale, l’admission dépend aussi du médecin."]}, "e__ALD__HC": {"from": "ALD", "to": "HC", "mech": ["**Prise en charge à 100 %** : la barrière financière est levée pour les soins liés à l’ALD."], "role": null}, "e__ALD__T": {"from": "ALD", "to": "T", "mech": ["**Le protocole de soins définit le parcours** : spécialistes, traitements.", "**Accès financier** au spécialiste et au médicament."], "role": ["**Confondant** : ajustement nécessaire, en plus de son rôle de proxy."]}, "e__ALD__remb": {"from": "ALD", "to": "remb", "mech": ["**Taux de remboursement à 100 %** pour les soins liés à l’ALD."], "role": ["Aide le modèle à **séparer couverture et gravité** dans les montants."]}, "e__infra__ind": {"from": "infra", "to": "ind", "mech": ["**APL** : accessibilité aux médecins depuis la commune, selon l’activité des praticiens et les besoins de la population.", "**BPE** : équipements (urgences, hôpitaux, pharmacies) et distances d’accès."], "role": ["**Arc de mesure** : le blocage vient de la qualité de la mesure, pas d’un arc.", "**Crédible** pour la quantité de l’offre, **beaucoup moins** pour sa qualité."]}, "e__infra__dist": {"from": "infra", "to": "dist", "mech": ["**Offre locale insuffisante** → on va se soigner plus loin."], "role": null}, "e__infra__HC": {"from": "infra", "to": "HC", "mech": ["**Densité et proximité** conditionnent le recours : déserts médicaux."], "role": null}, "e__infra__T": {"from": "infra", "to": "T", "mech": ["**Spécialistes disponibles et délais** déterminent l’accès à la consultation."], "role": null}, "e__infra__Y": {"from": "infra", "to": "Y", "mech": ["**Canaux hors T** : proximité et qualité des urgences et des hôpitaux."], "role": ["**Ni les indicateurs ni la distance ne sont sur le chemin** : bloqué dans la mesure où ils capturent l’infrastructure.", "**Résiduel** : délais, saturation, variation infra-départementale, qualité de l’offre.", "**Sens du biais** : si l’offre de qualité adresse aussi davantage et que T est bénéfique, effet **sur-estimé**.", "**Pistes** : indicateurs de qualité, délais construits dans le SNDS, analyse de sensibilité.", "**Exclut l’usage comme instrument.**"]}, "e__MT__HC": {"from": "MT", "to": "HC", "mech": ["**Parcours de soins coordonné** : orientation, renouvellements, prescriptions."], "role": null}, "e__MT__T": {"from": "MT", "to": "T", "mech": ["**Le MT adresse et prescrit** ; hors parcours, le spécialiste est moins remboursé."], "role": null}, "e__MT__Y": {"from": "MT", "to": "Y", "mech": ["**Soins primaires non tracés** : conseil, jugement clinique, repérage précoce.", "**Alternative aux urgences** : les urgences évitables dépendent des soins primaires."], "role": ["**Pas un instrument** : il est ajusté."]}, "e__HC__dist": {"from": "HC", "to": "dist", "mech": ["**Une distance n’existe que pour un événement** : attribut des soins consommés."], "role": ["**Collider et proxy** de plusieurs latents.", "**Dans φ uniquement**, jamais comme modificateur d’effet."]}, "e__HC__remb": {"from": "HC", "to": "remb", "mech": ["**Un montant n’existe que pour un événement remboursé.**"], "role": ["**Collider** comme la distance : **dans φ uniquement**."]}, "e__HC__T": {"from": "HC", "to": "T", "mech": ["**Le médecin décide sur les antécédents** : traitements, hospitalisations, comorbidités."], "role": null}, "e__HC__Y": {"from": "HC", "to": "Y", "mech": ["**Les soins passés agissent sur la survie.**"], "role": ["**Confondant** : ajustement nécessaire, pas seulement utile comme proxy."]}, "e__T__Y": {"from": "T", "to": "Y", "mech": ["**Effet d’intérêt.**"], "role": ["**Identifié** par ajustement sur EMB, calculé avant T, si EMB bloque les **quatre chemins latents** (NH, HSB, lifestyle, infrastructure).", "**Sensibilité** à analyser en priorité sur lifestyle."]}}};
+const ALL = {"sp": {"nodes": {"n__socio": {"key": "socio", "name": "socio-eco", "kind": "Latent", "desc": ["**Déterminant général** : revenus, diplôme, catégorie sociale, conditions de vie.", "**Non mesuré** dans le SNDS.", "**Proxys** : CMU/C2S, indice de défavorisation communal."]}, "n__life": {"key": "life", "name": "lifestyle", "kind": "Latent", "desc": ["**Comportements de santé** : tabac, alcool, alimentation, activité physique.", "**Confondant direct** : cause T et Y.", "**Le moins bien capté** : seulement des traces indirectes (substituts nicotiniques, diagnostics liés à l’alcool, codes d’obésité).", "Corrélé à health-seeking behaviour."]}, "n__HSB": {"key": "HSB", "name": "health-seeking behaviour", "kind": "Latent", "desc": ["**Propension à rechercher des soins** et à s’engager dans sa santé, **à besoin égal**.", "**Facteur prédisposant** du modèle d’Andersen ; le besoin (natural health) agit directement sur T, d’où l’absence d’arc natural health → health-seeking behaviour.", "**Traces** : médecin traitant déclaré, dépistages, vaccins, régularité des délivrances."]}, "n__NH": {"key": "NH", "name": "natural health", "kind": "Latent", "desc": ["**État de santé réel**, y compris non diagnostiqué ou non traité.", "La consommation de soins en est **une trace, pas une mesure**."]}, "n__infra": {"key": "infra", "name": "local health infrastructure", "kind": "Latent", "desc": ["**Offre de soins du territoire** : quantité et disponibilité des médecins par spécialité, délais, proximité des urgences et des hôpitaux, qualité moyenne de l’offre.", "**Pas un instrument** : agit sur Y hors T.", "**Bien captée** : la dimension quantitative (APL, BPE).", "**Mal captés** : délais réels, saturation, variation à l’intérieur du département, qualité de l’offre.", "La pratique des médecins **propres au patient** est une autre question : elle varie au sein d’un territoire."]}, "n__agesex": {"key": "agesex", "name": "age, gender", "kind": "Ajusté", "desc": ["**Démographie observée**, exogène."]}, "n__CMU": {"key": "CMU", "name": "CMU / C2S", "kind": "Ajusté", "desc": ["**Couverture complémentaire** sous condition de ressources.", "**Double rôle** : cause (accès financier aux soins) et proxy du socio-économique."]}, "n__ind": {"key": "ind", "name": "indicateurs d’offre", "kind": "Ajusté", "desc": ["**APL** (DREES) par spécialité et **BPE** (INSEE), à la commune de résidence.", "**Proxy de l’infrastructure** : il la mesure, il ne la cause pas, d’où l’absence d’arc sortant.", "**Ne bloque pas** T ← infrastructure → Y au sens de la d-séparation : il n’est pas sur le chemin.", "**Blocage complet** si la mesure est parfaite, **partiel** sinon.", "**Imparfait par construction** : mesure la quantité et la proximité, pas les délais ni la qualité."]}, "n__MT": {"key": "MT", "name": "médecin traitant", "kind": "Ajusté", "desc": ["**Médecin traitant déclaré.**", "**Pas un instrument** : causé par health-seeking behaviour, effet direct sur Y."]}, "n__HC": {"key": "HC", "name": "healthcare cons.", "kind": "Ajusté", "desc": ["**Consommation de soins** tracée dans le SNDS, strictement **avant T**.", "**Proxy** de natural health et de health-seeking behaviour : elle en est une trace.", "**Confondant à part entière** : les soins passés causent T et Y, d’où ses arcs sortants."]}, "n__dist": {"key": "dist", "name": "distance parcourue", "kind": "Ajusté", "desc": ["**Distance résidence → prestation**, par événement avant T.", "**Accès réalisé**, pas infrastructure : mélange offre, gravité et choix.", "**Proxy de quatre latents**, sans arc sortant.", "**Distance minimale** (professionnel le plus proche de la spécialité) → mesure l’**infrastructure**.", "**Excès de distance** (parcourue moins minimale) → mesure **gravité et choix** : proxy bien plus propre.", "**Suppose les communes** : au département, simple indicateur « hors département »."]}, "n__remb": {"key": "remb", "name": "montants remboursés", "kind": "Ajusté", "desc": ["**Montant remboursé** par l’Assurance maladie, pour chaque événement avant T.", "**À décomposer en trois parts**, comme la distance :", "**Base de remboursement** (tarif Sécurité sociale de l’acte) → proxy de la **gravité** et de l’intensité des soins.", "**Taux de remboursement** → reflète la **couverture** (C2S, ALD à 100 %), déjà ajustée.", "**Dépassements d’honoraires**, s’ils sont disponibles → liés à health-seeking behaviour, au socio-économique et à l’**offre locale** (secteur 2 ou privé quand le public n’est pas accessible).", "**Base seule** : collider sans danger, ses autres parents étant ajustés.", "**Dépassements** : collider de plusieurs latents, comme la distance : arbitrage proxy contre collider, à trancher par ablation. À garder séparés de la base."]}, "n__ALD": {"key": "ALD", "name": "statut ALD", "kind": "Ajusté", "desc": ["**Affection de longue durée** : entrées et sorties, avec la catégorie d’ALD.", "**Statut administratif**, pas consommation : prise en charge à 100 % et protocole de soins.", "**Meilleur proxy de la gravité** chronique dans le SNDS.", "**Confondant à part entière** : cause healthcare cons., T et les montants remboursés.", "**Collider** natural health → ALD ← médecin traitant : le chemin ouvert est refermé par l’ajustement sur le médecin traitant.", "**Encodage** : tokens d’entrée et de sortie, plus statut actif à chaque événement avec **catégorie** et **ancienneté**."]}, "n__T": {"key": "T", "name": "T", "kind": "Traitement", "desc": ["**Consultation spécialisée, médicament.**"]}, "n__Y": {"key": "Y", "name": "Y", "kind": "Outcome", "desc": ["**Décès, urgences évitables.**"]}}, "names": {"socio": "socio-eco", "life": "lifestyle", "HSB": "health-seeking behaviour", "NH": "natural health", "infra": "local health infrastructure", "agesex": "age, gender", "CMU": "CMU / C2S", "ind": "indicateurs d’offre", "MT": "médecin traitant", "HC": "healthcare cons.", "dist": "distance parcourue", "remb": "montants remboursés", "ALD": "statut ALD", "T": "T", "Y": "Y"}, "edges": {"e__agesex__socio": {"from": "agesex", "to": "socio", "mech": ["**Genre** : écarts de salaire et de retraite, carrières interrompues.", "**Âge** : cycle de vie, effets de cohorte (générations âgées moins diplômées)."], "role": ["Le lien inverse (les plus aisés vivent plus longtemps) est un **biais de survie**, pas un arc causal.", "**Bloqué** par l’ajustement sur âge et genre."]}, "e__agesex__life": {"from": "agesex", "to": "life", "mech": ["**Genre** : tabac et alcool plus fréquents chez les hommes.", "**Âge** : effets de cycle de vie et de génération sur le tabac, l’alcool, le poids, l’activité physique."], "role": ["**Effet favorable** : âge et genre étant ajustés, le confondant résiduel est lifestyle **à âge et genre fixés**, un peu moins fort que lifestyle brut."]}, "e__agesex__HSB": {"from": "agesex", "to": "HSB", "mech": ["**Genre** : à état de santé égal, les femmes consultent davantage et plus tôt.", "**Âge** : recours variable selon l’âge, les jeunes hommes consultant le moins."], "role": ["**Effet favorable** : âge et genre étant ajustés, le confondant résiduel est health-seeking behaviour **à âge et genre fixés**."]}, "e__agesex__NH": {"from": "agesex", "to": "NH", "mech": ["**L’âge** est le premier déterminant de la morbidité.", "**Profils de morbidité** différents selon le sexe."], "role": null}, "e__agesex__HC": {"from": "agesex", "to": "HC", "mech": ["**Recours croissant avec l’âge** : suivi chronique, dépistages.", "**Recours plus élevé des femmes** à état de santé égal (suivi gynécologique, grossesse)."], "role": null}, "e__agesex__MT": {"from": "agesex", "to": "MT", "mech": ["**Déclaration très variable avec l’âge** : faible chez les jeunes adultes, quasi systématique chez les personnes âgées.", "**Mineurs** : déclaration possible pour les moins de 16 ans depuis 2017 seulement."], "role": null}, "e__agesex__T": {"from": "agesex", "to": "T", "mech": ["**Recommandations indexées sur l’âge** : dépistages, seuils de prescription (statines), prudence et polymédication chez le sujet âgé.", "**Écarts selon le sexe** documentés, comme le sous-adressage des femmes en cardiologie à symptômes égaux."], "role": ["**Confondant direct** de T → Y : ajustement indispensable."]}, "e__agesex__Y": {"from": "agesex", "to": "Y", "mech": ["**Mortalité de base** croissante avec l’âge, plus élevée chez les hommes."], "role": ["**Confondant** : ajustement nécessaire."]}, "e__socio__CMU": {"from": "socio", "to": "CMU", "mech": ["**Éligibilité sous condition de ressources** : mesure directe de la précarité.", "**Proxy binaire** : ne distingue rien au-dessus du seuil."], "role": null}, "e__socio__life": {"from": "socio", "to": "life", "mech": ["**Gradient social** du tabac, de l’alcool, de l’alimentation, de la sédentarité."], "role": null}, "e__socio__HSB": {"from": "socio", "to": "HSB", "mech": ["**Littératie en santé**, rapport au système de soins.", "**Coût du temps** : horaires, garde d’enfants.", "**Renoncement aux soins** plus fréquent chez les plus précaires."], "role": null}, "e__socio__infra": {"from": "socio", "to": "infra", "mech": ["**Tri résidentiel** : les ressources contraignent le lieu de vie, donc l’offre accessible.", "Le sens inverse (**effets de lieu**, Chetty et al.) existe à long terme."], "role": ["**La direction ne change pas** l’ensemble d’ajustement."]}, "e__socio__dist": {"from": "socio", "to": "dist", "mech": ["**Mobilité inégale** : voiture, temps, coût du transport.", "Les plus aisés vont plus volontiers voir un **spécialiste réputé** plus loin."], "role": null}, "e__socio__NH": {"from": "socio", "to": "NH", "mech": ["**Gradient social de santé** hors comportements : expositions professionnelles, logement, stress."], "role": null}, "e__socio__HC": {"from": "socio", "to": "HC", "mech": ["**Barrières au recours** au-delà de la CMU : reste à charge, dépassements, distance culturelle."], "role": null}, "e__CMU__HC": {"from": "CMU", "to": "HC", "mech": ["**Pas de reste à charge**, pas de dépassements : la barrière financière est levée.", "Effet sur le recours **bien documenté** (IRDES)."], "role": null}, "e__CMU__T": {"from": "CMU", "to": "T", "mech": ["**Au moment de la décision**, la couverture joue sur le fait de consulter ou de délivrer le médicament.", "**Refus de soins** envers les bénéficiaires, mis en évidence par des testings : effet inverse."], "role": ["**Pas d’arc CMU → Y** : l’association avec la mortalité passe par socio-eco."]}, "e__CMU__remb": {"from": "CMU", "to": "remb", "mech": ["**À soin égal**, la C2S augmente le montant remboursé."], "role": ["Le montant **mélange gravité et couverture** : le modèle doit voir CMU et le type d’acte."]}, "e__life__NH": {"from": "life", "to": "NH", "mech": ["**Tabac, alcool, alimentation, activité** déterminent les maladies chroniques."], "role": null}, "e__life__T": {"from": "life", "to": "T", "mech": ["**Interrogatoire direct** sur tabac et alcool, pris en compte dans la décision.", "**SCORE2** : le tabagisme guide la prescription de statines et d’antihypertenseurs.", "**Tabac et poids** orientent vers examens et spécialistes."], "role": ["**Dépend de T** : arc fort pour les traitements guidés par le tabac, l’alcool ou le poids, quasi absent pour les autres.", "**Quand il existe** : confondant direct, et **le moins bien capté** (ni tabac ni IMC dans le SNDS).", "**Priorité** de l’analyse de sensibilité pour ces traitements."]}, "e__life__Y": {"from": "life", "to": "Y", "mech": ["**Décès non médiés** par un état de santé diagnosticable : accidents, intoxications, morts brutales."], "role": ["Avec lifestyle → T, ouvre **T ← lifestyle → Y**, distinct du chemin par natural health."]}, "e__life__HSB": {"from": "life", "to": "HSB", "mech": ["**Cause commune non représentée** au-delà de socio-eco : conscience de sa santé, conscienciosité.", "**Sens incertain** : l’arête bidirectionnelle (notation de Pearl) ne s’engage pas."], "role": ["**Ne change pas l’identification** : les deux latents confondent déjà T et Y.", "**Atténuation** : les proxys de health-seeking behaviour informent un peu sur lifestyle, dans une mesure non quantifiable."], "bi": true}, "e__HSB__MT": {"from": "HSB", "to": "MT", "mech": ["**Déclarer un médecin traitant** est une démarche volontaire."], "role": null}, "e__HSB__HC": {"from": "HSB", "to": "HC", "mech": ["**Consulter à symptômes égaux**, faire dépistages et vaccins."], "role": null}, "e__HSB__T": {"from": "HSB", "to": "T", "mech": ["**À état de santé égal**, plus de consultations spécialisées et de traitements prescrits et délivrés."], "role": null}, "e__HSB__Y": {"from": "HSB", "to": "Y", "mech": ["**Healthy user effect** : ceux qui se soignent ont d’autres comportements protecteurs.", "**Coronary Drug Project** : les observants du placebo mouraient nettement moins."], "role": ["**T ← HSB → Y** : bloqué seulement si EMB capture HSB (médecin traitant, dépistages, délivrances)."]}, "e__HSB__dist": {"from": "HSB", "to": "dist", "mech": ["**Chercher le centre de référence**, quitte à aller loin."], "role": null}, "e__NH__HC": {"from": "NH", "to": "HC", "mech": ["**L’état de santé génère la consommation** : d’où son rôle de proxy."], "role": ["**Proxy imparfait** : une maladie non diagnostiquée ou peu suivie laisse peu de traces."]}, "e__NH__T": {"from": "NH", "to": "T", "mech": ["**Le médecin décide sur l’état clinique** : symptômes, gravité.", "**Absent du SNDS** : actes de biologie sans résultats, sévérité rarement renseignée."], "role": null}, "e__NH__Y": {"from": "NH", "to": "Y", "mech": ["**Une maladie grave tue** indépendamment du recours aux soins."], "role": ["**Chemin central** T ← NH → Y.", "**Hypothèse** : EMB est un proxy suffisant de natural health."]}, "e__NH__dist": {"from": "NH", "to": "dist", "mech": ["**Gravité → adressage** vers des centres éloignés : CHU, centres de lutte contre le cancer."], "role": null}, "e__NH__remb": {"from": "NH", "to": "remb", "mech": ["**Soins lourds = montants élevés** : hospitalisations, chimiothérapies, biothérapies."], "role": ["**Renforce le blocage** de T ← NH → Y sur la gravité, mal renseignée par ailleurs."]}, "e__NH__ALD": {"from": "NH", "to": "ALD", "mech": ["**Maladie chronique grave diagnostiquée** → admission en ALD (liste de 30 affections).", "**La catégorie** dit quelle maladie : diabète, cancer, insuffisance cardiaque…"], "role": ["**Proxy le plus fiable** de natural health pour sa part chronique et diagnostiquée."]}, "e__MT__ALD": {"from": "MT", "to": "ALD", "mech": ["**Le médecin traitant établit le protocole de soins** et fait la demande d’ALD."], "role": ["Fait de l’ALD un **collider** : à maladie égale, l’admission dépend aussi du médecin."]}, "e__ALD__HC": {"from": "ALD", "to": "HC", "mech": ["**Prise en charge à 100 %** : la barrière financière est levée pour les soins liés à l’ALD."], "role": null}, "e__ALD__T": {"from": "ALD", "to": "T", "mech": ["**Le protocole de soins définit le parcours** : spécialistes, traitements.", "**Accès financier** au spécialiste et au médicament."], "role": ["**Confondant** : ajustement nécessaire, en plus de son rôle de proxy."]}, "e__ALD__remb": {"from": "ALD", "to": "remb", "mech": ["**Taux de remboursement à 100 %** pour les soins liés à l’ALD."], "role": ["Aide le modèle à **séparer couverture et gravité** dans les montants."]}, "e__infra__ind": {"from": "infra", "to": "ind", "mech": ["**APL** : accessibilité aux médecins depuis la commune, selon l’activité des praticiens et les besoins de la population.", "**BPE** : équipements (urgences, hôpitaux, pharmacies) et distances d’accès."], "role": ["**Arc de mesure** : le blocage vient de la qualité de la mesure, pas d’un arc.", "**Crédible** pour la quantité de l’offre, **beaucoup moins** pour sa qualité."]}, "e__infra__MT": {"from": "infra", "to": "MT", "mech": ["**Offre de généralistes** : dans un désert médical, trouver un médecin traitant est difficile, voire impossible."], "role": ["**Proxy partiel** de l’infrastructure : conditionner sur le médecin traitant renseigne sur l’offre passée.", "**Collider** infrastructure → médecin traitant ← health-seeking behaviour : chemin ouvert de même nature que ceux de healthcare cons."]}, "e__infra__dist": {"from": "infra", "to": "dist", "mech": ["**Offre locale insuffisante** → on va se soigner plus loin."], "role": null}, "e__infra__HC": {"from": "infra", "to": "HC", "mech": ["**Densité et proximité** conditionnent le recours : déserts médicaux."], "role": null}, "e__infra__T": {"from": "infra", "to": "T", "mech": ["**Spécialistes disponibles et délais** déterminent l’accès à la consultation."], "role": null}, "e__infra__Y": {"from": "infra", "to": "Y", "mech": ["**Canaux hors T** : proximité et qualité des urgences et des hôpitaux."], "role": ["**Ni les indicateurs ni la distance ne sont sur le chemin** : bloqué dans la mesure où ils capturent l’infrastructure.", "**Résiduel** : délais, saturation, variation infra-départementale, qualité de l’offre.", "**Sens du biais** : si l’offre de qualité adresse aussi davantage et que T est bénéfique, effet **sur-estimé**.", "**Pistes** : indicateurs de qualité, délais construits dans le SNDS, analyse de sensibilité.", "**Exclut l’usage comme instrument.**"]}, "e__MT__HC": {"from": "MT", "to": "HC", "mech": ["**Parcours de soins coordonné** : orientation, renouvellements, prescriptions."], "role": null}, "e__MT__T": {"from": "MT", "to": "T", "mech": ["**Le MT adresse et prescrit** ; hors parcours, le spécialiste est moins remboursé."], "role": null}, "e__MT__Y": {"from": "MT", "to": "Y", "mech": ["**Soins primaires non tracés** : conseil, jugement clinique, repérage précoce.", "**Alternative aux urgences** : les urgences évitables dépendent des soins primaires."], "role": ["**Pas un instrument** : il est ajusté."]}, "e__HC__dist": {"from": "HC", "to": "dist", "mech": ["**Une distance n’existe que pour un événement** : attribut des soins consommés."], "role": ["**Collider et proxy** de plusieurs latents : l’ajouter à φ ouvre des chemins entre ces latents.", "**Arbitrage** proxy contre collider, à trancher par ablation ; jamais comme modificateur d’effet.", "**Décomposition** (distance minimale, excès de distance) pour réduire le problème."]}, "e__HC__remb": {"from": "HC", "to": "remb", "mech": ["**Un montant n’existe que pour un événement remboursé.**"], "role": ["**Collider sans danger** : son seul parent latent est natural health ; ses autres parents (healthcare cons., CMU, ALD) sont ajustés et referment tous les chemins ouverts.", "**Différence avec la distance**, qui a plusieurs parents latents.", "**Réserve** : si le montant dépendait aussi de health-seeking behaviour ou de l’offre locale (choix du prestataire), le problème réapparaîtrait, atténué."]}, "e__HC__T": {"from": "HC", "to": "T", "mech": ["**Le médecin décide sur les antécédents** : traitements, hospitalisations, comorbidités."], "role": null}, "e__HC__Y": {"from": "HC", "to": "Y", "mech": ["**Les soins passés agissent sur la survie.**"], "role": ["**Confondant** : ajustement nécessaire, pas seulement utile comme proxy."]}, "e__T__Y": {"from": "T", "to": "Y", "mech": ["**Effet d’intérêt.**"], "role": ["**Identifié** par ajustement sur EMB, calculé avant T, si EMB bloque les **quatre chemins latents** (NH, HSB, lifestyle, infrastructure).", "**Sensibilité** à analyser en priorité sur lifestyle."]}}, "default": {"title": "EMB doit bloquer quatre chemins latents", "paths": ["T ← natural health → Y", "T ← health-seeking behaviour → Y", "T ← lifestyle → Y", "T ← local health infrastructure → Y"], "notes": ["**Autres chemins** : commencent par un parent observé de T, déjà ajusté.", "**Ces quatre-là** : bloqués seulement dans la mesure où les proxys capturent les latents."]}, "hash": "specialiste"}, "mt": {"nodes": {"n__socio": {"key": "socio", "name": "socio-eco", "kind": "Latent", "desc": ["**Déterminant général** : revenus, diplôme, catégorie sociale, conditions de vie.", "**Non mesuré** dans le SNDS.", "**Proxys** : CMU/C2S, indice de défavorisation communal."]}, "n__life": {"key": "life", "name": "lifestyle", "kind": "Latent", "desc": ["**Comportements de santé** : tabac, alcool, alimentation, activité physique.", "**Pas d’arc direct vers T** ici : on ne déclare pas un médecin traitant à cause de son tabagisme.", "**Confond seulement via natural health** : moins préoccupant que pour un traitement prescrit."]}, "n__HSB": {"key": "HSB", "name": "health-seeking behaviour", "kind": "Latent", "desc": ["**Propension à rechercher des soins** et à s’engager dans sa santé, **à besoin égal**.", "**Facteur prédisposant** du modèle d’Andersen ; le besoin (natural health) agit directement sur T, d’où l’absence d’arc natural health → health-seeking behaviour.", "**Traces** : médecin traitant déclaré, dépistages, vaccins, régularité des délivrances."]}, "n__NH": {"key": "NH", "name": "natural health", "kind": "Latent", "desc": ["**État de santé réel**, y compris non diagnostiqué ou non traité.", "La consommation de soins en est **une trace, pas une mesure**."]}, "n__infra": {"key": "infra", "name": "local health infrastructure", "kind": "Latent", "desc": ["**Offre de soins du territoire** : quantité et disponibilité des médecins par spécialité, délais, proximité des urgences et des hôpitaux, qualité moyenne de l’offre.", "**Pas un instrument** : agit sur Y hors T.", "**Bien captée** : la dimension quantitative (APL, BPE).", "**Mal captés** : délais réels, saturation, variation à l’intérieur du département, qualité de l’offre.", "La pratique des médecins **propres au patient** est une autre question : elle varie au sein d’un territoire."]}, "n__agesex": {"key": "agesex", "name": "age, gender", "kind": "Ajusté", "desc": ["**Démographie observée**, exogène."]}, "n__CMU": {"key": "CMU", "name": "CMU / C2S", "kind": "Ajusté", "desc": ["**Couverture complémentaire** sous condition de ressources.", "**Double rôle** : cause (accès financier aux soins) et proxy du socio-économique."]}, "n__ind": {"key": "ind", "name": "indicateurs d’offre", "kind": "Ajusté", "desc": ["**APL** (DREES) par spécialité et **BPE** (INSEE), à la commune de résidence.", "**Proxy de l’infrastructure** : il la mesure, il ne la cause pas, d’où l’absence d’arc sortant.", "**Ne bloque pas** T ← infrastructure → Y au sens de la d-séparation : il n’est pas sur le chemin.", "**Blocage complet** si la mesure est parfaite, **partiel** sinon.", "**Imparfait par construction** : mesure la quantité et la proximité, pas les délais ni la qualité."]}, "n__MT": {"key": "MT", "name": "médecin traitant passé", "kind": "Ajusté", "desc": ["**Affiliations antérieures** à T.", "**Prédicteur quasi déterministe** de T : on reste affilié tant que le médecin exerce.", "**Positivité** : impose un design **new user**, parmi les patients sans médecin traitant à une date donnée."]}, "n__HC": {"key": "HC", "name": "healthcare cons.", "kind": "Ajusté", "desc": ["**Consommation de soins** tracée dans le SNDS, strictement **avant T**.", "**Proxy** de natural health et de health-seeking behaviour : elle en est une trace.", "**Confondant à part entière** : les soins passés causent T et Y, d’où ses arcs sortants."]}, "n__dist": {"key": "dist", "name": "distance parcourue", "kind": "Ajusté", "desc": ["**Distance résidence → prestation**, par événement avant T.", "**Accès réalisé**, pas infrastructure : mélange offre, gravité et choix.", "**Proxy de quatre latents**, sans arc sortant.", "**Distance minimale** (professionnel le plus proche de la spécialité) → mesure l’**infrastructure**.", "**Excès de distance** (parcourue moins minimale) → mesure **gravité et choix** : proxy bien plus propre.", "**Suppose les communes** : au département, simple indicateur « hors département »."]}, "n__remb": {"key": "remb", "name": "montants remboursés", "kind": "Ajusté", "desc": ["**Montant remboursé** par l’Assurance maladie, pour chaque événement avant T.", "**À décomposer en trois parts**, comme la distance :", "**Base de remboursement** (tarif Sécurité sociale de l’acte) → proxy de la **gravité** et de l’intensité des soins.", "**Taux de remboursement** → reflète la **couverture** (C2S, ALD à 100 %), déjà ajustée.", "**Dépassements d’honoraires**, s’ils sont disponibles → liés à health-seeking behaviour, au socio-économique et à l’**offre locale** (secteur 2 ou privé quand le public n’est pas accessible).", "**Base seule** : collider sans danger, ses autres parents étant ajustés.", "**Dépassements** : collider de plusieurs latents, comme la distance : arbitrage proxy contre collider, à trancher par ablation. À garder séparés de la base."]}, "n__ALD": {"key": "ALD", "name": "statut ALD", "kind": "Ajusté", "desc": ["**Affection de longue durée** : entrées et sorties, avec la catégorie d’ALD.", "**Statut administratif**, pas consommation : prise en charge à 100 % et protocole de soins.", "**Meilleur proxy de la gravité** chronique dans le SNDS.", "**Confondant à part entière** : cause healthcare cons., T et les montants remboursés.", "**Collider** natural health → ALD ← médecin traitant : le chemin ouvert est refermé par l’ajustement sur le médecin traitant.", "**Encodage** : tokens d’entrée et de sortie, plus statut actif à chaque événement avec **catégorie** et **ancienneté**."]}, "n__T": {"key": "T", "name": "T", "kind": "Traitement", "desc": ["**Affiliation à un médecin traitant** (nouvelle déclaration).", "Toutes les covariables sont mesurées **avant** T."]}, "n__Y": {"key": "Y", "name": "Y", "kind": "Outcome", "desc": ["**Décès, urgences évitables.**"]}}, "names": {"socio": "socio-eco", "life": "lifestyle", "HSB": "health-seeking behaviour", "NH": "natural health", "infra": "local health infrastructure", "agesex": "age, gender", "CMU": "CMU / C2S", "ind": "indicateurs d’offre", "MT": "médecin traitant passé", "HC": "healthcare cons.", "dist": "distance parcourue", "remb": "montants remboursés", "ALD": "statut ALD", "T": "T", "Y": "Y"}, "edges": {"e__agesex__socio": {"from": "agesex", "to": "socio", "mech": ["**Genre** : écarts de salaire et de retraite, carrières interrompues.", "**Âge** : cycle de vie, effets de cohorte (générations âgées moins diplômées)."], "role": ["Le lien inverse (les plus aisés vivent plus longtemps) est un **biais de survie**, pas un arc causal.", "**Bloqué** par l’ajustement sur âge et genre."]}, "e__agesex__life": {"from": "agesex", "to": "life", "mech": ["**Genre** : tabac et alcool plus fréquents chez les hommes.", "**Âge** : effets de cycle de vie et de génération sur le tabac, l’alcool, le poids, l’activité physique."], "role": ["**Effet favorable** : âge et genre étant ajustés, le confondant résiduel est lifestyle **à âge et genre fixés**, un peu moins fort que lifestyle brut."]}, "e__agesex__HSB": {"from": "agesex", "to": "HSB", "mech": ["**Genre** : à état de santé égal, les femmes consultent davantage et plus tôt.", "**Âge** : recours variable selon l’âge, les jeunes hommes consultant le moins."], "role": ["**Effet favorable** : âge et genre étant ajustés, le confondant résiduel est health-seeking behaviour **à âge et genre fixés**."]}, "e__agesex__NH": {"from": "agesex", "to": "NH", "mech": ["**L’âge** est le premier déterminant de la morbidité.", "**Profils de morbidité** différents selon le sexe."], "role": null}, "e__agesex__HC": {"from": "agesex", "to": "HC", "mech": ["**Recours croissant avec l’âge** : suivi chronique, dépistages.", "**Recours plus élevé des femmes** à état de santé égal (suivi gynécologique, grossesse)."], "role": null}, "e__agesex__MT": {"from": "agesex", "to": "MT", "mech": ["**Déclaration très variable avec l’âge** : faible chez les jeunes adultes, quasi systématique chez les personnes âgées.", "**Mineurs** : déclaration possible pour les moins de 16 ans depuis 2017 seulement."], "role": null}, "e__agesex__Y": {"from": "agesex", "to": "Y", "mech": ["**Mortalité de base** croissante avec l’âge, plus élevée chez les hommes."], "role": ["**Confondant** : ajustement nécessaire."]}, "e__socio__CMU": {"from": "socio", "to": "CMU", "mech": ["**Éligibilité sous condition de ressources** : mesure directe de la précarité.", "**Proxy binaire** : ne distingue rien au-dessus du seuil."], "role": null}, "e__socio__life": {"from": "socio", "to": "life", "mech": ["**Gradient social** du tabac, de l’alcool, de l’alimentation, de la sédentarité."], "role": null}, "e__socio__HSB": {"from": "socio", "to": "HSB", "mech": ["**Littératie en santé**, rapport au système de soins.", "**Coût du temps** : horaires, garde d’enfants.", "**Renoncement aux soins** plus fréquent chez les plus précaires."], "role": null}, "e__socio__infra": {"from": "socio", "to": "infra", "mech": ["**Tri résidentiel** : les ressources contraignent le lieu de vie, donc l’offre accessible.", "Le sens inverse (**effets de lieu**, Chetty et al.) existe à long terme."], "role": ["**La direction ne change pas** l’ensemble d’ajustement."]}, "e__socio__dist": {"from": "socio", "to": "dist", "mech": ["**Mobilité inégale** : voiture, temps, coût du transport.", "Les plus aisés vont plus volontiers voir un **spécialiste réputé** plus loin."], "role": null}, "e__socio__NH": {"from": "socio", "to": "NH", "mech": ["**Gradient social de santé** hors comportements : expositions professionnelles, logement, stress."], "role": null}, "e__socio__HC": {"from": "socio", "to": "HC", "mech": ["**Barrières au recours** au-delà de la CMU : reste à charge, dépassements, distance culturelle."], "role": null}, "e__CMU__HC": {"from": "CMU", "to": "HC", "mech": ["**Pas de reste à charge**, pas de dépassements : la barrière financière est levée.", "Effet sur le recours **bien documenté** (IRDES)."], "role": null}, "e__CMU__remb": {"from": "CMU", "to": "remb", "mech": ["**À soin égal**, la C2S augmente le montant remboursé."], "role": ["Le montant **mélange gravité et couverture** : le modèle doit voir CMU et le type d’acte."]}, "e__life__NH": {"from": "life", "to": "NH", "mech": ["**Tabac, alcool, alimentation, activité** déterminent les maladies chroniques."], "role": null}, "e__life__Y": {"from": "life", "to": "Y", "mech": ["**Décès non médiés** par un état de santé diagnosticable : accidents, intoxications, morts brutales."], "role": ["Avec lifestyle → T, ouvre **T ← lifestyle → Y**, distinct du chemin par natural health."]}, "e__life__HSB": {"from": "life", "to": "HSB", "mech": ["**Cause commune non représentée** au-delà de socio-eco : conscience de sa santé, conscienciosité.", "**Sens incertain** : l’arête bidirectionnelle (notation de Pearl) ne s’engage pas."], "role": ["**Ne change pas l’identification** : les deux latents confondent déjà T et Y.", "**Atténuation** : les proxys de health-seeking behaviour informent un peu sur lifestyle, dans une mesure non quantifiable."], "bi": true}, "e__HSB__MT": {"from": "HSB", "to": "MT", "mech": ["**Déclarer un médecin traitant** est une démarche volontaire."], "role": null}, "e__HSB__HC": {"from": "HSB", "to": "HC", "mech": ["**Consulter à symptômes égaux**, faire dépistages et vaccins."], "role": null}, "e__HSB__Y": {"from": "HSB", "to": "Y", "mech": ["**Healthy user effect** : ceux qui se soignent ont d’autres comportements protecteurs.", "**Coronary Drug Project** : les observants du placebo mouraient nettement moins."], "role": ["**T ← HSB → Y** : bloqué seulement si EMB capture HSB (médecin traitant, dépistages, délivrances)."]}, "e__HSB__dist": {"from": "HSB", "to": "dist", "mech": ["**Chercher le centre de référence**, quitte à aller loin."], "role": null}, "e__NH__HC": {"from": "NH", "to": "HC", "mech": ["**L’état de santé génère la consommation** : d’où son rôle de proxy."], "role": ["**Proxy imparfait** : une maladie non diagnostiquée ou peu suivie laisse peu de traces."]}, "e__NH__Y": {"from": "NH", "to": "Y", "mech": ["**Une maladie grave tue** indépendamment du recours aux soins."], "role": ["**Chemin central** T ← NH → Y.", "**Hypothèse** : EMB est un proxy suffisant de natural health."]}, "e__NH__dist": {"from": "NH", "to": "dist", "mech": ["**Gravité → adressage** vers des centres éloignés : CHU, centres de lutte contre le cancer."], "role": null}, "e__NH__remb": {"from": "NH", "to": "remb", "mech": ["**Soins lourds = montants élevés** : hospitalisations, chimiothérapies, biothérapies."], "role": ["**Renforce le blocage** de T ← NH → Y sur la gravité, mal renseignée par ailleurs."]}, "e__NH__ALD": {"from": "NH", "to": "ALD", "mech": ["**Maladie chronique grave diagnostiquée** → admission en ALD (liste de 30 affections).", "**La catégorie** dit quelle maladie : diabète, cancer, insuffisance cardiaque…"], "role": ["**Proxy le plus fiable** de natural health pour sa part chronique et diagnostiquée."]}, "e__MT__ALD": {"from": "MT", "to": "ALD", "mech": ["**Le médecin traitant établit le protocole de soins** et fait la demande d’ALD."], "role": ["Fait de l’ALD un **collider** : à maladie égale, l’admission dépend aussi du médecin."]}, "e__ALD__HC": {"from": "ALD", "to": "HC", "mech": ["**Prise en charge à 100 %** : la barrière financière est levée pour les soins liés à l’ALD."], "role": null}, "e__ALD__remb": {"from": "ALD", "to": "remb", "mech": ["**Taux de remboursement à 100 %** pour les soins liés à l’ALD."], "role": ["Aide le modèle à **séparer couverture et gravité** dans les montants."]}, "e__infra__ind": {"from": "infra", "to": "ind", "mech": ["**APL** : accessibilité aux médecins depuis la commune, selon l’activité des praticiens et les besoins de la population.", "**BPE** : équipements (urgences, hôpitaux, pharmacies) et distances d’accès."], "role": ["**Arc de mesure** : le blocage vient de la qualité de la mesure, pas d’un arc.", "**Crédible** pour la quantité de l’offre, **beaucoup moins** pour sa qualité."]}, "e__infra__MT": {"from": "infra", "to": "MT", "mech": ["**Offre de généralistes passée** : elle a déterminé l’affiliation antérieure, comme elle détermine T."], "role": ["**Purge partielle** : conditionner sur l’affiliation passée renseigne sur l’offre, dans la mesure où elle est stable dans le temps.", "**Reste** : les changements d’offre (départs, installations), exactement la variation exploitée par l’expérience naturelle.", "**Collider** infrastructure → médecin traitant passé ← health-seeking behaviour : dans un désert, avoir eu un médecin traitant signale une forte motivation."]}, "e__infra__dist": {"from": "infra", "to": "dist", "mech": ["**Offre locale insuffisante** → on va se soigner plus loin."], "role": null}, "e__infra__HC": {"from": "infra", "to": "HC", "mech": ["**Densité et proximité** conditionnent le recours : déserts médicaux."], "role": null}, "e__infra__Y": {"from": "infra", "to": "Y", "mech": ["**Canaux hors T** : proximité et qualité des urgences et des hôpitaux."], "role": ["**Ni les indicateurs ni la distance ne sont sur le chemin** : bloqué dans la mesure où ils capturent l’infrastructure.", "**Résiduel** : délais, saturation, variation infra-départementale, qualité de l’offre.", "**Sens du biais** : si l’offre de qualité adresse aussi davantage et que T est bénéfique, effet **sur-estimé**.", "**Pistes** : indicateurs de qualité, délais construits dans le SNDS, analyse de sensibilité.", "**Exclut l’usage comme instrument.**"]}, "e__MT__HC": {"from": "MT", "to": "HC", "mech": ["**Parcours de soins coordonné** : orientation, renouvellements, prescriptions."], "role": null}, "e__MT__Y": {"from": "MT", "to": "Y", "mech": ["**Soins primaires non tracés** : conseil, jugement clinique, repérage précoce.", "**Alternative aux urgences** : les urgences évitables dépendent des soins primaires."], "role": ["**Pas un instrument** : il est ajusté."]}, "e__HC__dist": {"from": "HC", "to": "dist", "mech": ["**Une distance n’existe que pour un événement** : attribut des soins consommés."], "role": ["**Collider et proxy** de plusieurs latents : l’ajouter à φ ouvre des chemins entre ces latents.", "**Arbitrage** proxy contre collider, à trancher par ablation ; jamais comme modificateur d’effet.", "**Décomposition** (distance minimale, excès de distance) pour réduire le problème."]}, "e__HC__remb": {"from": "HC", "to": "remb", "mech": ["**Un montant n’existe que pour un événement remboursé.**"], "role": ["**Collider sans danger** : son seul parent latent est natural health ; ses autres parents (healthcare cons., CMU, ALD) sont ajustés et referment tous les chemins ouverts.", "**Différence avec la distance**, qui a plusieurs parents latents.", "**Réserve** : si le montant dépendait aussi de health-seeking behaviour ou de l’offre locale (choix du prestataire), le problème réapparaîtrait, atténué."]}, "e__HC__Y": {"from": "HC", "to": "Y", "mech": ["**Les soins passés agissent sur la survie.**"], "role": ["**Confondant** : ajustement nécessaire, pas seulement utile comme proxy."]}, "e__T__Y": {"from": "T", "to": "Y", "mech": ["**Effet d’intérêt** : coordination, prévention, repérage précoce, alternative aux urgences."], "role": ["**Identifié** par ajustement sur EMB si EMB bloque les **trois chemins latents** (natural health, health-seeking behaviour, infrastructure).", "**Lifestyle** ne confond plus que via natural health."]}, "e__MT__T": {"from": "MT", "to": "T", "mech": ["**Persistance** : on reste affilié au même médecin.", "**La perte** vient surtout d’un départ du médecin (retraite, déménagement, cessation)."], "role": ["**Positivité** : sans design new user, T ≈ médecin traitant passé.", "**Expérience naturelle** : le départ du généraliste fait perdre le médecin traitant indépendamment de la santé du patient : instrument crédible."]}, "e__agesex__T": {"from": "agesex", "to": "T", "mech": ["**Déclaration très variable avec l’âge** : faible chez les jeunes adultes, quasi systématique chez les personnes âgées.", "**Genre** : les femmes déclarent plus souvent un médecin traitant."], "role": ["**Confondant direct** : ajustement indispensable."]}, "e__HSB__T": {"from": "HSB", "to": "T", "mech": ["**Déclarer un médecin traitant est une démarche volontaire** : c’est presque la définition du recours aux soins."], "role": ["**Confondant dominant** de ce traitement : le healthy user effect est au cœur de la question.", "**Priorité absolue** des contrôles négatifs et de l’analyse de sensibilité."]}, "e__NH__T": {"from": "NH", "to": "T", "mech": ["**Besoin de soins** → on cherche un médecin traitant.", "**Gravité perçue par le patient** : c’est lui qui décide, y compris sur des symptômes jamais consultés."], "role": ["**Inversion** par rapport à un traitement prescrit : les symptômes non consultés comptent ici."]}, "e__infra__T": {"from": "infra", "to": "T", "mech": ["**Déserts médicaux** : des généralistes n’acceptent plus de nouveaux patients.", "**Des millions de personnes** sans médecin traitant faute d’offre."], "role": ["**Confondant majeur** : l’APL de médecine générale devient la variable clé.", "**Saturation des cabinets** non mesurée directement : à construire dans le SNDS."]}, "e__CMU__T": {"from": "CMU", "to": "T", "mech": ["**Précarité** : déclaration plus rare chez les plus précaires.", "**La couverture** lève une barrière financière sans tout compenser."], "role": null}, "e__HC__T": {"from": "HC", "to": "T", "mech": ["**Consulter régulièrement un généraliste** mène souvent à le déclarer."], "role": ["**Confondant** : ajustement nécessaire."]}, "e__ALD__T": {"from": "ALD", "to": "T", "mech": ["**Le protocole ALD** est établi par le médecin traitant : entrer en ALD pousse à en déclarer un."], "role": ["**Confondant** : ALD et médecin traitant sont étroitement liés."]}}, "default": {"title": "EMB doit bloquer trois chemins latents", "paths": ["T ← natural health → Y", "T ← health-seeking behaviour → Y", "T ← local health infrastructure → Y"], "notes": ["**Lifestyle** : pas d’arc direct vers T ici.", "**Health-seeking behaviour** : confondant dominant.", "**Design new user** indispensable (positivité)."]}, "hash": "medecin-traitant"}};
+let S = "sp", D = ALL.sp, svg = null, pinned = null;
 const panel = document.getElementById("panel");
-const svg = document.querySelector("#graph svg");
-svg.setAttribute("role","img");
-svg.setAttribute("aria-label","Graphe causal des déterminants de T et Y dans le SNDS");
-let pinned = null;
+const sel = document.getElementById("scen");
 function esc(s) { const d=document.createElement("div"); d.textContent=s; return d.innerHTML; }
 function md(s) { return esc(s).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>"); }
 const list = (a, cls) => `<ul class="${cls}">${a.map(x=>`<li>${md(x)}</li>`).join("")}</ul>`;
+const el = id => document.getElementById(S+"-"+id);
 const pinNote = () => pinned ? `<p class="pin">Affichage figé. Cliquez ailleurs ou appuyez sur Échap pour revenir.</p>` : "";
 
 function defaultPanel() {
-  panel.innerHTML = `<p class="kind">Hypothèse d’identification</p>
-  <p class="arc">EMB doit bloquer quatre chemins latents</p>
-  <ul class="mech"><li>T ← natural health → Y</li><li>T ← health-seeking behaviour → Y</li><li>T ← lifestyle → Y</li><li>T ← local health infrastructure → Y</li></ul>
-  <ul class="mech"><li><strong>Autres chemins</strong> : commencent par un parent observé de T, déjà ajusté.</li><li><strong>Ces quatre-là</strong> : bloqués seulement dans la mesure où les proxys capturent les latents.</li></ul>
+  const d = D.default;
+  panel.innerHTML = `<p class="kind">Hypothèse d’identification</p><p class="arc">${esc(d.title)}</p>
+  ${list(d.paths, "mech")}${list(d.notes, "mech")}
   <p class="hint">Survolez un arc ou un nœud pour le détail. Le bilan, chemin par chemin, est sous le graphe.</p>`;
 }
 function showEdge(id) {
@@ -605,39 +1023,56 @@ function showNode(id) {
   ${outs.length ? `<h4>Cause</h4><p class="hint">${outs.map(esc).join(", ")}</p>` : ""}
   ${cors.length ? `<h4>Corrélé à</h4><p class="hint">${cors.map(esc).join(", ")}</p>` : ""}${pinNote()}`;
 }
-function clearFocus() { svg.classList.remove("focus"); svg.querySelectorAll(".on").forEach(el=>el.classList.remove("on")); }
-function mark(eid) { const e=D.edges[eid]; document.getElementById(eid).classList.add("on"); document.getElementById("n__"+e.from).classList.add("on"); document.getElementById("n__"+e.to).classList.add("on"); }
+function clearFocus() { if (!svg) return; svg.classList.remove("focus"); svg.querySelectorAll(".on").forEach(x=>x.classList.remove("on")); }
+function mark(eid) { const e=D.edges[eid]; el(eid).classList.add("on"); el("n__"+e.from).classList.add("on"); el("n__"+e.to).classList.add("on"); }
 function focusEdge(id) { clearFocus(); svg.classList.add("focus"); mark(id); showEdge(id); }
 function focusNode(id) {
-  clearFocus(); const k=D.nodes[id].key; svg.classList.add("focus");
-  document.getElementById(id).classList.add("on");
+  clearFocus(); const k=D.nodes[id].key; svg.classList.add("focus"); el(id).classList.add("on");
   for (const [eid,e] of Object.entries(D.edges)) if (e.from===k || e.to===k) mark(eid);
   showNode(id);
 }
 function reset() { if (pinned) return; clearFocus(); defaultPanel(); }
 function unpin() { pinned=null; reset(); }
+const strip = id => id.slice(S.length+1);
 
-svg.querySelectorAll("g.ed").forEach(g => {
-  const e = D.edges[g.id]; if (!e) return;
-  const hit = g.querySelector("path").cloneNode(); hit.classList.add("hit"); g.appendChild(hit);
-  g.setAttribute("tabindex","0"); g.setAttribute("role","button");
-  g.setAttribute("aria-label", D.names[e.from]+(e.bi ? " corrélé à " : " vers ")+D.names[e.to]);
-  g.addEventListener("mouseenter", () => { if (!pinned) focusEdge(g.id); });
-  g.addEventListener("mouseleave", reset);
-  g.addEventListener("focus", () => { if (!pinned) focusEdge(g.id); });
-  g.addEventListener("blur", reset);
-  g.addEventListener("click", ev => { ev.stopPropagation(); pinned=g.id; focusEdge(g.id); });
-  g.addEventListener("keydown", ev => { if (ev.key==="Enter"||ev.key===" ") { ev.preventDefault(); pinned=g.id; focusEdge(g.id); } });
+document.querySelectorAll("#graph .scen").forEach(box => {
+  const sc = box.dataset.scen, s = box.querySelector("svg");
+  s.setAttribute("role","img"); s.setAttribute("aria-label","Graphe causal des déterminants de T et Y dans le SNDS");
+  s.querySelectorAll("g.ed").forEach(g => {
+    const id = g.id.slice(sc.length+1), e = ALL[sc].edges[id]; if (!e) return;
+    const hit = g.querySelector("path").cloneNode(); hit.classList.add("hit"); g.appendChild(hit);
+    g.setAttribute("tabindex","0"); g.setAttribute("role","button");
+    g.setAttribute("aria-label", ALL[sc].names[e.from]+(e.bi ? " corrélé à " : " vers ")+ALL[sc].names[e.to]);
+    g.addEventListener("mouseenter", () => { if (!pinned) focusEdge(id); });
+    g.addEventListener("mouseleave", reset);
+    g.addEventListener("focus", () => { if (!pinned) focusEdge(id); });
+    g.addEventListener("blur", reset);
+    g.addEventListener("click", ev => { ev.stopPropagation(); pinned=id; focusEdge(id); });
+    g.addEventListener("keydown", ev => { if (ev.key==="Enter"||ev.key===" ") { ev.preventDefault(); pinned=id; focusEdge(id); } });
+  });
+  s.querySelectorAll("g.nd").forEach(g => {
+    const id = g.id.slice(sc.length+1);
+    g.addEventListener("mouseenter", () => { if (!pinned) focusNode(id); });
+    g.addEventListener("mouseleave", reset);
+    g.addEventListener("click", ev => { ev.stopPropagation(); pinned=id; focusNode(id); });
+  });
 });
-svg.querySelectorAll("g.nd").forEach(g => {
-  g.addEventListener("mouseenter", () => { if (!pinned) focusNode(g.id); });
-  g.addEventListener("mouseleave", reset);
-  g.addEventListener("click", ev => { ev.stopPropagation(); pinned=g.id; focusNode(g.id); });
-});
+
+function setScen(sc) {
+  if (!ALL[sc]) sc = "sp";
+  pinned = null; clearFocus();
+  S = sc; D = ALL[sc]; sel.value = sc;
+  document.querySelectorAll(".scen").forEach(b => b.hidden = b.dataset.scen !== sc);
+  svg = document.querySelector(`#graph .scen[data-scen="${sc}"] svg`);
+  defaultPanel();
+}
+const fromHash = () => { const h = location.hash.slice(1); return Object.keys(ALL).find(k => ALL[k].hash === h) || "sp"; };
+sel.addEventListener("change", () => { location.hash = ALL[sel.value].hash; });
+window.addEventListener("hashchange", () => setScen(fromHash()));
 document.addEventListener("click", () => { if (pinned) unpin(); });
 document.addEventListener("keydown", ev => { if (ev.key==="Escape" && pinned) unpin(); });
 panel.addEventListener("click", ev => ev.stopPropagation());
-defaultPanel();
+setScen(fromHash());
 </script>
 </body>
 </html>
